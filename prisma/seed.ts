@@ -665,6 +665,108 @@ async function main() {
   }
 
   console.log(`\nSeeded ${weapons.length} weapons.`);
+
+  // === MODS ===
+  const mods: {
+    name: string;
+    type: "BARREL" | "GRIP" | "MAGAZINE" | "OPTIC" | "SHIELD" | "GENERATOR" | "CHIP";
+    rarity: "PRESTIGE" | "SUPERIOR" | "DELUXE" | "ENHANCED" | "STANDARD";
+    isUniversal?: boolean;
+    compatibleWeapons: string[];
+  }[] = [
+    // --- BARREL (14) ---
+    { name: "Flechette Split Action", type: "BARREL", rarity: "PRESTIGE", compatibleWeapons: ["WSTR Combat Shotgun", "BRRT SMG"] },
+    { name: "Lockout Muzzle Brake", type: "BARREL", rarity: "PRESTIGE", compatibleWeapons: ["B33 Volley Rifle"] },
+    { name: "MIPS Slug Converter", type: "BARREL", rarity: "PRESTIGE", compatibleWeapons: ["WSTR Combat Shotgun"] },
+    { name: "Pinpoint Barrel", type: "BARREL", rarity: "SUPERIOR", compatibleWeapons: ["Misriah 2442", "WSTR Combat Shotgun"] },
+    { name: "Steady Barrel", type: "BARREL", rarity: "SUPERIOR", compatibleWeapons: ["Hardline PR", "Repeater HPR", "Stryder M1T", "Twin Tap HBR", "Longshot", "Outland"] },
+    { name: "Precision Barrel", type: "BARREL", rarity: "DELUXE", compatibleWeapons: ["CE Tactical Sidearm", "Magnum MC", "Bully SMG", "BRRT SMG", "Copperhead RF"] },
+    { name: "Precision Choke", type: "BARREL", rarity: "DELUXE", compatibleWeapons: ["Misriah 2442", "WSTR Combat Shotgun"] },
+    { name: "Suppression Dampener", type: "BARREL", rarity: "DELUXE", compatibleWeapons: [] },
+    { name: "Farshot Barrel", type: "BARREL", rarity: "ENHANCED", compatibleWeapons: [] },
+    { name: "Impulse Brake", type: "BARREL", rarity: "ENHANCED", compatibleWeapons: [] },
+    { name: "Ironhold Barrel", type: "BARREL", rarity: "ENHANCED", compatibleWeapons: ["CE Tactical Sidearm", "Magnum MC", "Bully SMG", "BRRT SMG", "Copperhead RF"] },
+    { name: "Stabilizing Barrel", type: "BARREL", rarity: "ENHANCED", compatibleWeapons: ["V66 Lookout", "V99 Channel Rifle"] },
+    { name: "Weighted Barrel", type: "BARREL", rarity: "ENHANCED", compatibleWeapons: ["CE Tactical Sidearm", "Magnum MC", "Bully SMG", "BRRT SMG", "Copperhead RF"] },
+    { name: "Nano-Suppressor", type: "BARREL", rarity: "ENHANCED", compatibleWeapons: ["CE Tactical Sidearm", "Magnum MC", "Bully SMG", "BRRT SMG", "Copperhead RF"] },
+
+    // --- GRIP (2) ---
+    { name: "Combat Grip", type: "GRIP", rarity: "DELUXE", compatibleWeapons: ["Impact HAR", "M77 Assault Rifle", "Overrun AR", "V75 Scar"] },
+    { name: "Snapshot Grip", type: "GRIP", rarity: "DELUXE", compatibleWeapons: ["Misriah 2442", "V85 Circuit Breaker", "WSTR Combat Shotgun"] },
+
+    // --- MAGAZINE (10) ---
+    { name: "Adrenal Feedback Rounds", type: "MAGAZINE", rarity: "PRESTIGE", compatibleWeapons: ["Hardline PR"] },
+    { name: "Kingmaker Mag", type: "MAGAZINE", rarity: "PRESTIGE", compatibleWeapons: ["Longshot"] },
+    { name: "Overclocked Delimiter", type: "MAGAZINE", rarity: "PRESTIGE", compatibleWeapons: ["V85 Circuit Breaker"] },
+    { name: "Ram-Page Mag", type: "MAGAZINE", rarity: "PRESTIGE", compatibleWeapons: ["V75 Scar"] },
+    { name: "Rodeo Mag", type: "MAGAZINE", rarity: "PRESTIGE", compatibleWeapons: ["WSTR Combat Shotgun", "Bully SMG"] },
+    { name: "Air-Cooled Chamber", type: "MAGAZINE", rarity: "SUPERIOR", compatibleWeapons: ["V00 Zeus RG", "V85 Circuit Breaker", "V99 Channel Rifle"] },
+    { name: "Hi-Cap Mag", type: "MAGAZINE", rarity: "DELUXE", compatibleWeapons: ["B33 Volley Rifle", "Hardline PR", "Stryder M1T", "Twin Tap HBR", "Longshot"] },
+    { name: "Slick Mag I", type: "MAGAZINE", rarity: "ENHANCED", compatibleWeapons: ["Misriah 2442"] },
+    { name: "Steady Mag", type: "MAGAZINE", rarity: "ENHANCED", compatibleWeapons: ["CE Tactical Sidearm"] },
+    { name: "Turbo Chamber", type: "MAGAZINE", rarity: "ENHANCED", compatibleWeapons: ["V66 Lookout", "V11 Punch", "V22 Volt Thrower"] },
+
+    // --- OPTIC (5) ---
+    { name: "Lever Overhaul Interface", type: "OPTIC", rarity: "PRESTIGE", compatibleWeapons: ["Repeater HPR"] },
+    { name: "Pistol Scope", type: "OPTIC", rarity: "PRESTIGE", compatibleWeapons: ["Magnum MC"] },
+    { name: "Vital Intel", type: "OPTIC", rarity: "PRESTIGE", compatibleWeapons: ["Stryder M1T"] },
+    { name: "Far Reach Optic", type: "OPTIC", rarity: "DELUXE", compatibleWeapons: ["Impact HAR", "Overrun AR", "V75 Scar", "Bully SMG", "BRRT SMG", "Copperhead RF"] },
+    { name: "Termal Optic", type: "OPTIC", rarity: "DELUXE", compatibleWeapons: ["B33 Volley Rifle", "Hardline PR", "Repeater HPR", "Stryder M1T", "Twin Tap HBR", "V66 Lookout"] },
+
+    // --- SHIELD (4) ---
+    { name: "Circuit Shield", type: "SHIELD", rarity: "PRESTIGE", compatibleWeapons: ["Retaliator LMG"] },
+    { name: "Control Shield", type: "SHIELD", rarity: "SUPERIOR", compatibleWeapons: ["Conquest LMG", "Demolition HMG", "Retaliator LMG"] },
+    { name: "Balanced Shield", type: "SHIELD", rarity: "DELUXE", compatibleWeapons: ["Conquest LMG", "Demolition HMG", "Retaliator LMG"] },
+    { name: "Duelist Shield", type: "SHIELD", rarity: "ENHANCED", compatibleWeapons: ["Conquest LMG", "Demolition HMG", "Retaliator LMG"] },
+
+    // --- GENERATOR (2) ---
+    { name: "Overclocked Generator", type: "GENERATOR", rarity: "PRESTIGE", compatibleWeapons: ["V00 Zeus RG"] },
+    { name: "Stabilizing Generator", type: "GENERATOR", rarity: "SUPERIOR", compatibleWeapons: ["Ares RG", "V00 Zeus RG"] },
+
+    // --- CHIP (9: 8 universal + 1 non-universal) ---
+    { name: "See ya", type: "CHIP", rarity: "SUPERIOR", isUniversal: true, compatibleWeapons: [] },
+    { name: "Bounty", type: "CHIP", rarity: "DELUXE", isUniversal: true, compatibleWeapons: [] },
+    { name: "Torch Bug", type: "CHIP", rarity: "DELUXE", isUniversal: true, compatibleWeapons: [] },
+    { name: "Bounty Hunter", type: "CHIP", rarity: "ENHANCED", isUniversal: true, compatibleWeapons: [] },
+    { name: "Swarm Directive", type: "CHIP", rarity: "ENHANCED", isUniversal: true, compatibleWeapons: [] },
+    { name: "Last Resort", type: "CHIP", rarity: "ENHANCED", isUniversal: true, compatibleWeapons: [] },
+    { name: "Eyes On Fire", type: "CHIP", rarity: "STANDARD", isUniversal: true, compatibleWeapons: [] },
+    { name: "Endless Runner", type: "CHIP", rarity: "STANDARD", isUniversal: true, compatibleWeapons: [] },
+    { name: "Veilshot Chip", type: "CHIP", rarity: "ENHANCED", compatibleWeapons: ["Conquest LMG", "V85 Circuit Breaker"] },
+  ];
+
+  console.log(`\nSeeding ${mods.length} mods...`);
+
+  // Build weapon name → id lookup
+  const allWeapons = await db.weapon.findMany({ select: { id: true, name: true } });
+  const weaponMap = new Map(allWeapons.map((w) => [w.name, w.id]));
+
+  for (const mod of mods) {
+    const slug = slugify(mod.name);
+    const upserted = await db.mod.upsert({
+      where: { name: mod.name },
+      update: { slug, type: mod.type, rarity: mod.rarity, isUniversal: mod.isUniversal ?? false },
+      create: { name: mod.name, slug, type: mod.type, rarity: mod.rarity, isUniversal: mod.isUniversal ?? false },
+    });
+
+    // Create junction rows for non-universal mods
+    for (const weaponName of mod.compatibleWeapons) {
+      const weaponId = weaponMap.get(weaponName);
+      if (!weaponId) {
+        console.warn(`  ⚠ Weapon not found: "${weaponName}" (mod: ${mod.name})`);
+        continue;
+      }
+      await db.weaponMod.upsert({
+        where: { weaponId_modId: { weaponId, modId: upserted.id } },
+        update: {},
+        create: { weaponId, modId: upserted.id },
+      });
+    }
+
+    console.log(`  ✓ ${mod.name} (${mod.compatibleWeapons.length} weapons)`);
+  }
+
+  console.log(`\nSeeded ${mods.length} mods.`);
 }
 
 main()

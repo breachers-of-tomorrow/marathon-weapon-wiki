@@ -8,6 +8,24 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+enum ModType {
+    BARREL
+    GRIP
+    MAGAZINE
+    OPTIC
+    SHIELD
+    GENERATOR
+    CHIP
+}
+
+enum ModRarity {
+    PRESTIGE
+    SUPERIOR
+    DELUXE
+    ENHANCED
+    STANDARD
+}
+
 enum WeaponType {
     ASSAULT_RIFLE
     SMG
@@ -79,10 +97,40 @@ model Weapon {
     voltDrain   Float?
     chargeTime  Float?
 
+    mods WeaponMod[]
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
     @@index([type])
     @@index([slot])
     @@index([ammoType])
+}
+
+model Mod {
+    id          String    @id @default(cuid())
+    name        String    @unique
+    slug        String    @unique
+    type        ModType
+    rarity      ModRarity
+    description String?
+    isUniversal Boolean   @default(false)
+    weapons     WeaponMod[]
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+
+    @@index([type])
+    @@index([rarity])
+}
+
+model WeaponMod {
+    id       String @id @default(cuid())
+    weapon   Weapon @relation(fields: [weaponId], references: [id])
+    weaponId String
+    mod      Mod    @relation(fields: [modId], references: [id])
+    modId    String
+
+    @@unique([weaponId, modId])
+    @@index([weaponId])
+    @@index([modId])
 }
