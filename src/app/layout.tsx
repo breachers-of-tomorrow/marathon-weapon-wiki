@@ -5,10 +5,43 @@ import { Geist, JetBrains_Mono } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
 export const metadata: Metadata = {
-  title: "Marathon Weapon Wiki",
-  description: "Tactical weapon database for Marathon",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Marathon Weapon Wiki",
+    template: "%s | Marathon Weapon Wiki",
+  },
+  description:
+    "Tactical weapon database for Marathon — stats, damage, rate of fire, and combat data for every weapon.",
+  keywords: [
+    "Marathon",
+    "weapons",
+    "wiki",
+    "stats",
+    "damage",
+    "weapon database",
+    "tactical",
+    "combat data",
+  ],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "Marathon Weapon Wiki",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
 };
 
 const geist = Geist({

@@ -1,6 +1,22 @@
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import { api } from "@/trpc/server";
 import { WeaponGrid } from "./_components/weapon-grid";
+import { websiteJsonLd, weaponListJsonLd } from "@/lib/structured-data";
+
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
+export const metadata: Metadata = {
+  title: {
+    absolute: "Marathon Weapon Wiki — Tactical Weapon Database",
+  },
+  description:
+    "Complete tactical weapon database for Marathon — stats, damage, rate of fire, and combat data for every weapon.",
+  alternates: {
+    canonical: siteUrl,
+  },
+};
 
 export const dynamic = "force-dynamic";
 
@@ -27,12 +43,29 @@ async function WeaponGridLoader() {
     api.weapon.getTypes(),
   ]);
 
-  return <WeaponGrid weapons={weapons} types={types} />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(weaponListJsonLd(siteUrl, weapons)),
+        }}
+      />
+      <WeaponGrid weapons={weapons} types={types} />
+    </>
+  );
 }
 
 export default function Home() {
   return (
     <main className="mx-auto min-h-screen max-w-7xl px-4 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(websiteJsonLd(siteUrl)),
+        }}
+      />
+
       {/* Static shell — served instantly */}
       <div className="mb-10">
         <h1 className="font-mono text-3xl font-bold uppercase tracking-widest text-foreground">

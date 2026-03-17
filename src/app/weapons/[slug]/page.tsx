@@ -7,6 +7,13 @@ import type { Metadata } from "next";
 import { api } from "@/trpc/server";
 import { WeaponBadges } from "@/app/_components/weapon-badges";
 import { WeaponStats } from "@/app/_components/stat-section";
+import {
+  weaponProductJsonLd,
+  breadcrumbJsonLd,
+} from "@/lib/structured-data";
+
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export const dynamic = "force-dynamic";
 
@@ -18,8 +25,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!weapon) return { title: "Weapon Not Found" };
 
   return {
-    title: `${weapon.name} — Marathon Weapon Wiki`,
-    description: weapon.description ?? `${weapon.name} stats and details`,
+    title: weapon.name,
+    description:
+      weapon.description ?? `${weapon.name} stats and details for Marathon`,
+    keywords: [
+      weapon.name,
+      weapon.type.replace(/_/g, " "),
+      "Marathon",
+      "weapon stats",
+    ],
+    alternates: {
+      canonical: `${siteUrl}/weapons/${weapon.slug}`,
+    },
+    openGraph: {
+      type: "article",
+      title: `${weapon.name} | Marathon Weapon Wiki`,
+      description:
+        weapon.description ?? `${weapon.name} stats and details for Marathon`,
+    },
   };
 }
 
@@ -53,6 +76,24 @@ async function WeaponDetail({ slug }: { slug: string }) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(weaponProductJsonLd(siteUrl, weapon)),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbJsonLd(siteUrl, [
+              { name: "Home", url: "/" },
+              { name: weapon.name },
+            ]),
+          ),
+        }}
+      />
+
       {/* Hero section */}
       <div className="mt-4 grid gap-8 md:grid-cols-2">
         {/* Left: Image */}
