@@ -2,6 +2,8 @@ import { Suspense } from "react";
 import { api } from "@/trpc/server";
 import { WeaponGrid } from "./_components/weapon-grid";
 
+export const dynamic = "force-dynamic";
+
 function WeaponGridSkeleton() {
   return (
     <div>
