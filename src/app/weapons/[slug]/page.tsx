@@ -8,6 +8,8 @@ import { api } from "@/trpc/server";
 import { WeaponBadges } from "@/app/_components/weapon-badges";
 import { WeaponStats } from "@/app/_components/stat-section";
 
+export const dynamic = "force-dynamic";
+
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

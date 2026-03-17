@@ -104,6 +104,12 @@ const weapons = [
     rarity: "Standard",
     description:
       "Volt-actuated assault rifle with tracking projectiles. Sustained fire overheats the weapon, lowering its rate of fire.",
+    firepower: 20.3,
+    accuracy: 59.3,
+    handling: 42,
+    range: 46,
+    zoom: 1.2,
+    voltDrain: 2.5,
   },
 
   // === SUBMACHINE GUNS ===
@@ -195,8 +201,13 @@ const weapons = [
     slot: "PRIMARY" as const,
     ammoType: "LIGHT_ROUNDS" as const,
     rarity: "Standard",
-    description:
-      "semi-automatic SMG that uses Light Rounds. This slower-firing weapon emphasizes stability and higher damage per shot",
+    description: "Light submachine gun with rapid semiautomatic fire.",
+    firepower: 16.8,
+    accuracy: 49.1,
+    handling: 46,
+    range: 15,
+    magazineSize: 21,
+    zoom: 1.1,
   },
 
   // === LIGHT MACHINE GUNS ===
@@ -261,10 +272,10 @@ const weapons = [
     slot: "HEAVY" as const,
     ammoType: "LIGHT_ROUNDS" as const,
     rarity: "Standard",
-    description: "Heavy machine gun with moderate rate of fire.",
+    description: "Belt-fed light machine gun with high rate of fire.",
     firepower: 16.4,
-    range: 35,
-    accuracy: 51,
+    range: 51,
+    accuracy: 49.8,
     handling: 25,
     magazineSize: 44,
     zoom: 1.2,
@@ -279,6 +290,7 @@ const weapons = [
     rarity: "Standard",
     description:
       "Light ballistic pistol with standard semiautomatic fire.",
+    firepower: 36.0,
     damage: 20,
     precisionMultiplier: 1.8,
     rateOfFire: 300,
@@ -305,7 +317,8 @@ const weapons = [
     ammoType: "HEAVY_ROUNDS" as const,
     rarity: "Standard",
     description:
-      "Heavy pistol equipped with modular muzzle and optics rail",
+      "Heavy pistol equipped with modular muzzle and optics rail.",
+    firepower: 66.0,
     damage: 33,
     precisionMultiplier: 2.1,
     rateOfFire: 138,
@@ -332,7 +345,8 @@ const weapons = [
     ammoType: "VOLT_BATTERY" as const,
     rarity: "Standard",
     description:
-      "Volt-actuated pistol. Tap for semiautomatic fire or hold to build and release high-damage burst.",
+      "Volt-actuated pistol. Tap for semiautomatic fire or hold to build and release a high-damage burst.",
+    firepower: 37.5,
     damage: 20,
     precisionMultiplier: 1.5,
     rateOfFire: 600,
@@ -389,7 +403,13 @@ const weapons = [
     ammoType: "VOLT_CELL" as const,
     rarity: "Standard",
     description:
-      "The V99 Channel Rifle is a Sniper Rifle that uses a Volt Cell. It excels at long range assassinations.",
+      "Powerful volt sniper rifle that charges up for increased damage while scoped. Hits almost instantly at long range.",
+    firepower: 120.0,
+    accuracy: 71.2,
+    handling: 29,
+    range: 175,
+    zoom: 4.0,
+    voltDrain: 29,
   },
   {
     name: "Outland",
@@ -398,7 +418,7 @@ const weapons = [
     ammoType: "MIPS_ROUNDS" as const,
     rarity: "Standard",
     description:
-      "The Outland is a Sniper Rifle that uses MIPS Rounds. It excels at long range assassinations.",
+      "Ballistic bolt-action sniper rifle. Extreme damage and range.",
   },
 
   // === SHOTGUNS ===
@@ -436,16 +456,21 @@ const weapons = [
     ammoType: "MIPS_ROUNDS" as const,
     rarity: "Standard",
     description:
-      "Compact submachine gun with five-round burst firing mechanism.",
+      "Pump-action shotgun kept for close encounters. Reloads one MIPS cartridge at a time.",
   },
   {
     name: "V85 Circuit Breaker",
     type: "SHOTGUN" as const,
     slot: "SECONDARY" as const,
-    ammoType: "VOLT_BATTERY" as const,
+    ammoType: "VOLT_CELL" as const,
     rarity: "Standard",
     description:
-      "Compact submachine gun with five-round burst firing mechanism.",
+      "Fixed-pattern heavy volt shotgun. Can be charged up to three levels.",
+    firepower: 220.0,
+    handling: 42,
+    range: 14,
+    spreadAngle: 1.7,
+    zoom: 1.1,
   },
 
   // === PRECISION RIFLES ===
@@ -539,8 +564,13 @@ const weapons = [
     slot: "PRIMARY" as const,
     ammoType: "LIGHT_ROUNDS" as const,
     rarity: "Standard",
-    description:
-      "semi-automatic Precision Rifle that uses Light Rounds. This rapid fire long-range rifle is also adaptable to closer chaotic engages.",
+    description: "Fine-tuned semiautomatic precision rifle.",
+    firepower: 46.5,
+    accuracy: 59.4,
+    handling: 39,
+    range: 84,
+    magazineSize: 12,
+    zoom: 1.4,
   },
   {
     name: "V66 Lookout",
@@ -549,26 +579,27 @@ const weapons = [
     ammoType: "VOLT_BATTERY" as const,
     rarity: "Standard",
     description:
-      "Burst-fire heavy ballistic precision rifle with dual-round delivery system.",
+      "Volt-actuated precision rifle with tracking projectiles. Sustained fire overheats the weapon, lowering its rate of fire.",
     firepower: 46.8,
-    range: 66,
+    range: 88,
     accuracy: 66,
-    handling: 42,
-    zoom: 2.5,
-    voltDrain: 3.42,
+    handling: 46,
+    zoom: 1.4,
+    voltDrain: 3.4,
   },
   {
     name: "B33 Volley Rifle",
     type: "PRECISION_RIFLE" as const,
     slot: "PRIMARY" as const,
-    ammoType: "HEAVY_ROUNDS" as const,
+    ammoType: "LIGHT_ROUNDS" as const,
     rarity: "Standard",
-    description: "Burst-fire heavy ballistic precision rifle",
+    description:
+      "Semiautomatic precision rifle with three-round burst fire.",
     firepower: 20.7,
     range: 48,
     accuracy: 61.2,
-    handling: 39.6,
-    magazineSize: 31,
+    handling: 45,
+    magazineSize: 27,
     zoom: 1.4,
   },
 
@@ -606,10 +637,16 @@ const weapons = [
     name: "Ares RG",
     type: "RAILGUN" as const,
     slot: "HEAVY" as const,
-    ammoType: "VOLT_CELL" as const,
+    ammoType: "MIPS_ROUNDS" as const,
     rarity: "Standard",
     description:
-      "The Ares RG is a semi-automatic Railgun that uses Volt Cells. A single shot can eliminate opponents with devastating effect.",
+      "Heavy ballistic railgun. Charges up to fire massive projectile at extreme velocity.",
+    firepower: 159.9,
+    accuracy: 100.0,
+    handling: 47,
+    range: 55,
+    magazineSize: 4,
+    zoom: 2.5,
   },
 ];
 
