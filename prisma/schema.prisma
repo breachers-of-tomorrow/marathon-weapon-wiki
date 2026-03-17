@@ -136,3 +136,12 @@ model WeaponMod {
     @@index([weaponId])
     @@index([modId])
 }
+
+model Submission {
+    id        String   @id @default(cuid())
+    message   String   @db.VarChar(180)
+    imageUrl  String
+    pageUrl   String?
+    status    String   @default("pending")
+    createdAt DateTime @default(now())
+}

@@ -4,6 +4,7 @@ import { type Metadata } from "next";
 import { Geist, JetBrains_Mono } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
+import { SubmitDataButton } from "@/app/_components/submit-data-button";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -60,7 +61,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`dark ${geist.variable} ${jetbrainsMono.variable}`}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          {children}
+          <SubmitDataButton />
+        </TRPCReactProvider>
       </body>
     </html>
   );
