@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { unstable_cache } from "next/cache";
 import { db } from "@/server/db";
 
+export const dynamic = "force-dynamic";
+
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
