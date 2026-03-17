@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: marathon-weapon-wiki
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+      - /app/generated/prisma
+    environment:
+      DATABASE_URL: postgresql://postgres:password@db:5432/marathon-weapon-wiki
+      SKIP_ENV_VALIDATION: 1
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "bunx prisma db push && bun run dev"
+
+volumes:
+  pgdata:

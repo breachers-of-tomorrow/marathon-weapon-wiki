@@ -1,53 +1,50 @@
-import Link from "next/link";
+import { Suspense } from "react";
+import { api } from "@/trpc/server";
+import { WeaponGrid } from "./_components/weapon-grid";
 
-import { LatestPost } from "@/app/_components/post";
-import { api, HydrateClient } from "@/trpc/server";
-
-export default async function Home() {
-  const hello = await api.post.hello({ text: "from tRPC" });
-
-  void api.post.getLatest.prefetch();
-
+function WeaponGridSkeleton() {
   return (
-    <HydrateClient>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-          <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-            Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-          </h1>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-              href="https://create.t3.gg/en/usage/first-steps"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
-              <div className="text-lg">
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
-              </div>
-            </Link>
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-              href="https://create.t3.gg/en/introduction"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">Documentation →</h3>
-              <div className="text-lg">
-                Learn more about Create T3 App, the libraries it uses, and how
-                to deploy it.
-              </div>
-            </Link>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
-              {hello ? hello.greeting : "Loading tRPC query..."}
-            </p>
-          </div>
+    <div>
+      <div className="mb-8 flex gap-2">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="bg-panel h-8 w-20 animate-pulse rounded" />
+        ))}
+      </div>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div key={i} className="cryo-panel h-72 animate-pulse rounded-lg" />
+        ))}
+      </div>
+    </div>
+  );
+}
 
-          <LatestPost />
-        </div>
-      </main>
-    </HydrateClient>
+async function WeaponGridLoader() {
+  const [weapons, types] = await Promise.all([
+    api.weapon.getAll(),
+    api.weapon.getTypes(),
+  ]);
+
+  return <WeaponGrid weapons={weapons} types={types} />;
+}
+
+export default function Home() {
+  return (
+    <main className="mx-auto min-h-screen max-w-7xl px-4 py-12">
+      {/* Static shell — served instantly */}
+      <div className="mb-10">
+        <h1 className="font-mono text-3xl font-bold uppercase tracking-widest text-foreground">
+          Marathon Weapon Wiki
+        </h1>
+        <p className="text-dim mt-2 font-mono text-sm uppercase tracking-wide">
+          Tactical Weapon Database
+        </p>
+      </div>
+
+      {/* Dynamic part — streamed in */}
+      <Suspense fallback={<WeaponGridSkeleton />}>
+        <WeaponGridLoader />
+      </Suspense>
+    </main>
   );
 }

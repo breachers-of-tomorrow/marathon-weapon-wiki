@@ -3,4 +3,32 @@
 @theme {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  --color-background: #0a0b0f;
+  --color-panel: #12141a;
+  --color-panel-hover: #1a1d26;
+  --color-border: #2a2d3a;
+  --color-border-accent: #038adf;
+  --color-accent: #038adf;
+  --color-accent-dim: rgba(3, 138, 223, 0.15);
+  --color-foreground: #e8eaed;
+  --color-dim: #6b7280;
+  --color-heading: #9ca3af;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer components {
+  .cryo-panel {
+    @apply bg-panel border border-border;
+  }
+
+  .glow-accent {
+    filter: drop-shadow(0 0 12px rgba(3, 138, 223, 0.5));
+  }
 }
