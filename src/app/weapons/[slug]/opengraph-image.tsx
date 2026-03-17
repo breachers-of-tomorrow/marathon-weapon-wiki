@@ -19,7 +19,7 @@ const getWeapon = unstable_cache(
         imageUrl: true,
       },
     }),
-  ["weapons"],
+  ["weapon-og"],
   { revalidate: 3600, tags: ["weapons"] },
 );
 

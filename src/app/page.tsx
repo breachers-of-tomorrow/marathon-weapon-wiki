@@ -18,8 +18,6 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = "force-dynamic";
-
 function WeaponGridSkeleton() {
   return (
     <div>

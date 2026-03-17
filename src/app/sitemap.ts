@@ -2,8 +2,6 @@ import type { MetadataRoute } from "next";
 import { unstable_cache } from "next/cache";
 import { db } from "@/server/db";
 
-export const dynamic = "force-dynamic";
-
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -12,7 +10,7 @@ const getWeaponSlugs = unstable_cache(
     db.weapon.findMany({
       select: { slug: true, updatedAt: true },
     }),
-  ["weapons"],
+  ["weapon-slugs"],
   { revalidate: 3600, tags: ["weapons"] },
 );
 

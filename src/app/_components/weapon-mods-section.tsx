@@ -9,6 +9,8 @@ type Mod = {
   type: string;
   rarity: string;
   description: string | null;
+  price: number | null;
+  imageUrl: string | null;
   isUniversal: boolean;
 };
 
@@ -132,16 +134,30 @@ export function WeaponModsSection({
                     </span>
                   )}
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-3">
                   {modsInGroup.map((mod) => (
                     <div
                       key={mod.id}
-                      className="flex items-center justify-between gap-2"
+                      className="border-border border-b pb-3 last:border-b-0 last:pb-0"
                     >
-                      <span className="text-foreground text-sm font-mono">
-                        {mod.name}
-                      </span>
-                      <RarityBadge rarity={mod.rarity} />
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-foreground text-sm font-mono">
+                          {mod.name}
+                        </span>
+                        <div className="flex shrink-0 items-center gap-2">
+                          {mod.price != null && (
+                            <span className="text-dim font-mono text-[10px]">
+                              {mod.price.toLocaleString()}cr
+                            </span>
+                          )}
+                          <RarityBadge rarity={mod.rarity} />
+                        </div>
+                      </div>
+                      {mod.description && (
+                        <p className="text-dim mt-1 text-xs leading-relaxed">
+                          {mod.description}
+                        </p>
+                      )}
                     </div>
                   ))}
                 </div>

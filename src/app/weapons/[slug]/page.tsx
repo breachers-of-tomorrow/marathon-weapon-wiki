@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 import { api } from "@/trpc/server";
+import { db } from "@/server/db";
 import { WeaponBadges } from "@/app/_components/weapon-badges";
 import { WeaponStats } from "@/app/_components/stat-section";
 import { WeaponModsSection } from "@/app/_components/weapon-mods-section";
@@ -16,7 +17,10 @@ import {
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
-export const dynamic = "force-dynamic";
+export async function generateStaticParams() {
+  const weapons = await db.weapon.findMany({ select: { slug: true } });
+  return weapons.map((w) => ({ slug: w.slug }));
+}
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -153,7 +157,7 @@ async function WeaponDetail({ slug }: { slug: string }) {
           <h2 className="text-heading mb-4 font-mono text-xs uppercase tracking-widest">
             Weapon Statistics
           </h2>
-          <WeaponStats weapon={weapon as unknown as Record<string, number | null | undefined>} />
+          <WeaponStats weapon={weapon} />
         </div>
 
         <div>

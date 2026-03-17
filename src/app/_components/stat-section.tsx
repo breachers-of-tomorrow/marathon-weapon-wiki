@@ -1,6 +1,8 @@
+import type { Weapon } from "../../../generated/prisma";
+
 interface StatRow {
   label: string;
-  value: number;
+  value: number | null;
   max?: number;
 }
 
@@ -11,8 +13,6 @@ export function StatSection({
   title: string;
   stats: StatRow[];
 }) {
-  if (stats.length === 0) return null;
-
   return (
     <div className="cryo-panel rounded-lg p-4">
       <h3 className="text-heading mb-3 font-mono text-xs uppercase tracking-widest">
@@ -23,16 +23,24 @@ export function StatSection({
           <div key={stat.label}>
             <div className="flex items-center justify-between text-sm">
               <span className="text-dim">{stat.label}</span>
-              <span className="font-mono text-foreground">{stat.value}</span>
+              {stat.value != null ? (
+                <span className="font-mono text-foreground">{stat.value}</span>
+              ) : (
+                <span className="font-mono text-dim/50 text-xs italic">—</span>
+              )}
             </div>
             {stat.max != null && stat.max > 0 && (
               <div className="bg-border mt-1 h-1 rounded-full">
-                <div
-                  className="bg-accent h-1 rounded-full transition-all"
-                  style={{
-                    width: `${Math.min(100, (stat.value / stat.max) * 100)}%`,
-                  }}
-                />
+                {stat.value != null ? (
+                  <div
+                    className="bg-accent h-1 rounded-full transition-all"
+                    style={{
+                      width: `${Math.min(100, (stat.value / stat.max) * 100)}%`,
+                    }}
+                  />
+                ) : (
+                  <div className="h-1 rounded-full" />
+                )}
               </div>
             )}
           </div>
@@ -42,19 +50,23 @@ export function StatSection({
   );
 }
 
-type WeaponData = Record<string, number | null | undefined>;
+type WeaponStatFields = Pick<Weapon,
+  | "firepower" | "damage" | "precisionMultiplier" | "rateOfFire" | "range"
+  | "accuracy" | "hipfireSpread" | "adsSpread" | "crouchSpreadBonus" | "movingInaccuracy"
+  | "handling" | "equipSpeed" | "adsSpeed" | "reloadSpeed" | "weight" | "recoil" | "aimAssist"
+  | "magazineSize" | "zoom"
+  | "pelletCount" | "spreadAngle" | "voltDrain" | "chargeTime"
+>;
 
-export function WeaponStats({ weapon }: { weapon: WeaponData }) {
+export function WeaponStats({ weapon }: { weapon: WeaponStatFields }) {
   const buildStats = (
-    entries: [string, string, number?][],
+    entries: [keyof WeaponStatFields, string, number?][],
   ): StatRow[] =>
-    entries
-      .filter(([key]) => weapon[key] != null)
-      .map(([key, label, max]) => ({
-        label,
-        value: weapon[key]!,
-        max,
-      }));
+    entries.map(([key, label, max]) => ({
+      label,
+      value: weapon[key] ?? null,
+      max,
+    }));
 
   const sections: { title: string; stats: StatRow[] }[] = [
     {
@@ -109,16 +121,13 @@ export function WeaponStats({ weapon }: { weapon: WeaponData }) {
 
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      {sections.map(
-        (section) =>
-          section.stats.length > 0 && (
-            <StatSection
-              key={section.title}
-              title={section.title}
-              stats={section.stats}
-            />
-          ),
-      )}
+      {sections.map((section) => (
+        <StatSection
+          key={section.title}
+          title={section.title}
+          stats={section.stats}
+        />
+      ))}
     </div>
   );
 }

@@ -671,68 +671,71 @@ async function main() {
     name: string;
     type: "BARREL" | "GRIP" | "MAGAZINE" | "OPTIC" | "SHIELD" | "GENERATOR" | "CHIP";
     rarity: "PRESTIGE" | "SUPERIOR" | "DELUXE" | "ENHANCED" | "STANDARD";
+    description?: string;
+    price?: number;
+    imageUrl?: string;
     isUniversal?: boolean;
     compatibleWeapons: string[];
   }[] = [
     // --- BARREL (14) ---
-    { name: "Flechette Split Action", type: "BARREL", rarity: "PRESTIGE", compatibleWeapons: ["WSTR Combat Shotgun", "BRRT SMG"] },
-    { name: "Lockout Muzzle Brake", type: "BARREL", rarity: "PRESTIGE", compatibleWeapons: ["B33 Volley Rifle"] },
-    { name: "MIPS Slug Converter", type: "BARREL", rarity: "PRESTIGE", compatibleWeapons: ["WSTR Combat Shotgun"] },
-    { name: "Pinpoint Barrel", type: "BARREL", rarity: "SUPERIOR", compatibleWeapons: ["Misriah 2442", "WSTR Combat Shotgun"] },
-    { name: "Steady Barrel", type: "BARREL", rarity: "SUPERIOR", compatibleWeapons: ["Hardline PR", "Repeater HPR", "Stryder M1T", "Twin Tap HBR", "Longshot", "Outland"] },
-    { name: "Precision Barrel", type: "BARREL", rarity: "DELUXE", compatibleWeapons: ["CE Tactical Sidearm", "Magnum MC", "Bully SMG", "BRRT SMG", "Copperhead RF"] },
-    { name: "Precision Choke", type: "BARREL", rarity: "DELUXE", compatibleWeapons: ["Misriah 2442", "WSTR Combat Shotgun"] },
-    { name: "Suppression Dampener", type: "BARREL", rarity: "DELUXE", compatibleWeapons: [] },
-    { name: "Farshot Barrel", type: "BARREL", rarity: "ENHANCED", compatibleWeapons: [] },
-    { name: "Impulse Brake", type: "BARREL", rarity: "ENHANCED", compatibleWeapons: [] },
-    { name: "Ironhold Barrel", type: "BARREL", rarity: "ENHANCED", compatibleWeapons: ["CE Tactical Sidearm", "Magnum MC", "Bully SMG", "BRRT SMG", "Copperhead RF"] },
-    { name: "Stabilizing Barrel", type: "BARREL", rarity: "ENHANCED", compatibleWeapons: ["V66 Lookout", "V99 Channel Rifle"] },
-    { name: "Weighted Barrel", type: "BARREL", rarity: "ENHANCED", compatibleWeapons: ["CE Tactical Sidearm", "Magnum MC", "Bully SMG", "BRRT SMG", "Copperhead RF"] },
-    { name: "Nano-Suppressor", type: "BARREL", rarity: "ENHANCED", compatibleWeapons: ["CE Tactical Sidearm", "Magnum MC", "Bully SMG", "BRRT SMG", "Copperhead RF"] },
+    { name: "Flechette Split Action", type: "BARREL", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the BRRT SMG. Increases stability, handling, and accuracy when firing from the hip", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/f/f3/Flechette_Split_Action.png", compatibleWeapons: ["BRRT SMG"] },
+    { name: "Lockout Muzzle Brake", type: "BARREL", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the BR33 Volley Rifle. Increases movement speed with this weapon. While firing from the hip, this weapon has greatly increased accuracy, stability, and range.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/4/47/Lockout_Muzzle_Brake.png", compatibleWeapons: ["B33 Volley Rifle"] },
+    { name: "MIPS Slug Converter", type: "BARREL", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the WSTR Combat Shotgun. Increases rate of fire, stability, aim assist, range, and reduces pellet spread. Press to convert shells to a high-powered slug projectile.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/1/14/MIPS_Slug_Converter.png", compatibleWeapons: ["WSTR Combat Shotgun"] },
+    { name: "Pinpoint Barrel", type: "BARREL", rarity: "SUPERIOR", price: 540, description: "Greatly increases stability and range.", compatibleWeapons: ["WSTR Combat Shotgun", "Misriah 2442"] },
+    { name: "Steady Barrel", type: "BARREL", rarity: "SUPERIOR", price: 540, description: "Greatly increases stability, ready speed, and accuracy while moving.", compatibleWeapons: ["Stryder M1T", "Hardline PR", "Repeater HPR", "Twin Tap HBR", "Longshot", "Outland"] },
+    { name: "Suppression Dampener", type: "BARREL", rarity: "DELUXE", price: 207, imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/4/4b/Suppression_Dampener.png", compatibleWeapons: [] },
+    { name: "Precision Barrel", type: "BARREL", rarity: "DELUXE", price: 180, description: "Increased ADS accuracy and range.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/9/94/Precision_Barrel.png", compatibleWeapons: ["BRRT SMG", "Copperhead RF", "Bully SMG", "CE Tactical Sidearm", "Magnum MC"] },
+    { name: "Precision Choke", type: "BARREL", rarity: "DELUXE", price: 180, description: "Increases range and aim assist.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/d/da/Precision_Choke.png", compatibleWeapons: ["WSTR Combat Shotgun", "Misriah 2442"] },
+    { name: "Farshot Barrel", type: "BARREL", rarity: "ENHANCED", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/0/04/Farshot_Barrel.png", compatibleWeapons: [] },
+    { name: "Impulse Brake", type: "BARREL", rarity: "ENHANCED", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/b/bd/Impluse_Brake.png", compatibleWeapons: [] },
+    { name: "Ironhold Barrel", type: "BARREL", rarity: "ENHANCED", price: 60, compatibleWeapons: ["BRRT SMG", "Copperhead RF", "Bully SMG", "CE Tactical Sidearm", "Magnum MC"] },
+    { name: "Stabilizing Barrel", type: "BARREL", rarity: "ENHANCED", price: 60, description: "Slightly increases stability.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/7/7b/Stabilizing_Barrel.png", compatibleWeapons: ["V66 Lookout", "V99 Channel Rifle"] },
+    { name: "Weighted Barrel", type: "BARREL", rarity: "ENHANCED", price: 540, description: "Slightly increases aim assist.", compatibleWeapons: ["BRRT SMG", "Copperhead RF", "Bully SMG", "CE Tactical Sidearm", "Magnum MC"] },
+    { name: "Nano-Suppressor", type: "BARREL", rarity: "ENHANCED", description: "Shots fired from this weapon are silenced.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/0/0a/Marathon_nano-suppressor_enhanced.jpg", compatibleWeapons: ["BRRT SMG", "Copperhead RF", "Bully SMG", "CE Tactical Sidearm", "Magnum MC"] },
 
     // --- GRIP (2) ---
-    { name: "Combat Grip", type: "GRIP", rarity: "DELUXE", compatibleWeapons: ["Impact HAR", "M77 Assault Rifle", "Overrun AR", "V75 Scar"] },
-    { name: "Snapshot Grip", type: "GRIP", rarity: "DELUXE", compatibleWeapons: ["Misriah 2442", "V85 Circuit Breaker", "WSTR Combat Shotgun"] },
+    { name: "Combat Grip", type: "GRIP", rarity: "DELUXE", price: 180, description: "Increases ADS speed and ready speed.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/e/e2/Combat_Grip.png", compatibleWeapons: ["M77 Assault Rifle", "Overrun AR", "Impact HAR", "V75 Scar"] },
+    { name: "Snapshot Grip", type: "GRIP", rarity: "DELUXE", price: 180, description: "Increases accuracy while moving and ADS speed.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/9/93/Snapshot_Grip.png", compatibleWeapons: ["WSTR Combat Shotgun", "Misriah 2442", "V85 Circuit Breaker"] },
 
     // --- MAGAZINE (10) ---
-    { name: "Adrenal Feedback Rounds", type: "MAGAZINE", rarity: "PRESTIGE", compatibleWeapons: ["Hardline PR"] },
-    { name: "Kingmaker Mag", type: "MAGAZINE", rarity: "PRESTIGE", compatibleWeapons: ["Longshot"] },
-    { name: "Overclocked Delimiter", type: "MAGAZINE", rarity: "PRESTIGE", compatibleWeapons: ["V85 Circuit Breaker"] },
-    { name: "Ram-Page Mag", type: "MAGAZINE", rarity: "PRESTIGE", compatibleWeapons: ["V75 Scar"] },
-    { name: "Rodeo Mag", type: "MAGAZINE", rarity: "PRESTIGE", compatibleWeapons: ["WSTR Combat Shotgun", "Bully SMG"] },
-    { name: "Air-Cooled Chamber", type: "MAGAZINE", rarity: "SUPERIOR", compatibleWeapons: ["V00 Zeus RG", "V85 Circuit Breaker", "V99 Channel Rifle"] },
-    { name: "Hi-Cap Mag", type: "MAGAZINE", rarity: "DELUXE", compatibleWeapons: ["B33 Volley Rifle", "Hardline PR", "Stryder M1T", "Twin Tap HBR", "Longshot"] },
-    { name: "Slick Mag I", type: "MAGAZINE", rarity: "ENHANCED", compatibleWeapons: ["Misriah 2442"] },
-    { name: "Steady Mag", type: "MAGAZINE", rarity: "ENHANCED", compatibleWeapons: ["CE Tactical Sidearm"] },
-    { name: "Turbo Chamber", type: "MAGAZINE", rarity: "ENHANCED", compatibleWeapons: ["V66 Lookout", "V11 Punch", "V22 Volt Thrower"] },
+    { name: "Kingmaker Mag", type: "MAGAZINE", rarity: "PRESTIGE", price: 1620, description: "A unique mod for the Longshot. Increases reload speed and magazine size. Headshots increase rate of fire. Stacks up to three times.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/8/81/Kingmaker_Mag.png", compatibleWeapons: ["Longshot"] },
+    { name: "Overclocked Delimiter", type: "MAGAZINE", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the V85 Circuit Breaker. Increases magazine size and reload speed. Adds a third level of charge. When fully charged, this weapon has greatly reduced spread, increased damage, and its projectiles ricochet and pierce hostiles.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/5/53/Overclocked_Delimiter.png", compatibleWeapons: ["V85 Circuit Breaker"] },
+    { name: "Ram-Page Mag", type: "MAGAZINE", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the V75 SCAR. Increases rate of fire, magazine size, and reload speed. Rate of fire no longer decreases as heat builds and projectiles ricochet off surfaces, tracking nearby targets.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/b/ba/Ram-Page_Mag.png", compatibleWeapons: ["V75 Scar"] },
+    { name: "Adrenal Feedback Rounds", type: "MAGAZINE", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Hardline PR. Increases Magazine Size. Precision hits reduce your shell's heat and grant a stack of Micro-Adrenaline, increasing Heat Capacity and Agility for a short duration.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/4/4a/Adrenal_Feedback_Rounds.png", compatibleWeapons: ["Hardline PR"] },
+    { name: "Rodeo Mag", type: "MAGAZINE", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Bully SMG. Increases rate of fire, stability, and magazine size. This weapon's fire rate greatly increases over time.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/3/37/Rodeo_Mag.png", compatibleWeapons: ["Bully SMG"] },
+    { name: "Air-Cooled Chamber", type: "MAGAZINE", rarity: "SUPERIOR", price: 60, description: "Greatly increases reload speed and magazine size.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/3/3b/Air-Cooled_Chamber.png", compatibleWeapons: ["V99 Channel Rifle", "V00 Zeus RG", "V85 Circuit Breaker"] },
+    { name: "Hi-Cap Mag", type: "MAGAZINE", rarity: "DELUXE", price: 234, description: "Increases magazine size.", compatibleWeapons: ["Stryder M1T", "Hardline PR", "B33 Volley Rifle", "Twin Tap HBR", "Longshot"] },
+    { name: "Steady Mag", type: "MAGAZINE", rarity: "ENHANCED", price: 42, description: "Slightly increases magazine size and stability.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/8/81/Steady_Mag.png", compatibleWeapons: ["CE Tactical Sidearm"] },
+    { name: "Turbo Chamber", type: "MAGAZINE", rarity: "ENHANCED", price: 60, compatibleWeapons: ["V22 Volt Thrower", "V11 Punch", "V66 Lookout"] },
+    { name: "Slick Mag I", type: "MAGAZINE", rarity: "ENHANCED", price: 60, description: "Slightly increases rate of fire and magazine size.", compatibleWeapons: ["Misriah 2442"] },
 
     // --- OPTIC (5) ---
-    { name: "Lever Overhaul Interface", type: "OPTIC", rarity: "PRESTIGE", compatibleWeapons: ["Repeater HPR"] },
-    { name: "Pistol Scope", type: "OPTIC", rarity: "PRESTIGE", compatibleWeapons: ["Magnum MC"] },
-    { name: "Vital Intel", type: "OPTIC", rarity: "PRESTIGE", compatibleWeapons: ["Stryder M1T"] },
-    { name: "Far Reach Optic", type: "OPTIC", rarity: "DELUXE", compatibleWeapons: ["Impact HAR", "Overrun AR", "V75 Scar", "Bully SMG", "BRRT SMG", "Copperhead RF"] },
-    { name: "Termal Optic", type: "OPTIC", rarity: "DELUXE", compatibleWeapons: ["B33 Volley Rifle", "Hardline PR", "Repeater HPR", "Stryder M1T", "Twin Tap HBR", "V66 Lookout"] },
+    { name: "Lever Overhaul Interface", type: "OPTIC", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Repeater HPR. Increases reload speed and rounds reloaded at a time. Shots on target increase fire rate. This degrades when a shot misses.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/5/56/Lever_Overhaul_Interface.png", compatibleWeapons: ["Repeater HPR"] },
+    { name: "Pistol Scope", type: "OPTIC", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for Magnum MC. Greatly increases ADS speed. Activates a specialized high zoom optic. Precision hits restore a small amount of shields.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/9/96/Pistol_Scope.png", compatibleWeapons: ["Magnum MC"] },
+    { name: "Vital Intel", type: "OPTIC", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Stryder M1T. Greatly increases handling and ADS speed. Enables Proximity Sensor on radar. When hostiles are nearby, this weapon has increased handling and accuracy.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/a/a4/Vital_Intel.png", compatibleWeapons: ["Stryder M1T"] },
+    { name: "Far Reach Optic", type: "OPTIC", rarity: "DELUXE", price: 207, description: "Increase zoom and ADS accuracy. Rangefinder uses laser pulses to measure distance to the target.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/7/75/Far_Reach_Optic.png", compatibleWeapons: ["Overrun AR", "Impact HAR", "V75 Scar", "BRRT SMG", "Copperhead RF", "Bully SMG"] },
+    { name: "Termal Optic", type: "OPTIC", rarity: "DELUXE", price: 207, description: "Increase zoom and ADS accuracy. This sight highlights hostile heat signatures.", compatibleWeapons: ["Stryder M1T", "Hardline PR", "Repeater HPR", "V66 Lookout", "B33 Volley Rifle", "Twin Tap HBR"] },
 
     // --- SHIELD (4) ---
-    { name: "Circuit Shield", type: "SHIELD", rarity: "PRESTIGE", compatibleWeapons: ["Retaliator LMG"] },
-    { name: "Control Shield", type: "SHIELD", rarity: "SUPERIOR", compatibleWeapons: ["Conquest LMG", "Demolition HMG", "Retaliator LMG"] },
-    { name: "Balanced Shield", type: "SHIELD", rarity: "DELUXE", compatibleWeapons: ["Conquest LMG", "Demolition HMG", "Retaliator LMG"] },
-    { name: "Duelist Shield", type: "SHIELD", rarity: "ENHANCED", compatibleWeapons: ["Conquest LMG", "Demolition HMG", "Retaliator LMG"] },
+    { name: "Circuit Shield", type: "SHIELD", rarity: "PRESTIGE", price: 1620, description: "Decreases Recoil by 10%. Damage absorbed by this shield refunds ammo back to the magazine.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/4/49/Circuit_Shield.png", compatibleWeapons: ["Retaliator LMG"] },
+    { name: "Control Shield", type: "SHIELD", rarity: "SUPERIOR", price: 621, description: "Greatly increases stability.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/1/14/Control_Shield.png", compatibleWeapons: ["Conquest LMG", "Retaliator LMG", "Demolition HMG"] },
+    { name: "Balanced Shield", type: "SHIELD", rarity: "DELUXE", price: 207, description: "Increases ready speed and movement speed with this weapon.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/e/ec/Balanced_Shield.png", compatibleWeapons: ["Conquest LMG", "Retaliator LMG", "Demolition HMG"] },
+    { name: "Duelist Shield", type: "SHIELD", rarity: "ENHANCED", price: 69, description: "Slightly increases accuracy while moving and ADS speed.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/7/71/Duelist_Shield.png", compatibleWeapons: ["Conquest LMG", "Retaliator LMG", "Demolition HMG"] },
 
     // --- GENERATOR (2) ---
     { name: "Overclocked Generator", type: "GENERATOR", rarity: "PRESTIGE", compatibleWeapons: ["V00 Zeus RG"] },
     { name: "Stabilizing Generator", type: "GENERATOR", rarity: "SUPERIOR", compatibleWeapons: ["Ares RG", "V00 Zeus RG"] },
 
     // --- CHIP (9: 8 universal + 1 non-universal) ---
-    { name: "See ya", type: "CHIP", rarity: "SUPERIOR", isUniversal: true, compatibleWeapons: [] },
-    { name: "Bounty", type: "CHIP", rarity: "DELUXE", isUniversal: true, compatibleWeapons: [] },
-    { name: "Torch Bug", type: "CHIP", rarity: "DELUXE", isUniversal: true, compatibleWeapons: [] },
-    { name: "Bounty Hunter", type: "CHIP", rarity: "ENHANCED", isUniversal: true, compatibleWeapons: [] },
-    { name: "Swarm Directive", type: "CHIP", rarity: "ENHANCED", isUniversal: true, compatibleWeapons: [] },
-    { name: "Last Resort", type: "CHIP", rarity: "ENHANCED", isUniversal: true, compatibleWeapons: [] },
-    { name: "Eyes On Fire", type: "CHIP", rarity: "STANDARD", isUniversal: true, compatibleWeapons: [] },
-    { name: "Endless Runner", type: "CHIP", rarity: "STANDARD", isUniversal: true, compatibleWeapons: [] },
-    { name: "Veilshot Chip", type: "CHIP", rarity: "ENHANCED", compatibleWeapons: ["Conquest LMG", "V85 Circuit Breaker"] },
+    { name: "See ya", type: "CHIP", rarity: "SUPERIOR", price: 621, description: "Reloading this weapon when the magazine is empty causes you to become briefly invisible.", isUniversal: true, compatibleWeapons: [] },
+    { name: "Bounty", type: "CHIP", rarity: "DELUXE", price: 207, description: "Eliminating UESC pays you a considerable amount of credits.", isUniversal: true, compatibleWeapons: [] },
+    { name: "Torch Bug", type: "CHIP", rarity: "DELUXE", price: 207, description: "Eliminating a hostile causes them to explode.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/f/ff/Torch_Bug.png", isUniversal: true, compatibleWeapons: [] },
+    { name: "Bounty Hunter", type: "CHIP", rarity: "ENHANCED", price: 69, description: "Eliminating UESC pays you a small amount of credits.", isUniversal: true, compatibleWeapons: [] },
+    { name: "Swarm Directive", type: "CHIP", rarity: "ENHANCED", price: 69, description: "Precision eliminations with this weapon spawn a few flechette seekers that heal you when damaging hostiles.", isUniversal: true, compatibleWeapons: [] },
+    { name: "Last Resort", type: "CHIP", rarity: "ENHANCED", price: 69, description: "While you are Overheated, non-precision damage is increased by a moderate amount.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/8/88/Last_Resort.png", isUniversal: true, compatibleWeapons: [] },
+    { name: "Eyes On Fire", type: "CHIP", rarity: "STANDARD", price: 60, imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/9/94/Eyes_On_Fire.png", isUniversal: true, compatibleWeapons: [] },
+    { name: "Endless Runner", type: "CHIP", rarity: "STANDARD", price: 23, imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/d/df/Endless_Runner.png", isUniversal: true, compatibleWeapons: [] },
+    { name: "Veilshot Chip", type: "CHIP", rarity: "ENHANCED", price: 60, compatibleWeapons: ["Conquest LMG"] },
   ];
 
   console.log(`\nSeeding ${mods.length} mods...`);
@@ -743,10 +746,19 @@ async function main() {
 
   for (const mod of mods) {
     const slug = slugify(mod.name);
+    const data = {
+      slug,
+      type: mod.type,
+      rarity: mod.rarity,
+      description: mod.description ?? null,
+      price: mod.price ?? null,
+      imageUrl: mod.imageUrl ?? null,
+      isUniversal: mod.isUniversal ?? false,
+    };
     const upserted = await db.mod.upsert({
       where: { name: mod.name },
-      update: { slug, type: mod.type, rarity: mod.rarity, isUniversal: mod.isUniversal ?? false },
-      create: { name: mod.name, slug, type: mod.type, rarity: mod.rarity, isUniversal: mod.isUniversal ?? false },
+      update: data,
+      create: { name: mod.name, ...data },
     });
 
     // Create junction rows for non-universal mods

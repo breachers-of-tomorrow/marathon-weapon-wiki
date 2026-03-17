@@ -1,8 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { RouterOutputs } from "@/trpc/react";
-
-type Weapon = RouterOutputs["weapon"]["getAll"][number];
+import type { Weapon } from "../../../generated/prisma";
 
 export function WeaponCard({ weapon }: { weapon: Weapon }) {
   const format = (s: string) => s.replace(/_/g, " ");

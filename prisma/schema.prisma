@@ -114,6 +114,8 @@ model Mod {
     type        ModType
     rarity      ModRarity
     description String?
+    price       Int?
+    imageUrl    String?
     isUniversal Boolean   @default(false)
     weapons     WeaponMod[]
     createdAt   DateTime  @default(now())
