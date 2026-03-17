@@ -53,24 +53,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 function DetailSkeleton() {
   return (
-    <div className="mt-4">
+    <div className="mt-4 grid gap-6 lg:grid-cols-[280px_1fr_320px]">
+      <div className="space-y-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="cryo-panel h-36 animate-pulse rounded-lg" />
+        ))}
+      </div>
       <div className="space-y-4">
         <div className="bg-panel h-8 w-48 animate-pulse rounded" />
-        <div className="flex gap-2">
-          <div className="bg-panel h-6 w-24 animate-pulse rounded" />
-          <div className="bg-panel h-6 w-20 animate-pulse rounded" />
-        </div>
-        <div className="bg-panel h-20 w-full animate-pulse rounded" />
-      </div>
-      <div className="cryo-panel mt-6 h-80 animate-pulse rounded-lg" />
-      <div className="mt-10 grid gap-8 lg:grid-cols-2">
-        <div className="space-y-4">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="cryo-panel h-40 animate-pulse rounded-lg" />
-          ))}
-        </div>
         <div className="cryo-panel h-96 animate-pulse rounded-lg" />
       </div>
+      <div className="cryo-panel h-96 animate-pulse rounded-lg" />
     </div>
   );
 }
@@ -100,67 +93,74 @@ async function WeaponDetail({ slug }: { slug: string }) {
         }}
       />
 
-      {/* Weapon info floating above image */}
-      <div className="mt-4">
-        <h1 className="font-mono text-2xl font-bold uppercase tracking-widest text-foreground">
-          {weapon.name}
-        </h1>
-
-        <div className="mt-3 flex flex-wrap items-center gap-3">
-          <WeaponBadges
-            type={weapon.type}
-            slot={weapon.slot}
-            ammoType={weapon.ammoType}
-          />
-          <div className="text-dim flex flex-wrap gap-x-6 gap-y-1 font-mono text-xs">
-            {weapon.rarity && (
-              <div>
-                <span className="text-heading uppercase">Rarity:</span>{" "}
-                <span className="text-foreground">{weapon.rarity}</span>
-              </div>
-            )}
-            {weapon.price != null && (
-              <div>
-                <span className="text-heading uppercase">Price:</span>{" "}
-                <span className="text-foreground">{weapon.price}</span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {weapon.description && (
-          <p className="text-dim mt-3 max-w-2xl text-sm leading-relaxed">
-            {weapon.description}
-          </p>
-        )}
-      </div>
-
-      {/* Big weapon image */}
-      <div className="cryo-panel relative mt-6 flex min-h-80 items-center justify-center rounded-lg md:min-h-96">
-        {weapon.imageUrl ? (
-          <Image
-            src={weapon.imageUrl}
-            alt={weapon.name}
-            fill
-            className="rounded-lg object-contain p-8"
-          />
-        ) : (
-          <div className="text-dim flex h-80 w-full items-center justify-center font-mono text-sm uppercase tracking-wide">
-            No Image Available
-          </div>
-        )}
-      </div>
-
-      {/* Two-column: Stats (left) + Mods (right) */}
-      <div className="mt-10 grid gap-8 lg:grid-cols-2">
-        <div>
+      {/* 3-column layout: Stats | Image+Info | Mods */}
+      <div className="mt-4 grid gap-6 lg:grid-cols-[280px_1fr_320px]">
+        {/* Left column: Stats */}
+        <div className="order-2 lg:order-1">
           <h2 className="text-heading mb-4 font-mono text-xs uppercase tracking-widest">
             Weapon Statistics
           </h2>
           <WeaponStats weapon={weapon} />
         </div>
 
-        <div>
+        {/* Center column: Info + Image */}
+        <div className="order-1 lg:order-2">
+          {/* Floating weapon details */}
+          <div className="mb-4 flex items-start justify-between gap-4">
+            <h1 className="font-mono text-2xl font-bold uppercase tracking-widest text-foreground">
+              {weapon.name}
+            </h1>
+            <div className="shrink-0 text-right">
+              <div className="text-dim flex flex-wrap justify-end gap-x-4 gap-y-1 font-mono text-xs">
+                {weapon.rarity && (
+                  <div>
+                    <span className="text-heading uppercase">Rarity:</span>{" "}
+                    <span className="text-foreground">{weapon.rarity}</span>
+                  </div>
+                )}
+                {weapon.price != null && (
+                  <div>
+                    <span className="text-heading uppercase">Price:</span>{" "}
+                    <span className="text-foreground">{weapon.price}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-4 flex flex-wrap items-center gap-2">
+            <WeaponBadges
+              type={weapon.type}
+              slot={weapon.slot}
+              ammoType={weapon.ammoType}
+            />
+          </div>
+
+          {weapon.description && (
+            <p className="text-dim mb-4 text-sm leading-relaxed">
+              {weapon.description}
+            </p>
+          )}
+
+          {/* Big weapon image */}
+          <div className="cryo-panel relative flex min-h-72 items-center justify-center rounded-lg lg:min-h-[28rem]">
+            {weapon.imageUrl ? (
+              <Image
+                src={weapon.imageUrl}
+                alt={weapon.name}
+                fill
+                className="rounded-lg object-contain p-6"
+              />
+            ) : (
+              <div className="text-dim flex h-72 w-full items-center justify-center font-mono text-sm uppercase tracking-wide">
+                No Image Available
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Right column: Mods */}
+        <div className="order-3">
           <WeaponModsLoader weaponId={weapon.id} />
         </div>
       </div>

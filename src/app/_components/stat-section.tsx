@@ -120,7 +120,7 @@ export function WeaponStats({ weapon }: { weapon: WeaponStatFields }) {
   ];
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2">
+    <div className="grid gap-4">
       {sections.map((section) => (
         <StatSection
           key={section.title}
