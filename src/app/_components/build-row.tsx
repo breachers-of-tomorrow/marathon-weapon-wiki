@@ -67,6 +67,12 @@ export function BuildRow({
     (a, b) => TYPE_ORDER.indexOf(a.mod.type) - TYPE_ORDER.indexOf(b.mod.type),
   );
 
+  // Compute total build cost
+  const totalCost = build.mods.reduce((sum, bm) => {
+    const mod = allModsMap.get(bm.mod.id);
+    return sum + (mod?.price ?? 0);
+  }, 0);
+
   return (
     <div className="cryo-panel rounded-lg">
       {/* Collapsed row */}
@@ -116,6 +122,11 @@ export function BuildRow({
             {build.mods.length > 0 && (
               <span className="text-dim font-mono text-[10px]">
                 {build.mods.length} mod{build.mods.length !== 1 && "s"}
+              </span>
+            )}
+            {totalCost > 0 && (
+              <span className="text-foreground/70 font-mono text-xs">
+                {totalCost.toLocaleString()}cr
               </span>
             )}
           </div>
@@ -184,7 +195,7 @@ export function BuildRow({
                       </span>
                       <div className="flex shrink-0 items-center gap-2">
                         {price != null && (
-                          <span className="text-dim font-mono text-[10px]">
+                          <span className="text-foreground/70 font-mono text-xs">
                             {price === 0 ? "Free" : `${price.toLocaleString()}cr`}
                           </span>
                         )}
@@ -199,6 +210,15 @@ export function BuildRow({
                   </div>
                 );
               })}
+            </div>
+          )}
+
+          {/* Total build cost */}
+          {totalCost > 0 && (
+            <div className="border-border mt-3 flex items-center justify-end border-t pt-3">
+              <span className="text-foreground font-mono text-xs">
+                Total: {totalCost.toLocaleString()}cr
+              </span>
             </div>
           )}
 

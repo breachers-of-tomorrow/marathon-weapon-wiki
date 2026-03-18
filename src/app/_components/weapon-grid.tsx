@@ -14,19 +14,31 @@ export function WeaponGrid({
   types: string[];
 }) {
   const [activeType, setActiveType] = useState<string | undefined>(undefined);
+  const [search, setSearch] = useState("");
 
   const filtered = useMemo(
     () =>
-      activeType
-        ? weapons.filter((w) => w.type === activeType)
-        : weapons,
-    [weapons, activeType],
+      weapons.filter((w) => {
+        if (activeType && w.type !== activeType) return false;
+        if (search && !w.name.toLowerCase().includes(search.toLowerCase())) return false;
+        return true;
+      }),
+    [weapons, activeType, search],
   );
 
   const format = (s: string) => s.replace(/_/g, " ");
 
   return (
     <div>
+      {/* Search bar */}
+      <input
+        type="text"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search weapons..."
+        className="bg-panel border-border text-foreground placeholder:text-dim mb-4 w-full rounded border px-4 py-2 font-mono text-sm outline-none focus:border-accent sm:max-w-sm"
+      />
+
       {/* Filter bar */}
       <div className="mb-8 flex flex-wrap gap-2" data-tour="filters">
         <button

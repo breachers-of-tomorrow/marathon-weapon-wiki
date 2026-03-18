@@ -26,17 +26,24 @@ export function WeaponModsSection({
   universalMods: Mod[];
 }) {
   const [activeRarity, setActiveRarity] = useState<string | null>(null);
+  const [activeType, setActiveType] = useState<string | null>(null);
   const [search, setSearch] = useState("");
 
   const allMods = useMemo(() => [...linkedMods, ...universalMods], [linkedMods, universalMods]);
 
+  // Only show type buttons for types that actually exist in this weapon's mods
+  const availableTypes = useMemo(() => {
+    return TYPE_ORDER.filter((type) => allMods.some((m) => m.type === type));
+  }, [allMods]);
+
   const filtered = useMemo(() => {
     return allMods.filter((mod) => {
       if (activeRarity && mod.rarity !== activeRarity) return false;
+      if (activeType && mod.type !== activeType) return false;
       if (search && !mod.name.toLowerCase().includes(search.toLowerCase())) return false;
       return true;
     });
-  }, [allMods, activeRarity, search]);
+  }, [allMods, activeRarity, activeType, search]);
 
   const grouped = useMemo(() => {
     const map = new Map<string, Mod[]>();
@@ -61,39 +68,36 @@ export function WeaponModsSection({
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Search mods..."
-        className="bg-panel border-border text-foreground placeholder:text-dim mb-3 w-full rounded border px-3 py-1.5 font-mono text-xs outline-none focus:border-accent"
+        className="bg-panel border-border text-foreground placeholder:text-dim mb-2 w-full rounded border px-3 py-1.5 font-mono text-xs outline-none focus:border-accent"
       />
 
-      {/* Rarity filter */}
-      <div className="mb-4 flex flex-wrap gap-1.5">
-        <button
-          onClick={() => setActiveRarity(null)}
-          className={`rounded px-2 py-1 font-mono text-[10px] uppercase tracking-wide transition-colors ${
-            activeRarity === null
-              ? "bg-accent text-background"
-              : "bg-panel text-dim hover:text-foreground border border-border"
-          }`}
+      {/* Filter dropdowns */}
+      <div className="mb-4 flex gap-2">
+        <select
+          value={activeType ?? ""}
+          onChange={(e) => setActiveType(e.target.value || null)}
+          className="bg-panel border-border text-foreground rounded border px-3 py-1.5 font-mono text-xs uppercase tracking-wide outline-none focus:border-accent"
         >
-          All
-        </button>
-        {RARITIES.map((r) => {
-          const color = RARITY_COLORS[r]!;
-          const isActive = activeRarity === r;
-          return (
-            <button
-              key={r}
-              onClick={() => setActiveRarity(isActive ? null : r)}
-              className="rounded px-2 py-1 font-mono text-[10px] uppercase tracking-wide transition-colors border"
-              style={{
-                backgroundColor: isActive ? `${color}30` : undefined,
-                borderColor: isActive ? color : "var(--color-border)",
-                color: isActive ? color : "var(--color-dim)",
-              }}
-            >
+          <option value="">All Types</option>
+          {availableTypes.map((type) => (
+            <option key={type} value={type}>
+              {type}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={activeRarity ?? ""}
+          onChange={(e) => setActiveRarity(e.target.value || null)}
+          className="bg-panel border-border text-foreground rounded border px-3 py-1.5 font-mono text-xs uppercase tracking-wide outline-none focus:border-accent"
+        >
+          <option value="">All Rarities</option>
+          {RARITIES.map((r) => (
+            <option key={r} value={r}>
               {r}
-            </button>
-          );
-        })}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Grouped mods */}
@@ -127,7 +131,7 @@ export function WeaponModsSection({
                         </span>
                         <div className="flex shrink-0 items-center gap-2">
                           {mod.price != null && (
-                            <span className="text-dim font-mono text-[10px]">
+                            <span className="text-foreground/70 font-mono text-xs">
                               {mod.price === 0 ? "Free" : `${mod.price.toLocaleString()}cr`}
                             </span>
                           )}
