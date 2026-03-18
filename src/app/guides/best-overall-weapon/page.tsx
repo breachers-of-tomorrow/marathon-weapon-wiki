@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Best Overall Weapon in Marathon | Ultimate Meta Analysis",
-  description: "The definitive ranking of every weapon in Marathon. What is the one gun you need? Analyzing the BRRT SMG and Impact HAR.",
+  description: "The definitive ranking of every weapon in Marathon. What is the one gun you need? Analyzing the Impact HAR, Bully SMG, and more.",
 };
 
 export default function OverallGuide() {
@@ -22,12 +22,12 @@ export default function OverallGuide() {
           {
             "@type": "Question",
             "name": "What is the best weapon overall in Marathon?",
-            "acceptedAnswer": { "@type": "Answer", "text": "The BRRT SMG and Impact HAR are currently the top-tier weapons, depending on engagement range." }
+            "acceptedAnswer": { "@type": "Answer", "text": "The Impact HAR is the best overall weapon due to its 0.6s headshot TTK, 60m range, and versatility across all engagement distances." }
           },
           {
             "@type": "Question",
-            "name": "Why is the BRRT SMG considered the best close-range weapon?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Its massive 183.33 DPS and 35-round magazine make it the most efficient killing machine in close-quarters combat." }
+            "name": "What is the best close-range weapon in Marathon?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The Bully SMG is the best close-range weapon thanks to its 0.667s headshot TTK and Heavy Rounds flinch effect that disrupts opponents' aim." }
           },
           {
             "@type": "Question",
@@ -45,7 +45,7 @@ export default function OverallGuide() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      
+
       <Link href="/guides" className="text-dim hover:text-accent mb-8 inline-flex items-center gap-1 font-mono text-xs uppercase tracking-wide transition-colors">
         &larr; Back to Guides
       </Link>
@@ -61,29 +61,29 @@ export default function OverallGuide() {
       </div>
 
       <div className="prose prose-invert max-w-none prose-headings:font-display prose-headings:uppercase prose-headings:tracking-widest prose-headings:text-foreground prose-p:text-dim prose-p:leading-relaxed prose-strong:text-foreground prose-a:text-accent hover:prose-a:underline">
-        <p className="text-xl italic">After analyzing every weapon in the Marathon database, two guns stand above the rest as the &quot;Best Overall&quot; depending on your engagement distance.</p>
+        <p className="text-xl italic">After analyzing every weapon in the Marathon database, one gun stands above the rest for pure versatility, with a close-range specialist right behind it.</p>
 
         <div className="cryo-panel my-8 p-6">
-          <h2 className="mb-4 mt-0 text-xl font-bold text-accent">The Verdict: BRRT SMG and Impact HAR Tie for the Throne</h2>
-          <p className="mb-0">Whether you are clearing rooms or holding overwatch, these two weapons represent the pinnacle of current tactical performance.</p>
+          <h2 className="mb-4 mt-0 text-xl font-bold text-accent">The Verdict: Impact HAR is the Best Overall Weapon</h2>
+          <p className="mb-0">The Impact HAR&apos;s combination of a 0.6s headshot TTK and 60m range makes it lethal at every distance. Pair it with a Bully SMG for close quarters and you have the strongest loadout in the game.</p>
         </div>
 
-        <h3>The Close-Range Champion: BRRT SMG</h3>
-        <p>If you look at the raw numbers, the BRRT SMG is the most efficient weapon in the game. Its 183.33 DPS is higher than every other primary weapon. It has a larger magazine than most ARs and a TTK that outclasses almost everything in the mid-range. For any indoor engagement or extract defense, the BRRT is the definitive &quot;Best in Slot&quot; weapon.</p>
+        <h3>The Overall Champion: Impact HAR</h3>
+        <p>The Impact HAR wins on tactical superiority. Its 0.6s headshot TTK on white shields allows it to compete with SMGs up close, while its 60m range lets it contest Snipers and Precision Rifles. With 120 DPS and a 1.6x headshot multiplier, it rewards precision at any distance. In the unpredictable world of Marathon, versatility is life. The Impact HAR allows you to engage at any range with lethal efficiency, provided you have the aim to back it up.</p>
 
         <div className="grid gap-4 md:grid-cols-2 my-6">
           <div className="cryo-panel p-4 text-center">
-            <span className="block font-mono text-xs uppercase tracking-widest text-accent mb-1">CQC Winner</span>
-            <span className="text-3xl font-bold text-foreground">BRRT SMG</span>
+            <span className="block font-mono text-xs uppercase tracking-widest text-accent mb-1">Best Overall</span>
+            <span className="text-3xl font-bold text-foreground">Impact HAR</span>
           </div>
           <div className="cryo-panel p-4 text-center">
-            <span className="block font-mono text-xs uppercase tracking-widest text-accent mb-1">Range Winner</span>
-            <span className="text-3xl font-bold text-foreground">Impact HAR</span>
+            <span className="block font-mono text-xs uppercase tracking-widest text-accent mb-1">Best CQC</span>
+            <span className="text-3xl font-bold text-foreground">Bully SMG</span>
           </div>
         </div>
 
-        <h3>The Mid-Range Champion: Impact HAR</h3>
-        <p>While the BRRT wins on speed, the Impact HAR wins on tactical superiority. Its 0.6s headshot TTK allows it to compete with SMGs, but its 60m range allows it to contest Snipers and Precision Rifles. In the unpredictable world of Marathon, versatility is life. The Impact HAR allows you to engage at any distance with lethal efficiency, provided you have the aim to back it up.</p>
+        <h3>The Close-Range Champion: Bully SMG</h3>
+        <p>The Bully SMG is the definitive close-quarters weapon. Its 135 DPS and 0.667s headshot TTK are strong, but the real edge comes from <strong>Heavy Rounds</strong> that inflict severe flinch, crippling your opponent&apos;s ability to fight back. For any indoor engagement or extract defense, the Bully is the &quot;Best in Slot&quot; CQC weapon.</p>
 
         <h3>The &quot;Delete Button&quot;: WSTR Combat Shotgun</h3>
         <p>Special mention must go to the WSTR Combat Shotgun. With a burst DPS of 485, it is technically the &quot;fastest&quot; killer in the game at 0-4 meters. However, its 2-round magazine and 1.3 RPM fire rate make it a high-risk tool. It isn&apos;t the best weapon, but it is the best counter to aggressive players.</p>
@@ -91,8 +91,8 @@ export default function OverallGuide() {
         <div className="bg-panel/50 my-12 border-l-4 border-accent p-8 rounded-r-lg">
           <h3 className="mt-0 text-foreground">Overall Rankings</h3>
           <ol className="mb-0 list-decimal pl-5 space-y-2">
-            <li><strong>BRRT SMG</strong> (Highest sustained CQC power)</li>
             <li><strong>Impact HAR</strong> (Most versatile lethal precision)</li>
+            <li><strong>Bully SMG</strong> (Best CQC duelist / Flinch specialist)</li>
             <li><strong>Twin Tap HBR</strong> (Best balance of DPS and range)</li>
           </ol>
         </div>
@@ -102,11 +102,11 @@ export default function OverallGuide() {
           <div className="space-y-8">
             <div>
               <h4 className="text-foreground font-bold mb-2">What is the best weapon overall in Marathon?</h4>
-              <p>The BRRT SMG and Impact HAR are currently the top-tier weapons, depending on your engagement range. The BRRT is dominant at close range, while the Impact HAR is the most versatile at mid-to-long distance.</p>
+              <p>The Impact HAR is the best overall weapon thanks to its 0.6s headshot TTK on white shields, 120 DPS, and 60m range, making it effective at every engagement distance.</p>
             </div>
             <div>
-              <h4 className="text-foreground font-bold mb-2">Why is the BRRT SMG considered the best close-range weapon?</h4>
-              <p>Its massive 183.33 DPS and 35-round magazine make it the most efficient killing machine in close-quarters combat, outperforming all other SMGs and ARs in raw TTK.</p>
+              <h4 className="text-foreground font-bold mb-2">What is the best close-range weapon?</h4>
+              <p>The Bully SMG is the best CQC weapon with its 0.667s headshot TTK and Heavy Rounds that cause severe flinch, disrupting opponents&apos; aim in 1v1 duels.</p>
             </div>
             <div>
               <h4 className="text-foreground font-bold mb-2">Is there a weapon that counters aggressive play?</h4>
