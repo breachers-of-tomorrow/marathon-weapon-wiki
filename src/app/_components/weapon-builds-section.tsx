@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { api } from "@/trpc/react";
-import { BuildVote } from "./build-vote";
+import { BuildRow } from "./build-row";
 import { BuildForm } from "./build-form";
 
 type Mod = {
@@ -16,26 +16,6 @@ type Mod = {
   price: number | null;
   imageUrl: string | null;
   isUniversal: boolean;
-};
-
-const RARITY_COLORS: Record<string, string> = {
-  PRESTIGE: "#f59e0b",
-  SUPERIOR: "#8b5cf6",
-  DELUXE: "#00d4ff",
-  ENHANCED: "#00ff9d",
-  STANDARD: "#6b7280",
-};
-
-const BUILD_TYPE_LABELS: Record<string, string> = {
-  PVP: "PvP",
-  PVE: "PvE",
-  PVEVP: "PvEvP",
-};
-
-const BUILD_TYPE_COLORS: Record<string, string> = {
-  PVP: "#ff2244",
-  PVE: "#00ff9d",
-  PVEVP: "#f59e0b",
 };
 
 const FILTER_OPTIONS = [
@@ -57,6 +37,15 @@ export function WeaponBuildsSection({
   const { data: session } = useSession();
   const [typeFilter, setTypeFilter] = useState<"PVP" | "PVE" | "PVEVP" | undefined>();
   const [formOpen, setFormOpen] = useState(false);
+  const [expandedBuildId, setExpandedBuildId] = useState<string | null>(null);
+
+  const allModsMap = useMemo(() => {
+    const map = new Map<string, Mod>();
+    for (const mod of [...linkedMods, ...universalMods]) {
+      map.set(mod.id, mod);
+    }
+    return map;
+  }, [linkedMods, universalMods]);
 
   const { data: builds, isLoading } = api.build.getByWeaponSlug.useQuery({
     weaponSlug,
@@ -119,72 +108,18 @@ export function WeaponBuildsSection({
       ) : (
         <div className="space-y-2">
           {builds.map((build) => (
-            <div key={build.id} className="cryo-panel flex gap-3 rounded-lg p-3">
-              <BuildVote
-                buildId={build.id}
-                initialScore={build.score}
-                initialUserVote={build.userVote}
-              />
-              <div className="min-w-0 flex-1">
-                <div className="mb-1 flex items-center gap-2">
-                  <span className="truncate text-sm font-medium text-foreground">
-                    {build.title}
-                  </span>
-                  <span
-                    className="shrink-0 rounded px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide"
-                    style={{
-                      backgroundColor: `${BUILD_TYPE_COLORS[build.type]}20`,
-                      color: BUILD_TYPE_COLORS[build.type],
-                    }}
-                  >
-                    {BUILD_TYPE_LABELS[build.type]}
-                  </span>
-                </div>
-
-                {/* Author */}
-                <div className="mb-1.5 flex items-center gap-1.5">
-                  {build.author.image && (
-                    <img
-                      src={build.author.image}
-                      alt=""
-                      className="h-4 w-4 rounded-full"
-                    />
-                  )}
-                  <span className="text-dim font-mono text-[10px]">
-                    {build.author.name ?? "Anonymous"}
-                  </span>
-                  {session?.user?.id === build.authorId && (
-                    <button
-                      onClick={() => deleteBuild.mutate({ buildId: build.id })}
-                      className="text-dim cursor-pointer font-mono text-[10px] transition-colors hover:text-danger"
-                    >
-                      delete
-                    </button>
-                  )}
-                </div>
-
-                {/* Mods */}
-                {build.mods.length > 0 && (
-                  <div className="flex flex-wrap gap-1">
-                    {build.mods.map((bm) => {
-                      const color = RARITY_COLORS[bm.mod.rarity] ?? "#6b7280";
-                      return (
-                        <span
-                          key={bm.id}
-                          className="rounded px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wide"
-                          style={{
-                            backgroundColor: `${color}20`,
-                            color,
-                          }}
-                        >
-                          {bm.mod.name}
-                        </span>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            </div>
+            <BuildRow
+              key={build.id}
+              build={build}
+              allModsMap={allModsMap}
+              isExpanded={expandedBuildId === build.id}
+              onToggle={() =>
+                setExpandedBuildId(expandedBuildId === build.id ? null : build.id)
+              }
+              session={session}
+              onDelete={(buildId) => deleteBuild.mutate({ buildId })}
+              isDeleting={deleteBuild.isPending}
+            />
           ))}
         </div>
       )}

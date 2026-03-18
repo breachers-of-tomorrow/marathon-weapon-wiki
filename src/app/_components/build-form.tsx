@@ -1,7 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  KeyboardSensor,
+  useSensor,
+  useSensors,
+  type DragStartEvent,
+  type DragEndEvent,
+} from "@dnd-kit/core";
 import { api } from "@/trpc/react";
+import { ModSlot } from "./mod-slot";
+import { ModCard } from "./mod-card";
+import { RarityBadge, RARITY_COLORS } from "./rarity-badge";
 
 type Mod = {
   id: string;
@@ -15,7 +28,15 @@ type Mod = {
   slug: string;
 };
 
-const TYPE_ORDER = ["BARREL", "GRIP", "MAGAZINE", "OPTIC", "SHIELD", "GENERATOR", "CHIP"];
+const TYPE_ORDER = [
+  "BARREL",
+  "GRIP",
+  "MAGAZINE",
+  "OPTIC",
+  "SHIELD",
+  "GENERATOR",
+  "CHIP",
+];
 const BUILD_TYPES = ["PVP", "PVE", "PVEVP"] as const;
 
 const BUILD_TYPE_LABELS: Record<string, string> = {
@@ -38,9 +59,18 @@ export function BuildForm({
   universalMods: Mod[];
 }) {
   const [title, setTitle] = useState("");
-  const [buildType, setBuildType] = useState<(typeof BUILD_TYPES)[number]>("PVP");
+  const [buildType, setBuildType] = useState<(typeof BUILD_TYPES)[number]>(
+    "PVP",
+  );
   const [selectedMods, setSelectedMods] = useState<Record<string, string>>({});
   const [error, setError] = useState("");
+  const [expandedType, setExpandedType] = useState<string | null>(null);
+  const [activeDragId, setActiveDragId] = useState<string | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor),
+  );
 
   const utils = api.useUtils();
   const createBuild = api.build.create.useMutation({
@@ -56,6 +86,8 @@ export function BuildForm({
     setBuildType("PVP");
     setSelectedMods({});
     setError("");
+    setExpandedType(null);
+    setActiveDragId(null);
     onClose();
   }
 
@@ -80,21 +112,63 @@ export function BuildForm({
     if (modsOfType.length > 0) modsByType.set(type, modsOfType);
   }
 
+  const allModsById = new Map(allMods.map((m) => [m.id, m]));
+
+  const selectMod = useCallback(
+    (type: string, modId: string) => {
+      setSelectedMods((prev) => ({ ...prev, [type]: modId }));
+      setExpandedType(null);
+    },
+    [],
+  );
+
+  const clearMod = useCallback((type: string) => {
+    setSelectedMods((prev) => {
+      const next = { ...prev };
+      delete next[type];
+      return next;
+    });
+  }, []);
+
+  function handleDragStart(event: DragStartEvent) {
+    setActiveDragId(event.active.id as string);
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
+    setActiveDragId(null);
+    const { active, over } = event;
+    if (!over) return;
+
+    const mod = active.data.current?.mod as Mod | undefined;
+    const slotType = over.data.current?.type as string | undefined;
+    if (mod && slotType && mod.type === slotType) {
+      selectMod(slotType, mod.id);
+    }
+  }
+
+  const activeDragMod = activeDragId
+    ? allModsById.get(activeDragId)
+    : undefined;
+
   if (!open) return null;
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
       onClick={(e) => {
-        if (e.target === e.currentTarget && !createBuild.isPending) resetAndClose();
+        if (e.target === e.currentTarget && !createBuild.isPending)
+          resetAndClose();
       }}
     >
-      <div className="cryo-panel mx-4 w-full max-w-md rounded-lg border-border-accent p-6">
+      <div className="cryo-panel mx-4 w-full max-w-lg rounded-lg border-border-accent p-6">
         <h2 className="mb-4 text-lg font-semibold text-foreground">
           Submit Build
         </h2>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form
+          onSubmit={handleSubmit}
+          className="flex max-h-[70vh] flex-col gap-4 overflow-y-auto pr-1"
+        >
           {/* Title */}
           <div>
             <label className="mb-1 block text-sm text-dim">Build Title</label>
@@ -130,36 +204,73 @@ export function BuildForm({
             </div>
           </div>
 
-          {/* Mod Selectors */}
+          {/* Mod Slots */}
           <div>
             <label className="mb-1 block text-sm text-dim">Mods</label>
-            <div className="space-y-2">
-              {Array.from(modsByType.entries()).map(([type, mods]) => (
-                <div key={type}>
-                  <label className="mb-0.5 block font-mono text-[10px] uppercase tracking-widest text-foreground">
-                    {type}
-                  </label>
-                  <select
-                    value={selectedMods[type] ?? ""}
-                    onChange={(e) =>
-                      setSelectedMods((prev) => ({
-                        ...prev,
-                        [type]: e.target.value,
-                      }))
-                    }
-                    className="w-full rounded-md border border-border bg-background px-3 py-1.5 text-sm text-foreground focus:border-accent focus:outline-none"
-                    disabled={createBuild.isPending}
+            <DndContext
+              sensors={sensors}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+            >
+              <div className="space-y-1.5">
+                {Array.from(modsByType.entries()).map(([type, mods]) => {
+                  const selectedModId = selectedMods[type];
+                  const selectedMod = selectedModId
+                    ? allModsById.get(selectedModId)
+                    : undefined;
+                  const isExpanded = expandedType === type;
+
+                  return (
+                    <div key={type}>
+                      <ModSlot
+                        type={type}
+                        selectedMod={selectedMod}
+                        expanded={isExpanded}
+                        onToggle={() =>
+                          setExpandedType(isExpanded ? null : type)
+                        }
+                        onClear={() => clearMod(type)}
+                        disabled={createBuild.isPending}
+                      />
+
+                      {/* Inline picker */}
+                      {isExpanded && (
+                        <div className="mt-1 mb-1 space-y-1 pl-2">
+                          {mods.map((mod) => (
+                            <ModCard
+                              key={mod.id}
+                              mod={mod}
+                              selected={selectedModId === mod.id}
+                              onClick={() => selectMod(type, mod.id)}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              <DragOverlay dropAnimation={null}>
+                {activeDragMod && (
+                  <div
+                    className="w-72 scale-105 rounded-md border border-accent bg-panel p-2.5 opacity-90 shadow-lg"
+                    style={{
+                      borderLeftWidth: "3px",
+                      borderLeftColor:
+                        RARITY_COLORS[activeDragMod.rarity] ?? "#6b7280",
+                    }}
                   >
-                    <option value="">None</option>
-                    {mods.map((mod) => (
-                      <option key={mod.id} value={mod.id}>
-                        {mod.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              ))}
-            </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="truncate font-mono text-sm text-foreground">
+                        {activeDragMod.name}
+                      </span>
+                      <RarityBadge rarity={activeDragMod.rarity} />
+                    </div>
+                  </div>
+                )}
+              </DragOverlay>
+            </DndContext>
           </div>
 
           {error && (
