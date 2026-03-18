@@ -8,6 +8,57 @@ import {
 } from "@/server/api/trpc";
 
 export const buildRouter = createTRPCRouter({
+  getTopBuilds: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).default(50),
+        type: z.enum(["PVP", "PVE", "PVEVP"]).optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const builds = await ctx.db.build.findMany({
+        where: input.type ? { type: input.type } : {},
+        orderBy: [{ score: "desc" }, { createdAt: "desc" }],
+        take: input.limit,
+        include: {
+          author: { select: { id: true, name: true, image: true } },
+          weapon: {
+            select: { name: true, slug: true, imageUrl: true, type: true },
+          },
+          mods: {
+            include: {
+              mod: {
+                select: {
+                  id: true,
+                  name: true,
+                  type: true,
+                  rarity: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      let userVotes: Record<string, number> = {};
+      if (ctx.session?.user) {
+        const votes = await ctx.db.buildVote.findMany({
+          where: {
+            buildId: { in: builds.map((b) => b.id) },
+            userId: ctx.session.user.id,
+          },
+        });
+        userVotes = Object.fromEntries(
+          votes.map((v) => [v.buildId, v.value]),
+        );
+      }
+
+      return builds.map((build) => ({
+        ...build,
+        userVote: (userVotes[build.id] as 1 | -1) ?? null,
+      }));
+    }),
+
   getByWeaponSlug: publicProcedure
     .input(
       z.object({
