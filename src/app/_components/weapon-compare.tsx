@@ -3,7 +3,14 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useMemo, useState, useRef, useEffect, useCallback } from "react";
 import type { Weapon, WeaponTTK } from "../../../generated/prisma";
-import { getTtkColor, shieldTiers, formatTtk } from "@/lib/ttk-utils";
+import { shieldTiers, formatTtk } from "@/lib/ttk-utils";
+
+/** Green if this value is strictly lower (faster), red if higher (slower), neutral if tied */
+function compareColor(mine: number, theirs: number): string {
+  if (mine < theirs) return "text-green-400";
+  if (mine > theirs) return "text-red-400";
+  return "text-foreground";
+}
 
 type WeaponWithTTK = Weapon & { ttk: WeaponTTK | null };
 
@@ -418,7 +425,7 @@ export function WeaponCompare({ weapons }: { weapons: WeaponWithTTK[] }) {
                   {ttkBodyKeys.map((key) => (
                     <td
                       key={key}
-                      className={`p-3 text-center font-mono font-bold ${getTtkColor(ttkA[key])}`}
+                      className={`p-3 text-center font-mono font-bold ${compareColor(ttkA[key], ttkB[key])}`}
                     >
                       {formatTtk(ttkA[key])}
                     </td>
@@ -432,7 +439,7 @@ export function WeaponCompare({ weapons }: { weapons: WeaponWithTTK[] }) {
                   {ttkBodyKeys.map((key) => (
                     <td
                       key={key}
-                      className={`p-3 text-center font-mono font-bold ${getTtkColor(ttkB[key])}`}
+                      className={`p-3 text-center font-mono font-bold ${compareColor(ttkB[key], ttkA[key])}`}
                     >
                       {formatTtk(ttkB[key])}
                     </td>
@@ -465,7 +472,7 @@ export function WeaponCompare({ weapons }: { weapons: WeaponWithTTK[] }) {
                   {ttkHeadKeys.map((key) => (
                     <td
                       key={key}
-                      className={`p-3 text-center font-mono font-bold ${getTtkColor(ttkA[key])}`}
+                      className={`p-3 text-center font-mono font-bold ${compareColor(ttkA[key], ttkB[key])}`}
                     >
                       {formatTtk(ttkA[key])}
                     </td>
@@ -479,7 +486,7 @@ export function WeaponCompare({ weapons }: { weapons: WeaponWithTTK[] }) {
                   {ttkHeadKeys.map((key) => (
                     <td
                       key={key}
-                      className={`p-3 text-center font-mono font-bold ${getTtkColor(ttkB[key])}`}
+                      className={`p-3 text-center font-mono font-bold ${compareColor(ttkB[key], ttkA[key])}`}
                     >
                       {formatTtk(ttkB[key])}
                     </td>
