@@ -23,6 +23,12 @@ export function Navbar() {
           >
             Compare
           </Link>
+          <Link
+            href="/guides"
+            className="rounded border border-border px-3 py-1 font-mono text-xs uppercase tracking-wider text-dim transition-all hover:border-border-accent hover:text-foreground hover:shadow-[0_0_12px_rgba(0,212,255,0.3)]"
+          >
+            Guides
+          </Link>
         </div>
 
         <div>
