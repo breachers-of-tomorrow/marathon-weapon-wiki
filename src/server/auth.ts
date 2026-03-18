@@ -25,6 +25,20 @@ export const authOptions: NextAuthOptions = {
         url: "https://www.bungie.net/en/OAuth/Authorize",
         params: { reauth: true, scope: "" },
       },
+      userinfo: {
+        async request({ tokens }) {
+          const res = await fetch(
+            `https://www.bungie.net/platform/User/GetBungieAccount/${tokens.membership_id}/254/`,
+            {
+              headers: {
+                "X-API-Key": process.env.AUTH_BUNGIE_API_KEY!,
+                Authorization: `Bearer ${tokens.access_token}`,
+              },
+            },
+          );
+          return await res.json();
+        },
+      },
       ...({
         headers: { "X-API-Key": process.env.AUTH_BUNGIE_API_KEY! },
       } as Record<string, unknown>),
