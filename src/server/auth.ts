@@ -1,17 +1,30 @@
-import NextAuth from "next-auth";
+import {
+  type DefaultSession,
+  type NextAuthOptions,
+  getServerSession,
+} from "next-auth";
 import BungieProvider from "next-auth/providers/bungie";
-import { PrismaAdapter } from "@auth/prisma-adapter";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { db } from "@/server/db";
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+declare module "next-auth" {
+  interface Session extends DefaultSession {
+    user: {
+      id: string;
+    } & DefaultSession["user"];
+  }
+}
+
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   providers: [
     BungieProvider({
-      clientId: process.env.AUTH_BUNGIE_ID,
-      clientSecret: process.env.AUTH_BUNGIE_SECRET,
-      // headers is required by Bungie API but not in the OAuthUserConfig type
-      headers: { "X-API-Key": process.env.AUTH_BUNGIE_API_KEY! },
-    } as Record<string, unknown>),
+      clientId: process.env.AUTH_BUNGIE_ID!,
+      clientSecret: process.env.AUTH_BUNGIE_SECRET!,
+      ...({
+        headers: { "X-API-Key": process.env.AUTH_BUNGIE_API_KEY! },
+      } as Record<string, unknown>),
+    }),
   ],
   callbacks: {
     session: ({ session, user }) => ({
@@ -22,4 +35,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   },
-});
+};
+
+export const getServerAuthSession = () => getServerSession(authOptions);
