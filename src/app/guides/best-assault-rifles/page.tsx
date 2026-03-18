@@ -33,6 +33,11 @@ export default function ArGuide() {
             "@type": "Question",
             "name": "What is the headshot TTK for the Impact HAR?",
             "acceptedAnswer": { "@type": "Answer", "text": "The Impact HAR has a headshot TTK of 0.6s, the fastest in its class." }
+          },
+          {
+            "@type": "Question",
+            "name": "How does the V75 Scar tracking work?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The V75 Scar uses volt-actuated tracking projectiles that help maintain accuracy during high-mobility engagements, though it requires careful heat management." }
           }
         ]
       }

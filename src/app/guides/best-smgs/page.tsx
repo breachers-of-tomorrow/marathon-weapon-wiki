@@ -33,6 +33,11 @@ export default function SmgGuide() {
             "@type": "Question",
             "name": "What is the magazine size of the BRRT SMG?",
             "acceptedAnswer": { "@type": "Answer", "text": "The BRRT SMG features a 35-round magazine, which is the largest in its class." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is the Bully SMG considered the best for 1v1s?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The Bully SMG uses Heavy Rounds which cause severe flinch, making it incredibly difficult for opponents to return fire accurately." }
           }
         ]
       }
