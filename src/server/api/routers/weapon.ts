@@ -24,7 +24,7 @@ const getCachedWeapons = (type?: WeaponType, slot?: WeaponSlot, ammoType?: AmmoT
 
 const getCachedWeaponBySlug = (slug: string) =>
   unstable_cache(
-    () => db.weapon.findUnique({ where: { slug } }),
+    () => db.weapon.findUnique({ where: { slug }, include: { ttk: true } }),
     [`weapon-${slug}`],
     { revalidate: CACHE_TTL, tags: ["weapons"] },
   )();
@@ -40,6 +40,18 @@ const getCachedWeaponTypes = () =>
         })
         .then((w) => w.map((w) => w.type)),
     ["weapon-types"],
+    { revalidate: CACHE_TTL, tags: ["weapons"] },
+  )();
+
+const getCachedWeaponsWithTTK = () =>
+  unstable_cache(
+    () =>
+      db.weapon.findMany({
+        where: { ttk: { isNot: null } },
+        include: { ttk: true },
+        orderBy: { name: "asc" },
+      }),
+    ["weapons-with-ttk"],
     { revalidate: CACHE_TTL, tags: ["weapons"] },
   )();
 
@@ -66,5 +78,9 @@ export const weaponRouter = createTRPCRouter({
 
   getTypes: publicProcedure.query(async () => {
     return getCachedWeaponTypes();
+  }),
+
+  getAllWithTTK: publicProcedure.query(async () => {
+    return getCachedWeaponsWithTTK();
   }),
 });

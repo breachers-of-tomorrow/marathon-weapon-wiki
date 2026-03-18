@@ -9,12 +9,21 @@ export function Navbar() {
   return (
     <nav className="cryo-panel border-b border-border" data-tour="navbar">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-        <Link
-          href="/"
-          className="font-display text-lg font-bold uppercase tracking-widest text-foreground heading-glow"
-        >
-          Marathon Weapon Wiki
-        </Link>
+        <div className="flex items-center gap-6">
+          <Link
+            href="/"
+            className="font-display text-lg font-bold uppercase tracking-widest text-foreground heading-glow"
+          >
+            Marathon Weapon Wiki
+          </Link>
+          <Link
+            href="/compare"
+            data-tour="compare-link"
+            className="rounded border border-border px-3 py-1 font-mono text-xs uppercase tracking-wider text-dim transition-all hover:border-border-accent hover:text-foreground hover:shadow-[0_0_12px_rgba(0,212,255,0.3)]"
+          >
+            Compare
+          </Link>
+        </div>
 
         <div>
           {status === "loading" ? (

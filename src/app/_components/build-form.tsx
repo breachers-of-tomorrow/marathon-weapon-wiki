@@ -26,6 +26,7 @@ type Mod = {
   imageUrl: string | null;
   isUniversal: boolean;
   slug: string;
+  statModifiers: unknown;
 };
 
 const TYPE_ORDER = [

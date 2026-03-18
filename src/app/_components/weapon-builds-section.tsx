@@ -16,6 +16,7 @@ type Mod = {
   price: number | null;
   imageUrl: string | null;
   isUniversal: boolean;
+  statModifiers: unknown;
 };
 
 const FILTER_OPTIONS = [

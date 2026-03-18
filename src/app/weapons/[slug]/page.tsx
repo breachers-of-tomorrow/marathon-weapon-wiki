@@ -15,6 +15,7 @@ import {
   weaponProductJsonLd,
   breadcrumbJsonLd,
 } from "@/lib/structured-data";
+import { WeaponTTKSection } from "@/app/_components/weapon-ttk-section";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -155,6 +156,14 @@ async function WeaponDetail({ slug }: { slug: string }) {
     </div>
   );
 
+  const ttkView = weapon.ttk ? (
+    <WeaponTTKSection ttk={weapon.ttk} />
+  ) : (
+    <div className="cryo-panel rounded-lg p-8 text-center">
+      <p className="text-dim font-mono text-sm">No TTK data available for this weapon yet.</p>
+    </div>
+  );
+
   const buildsView = (
     <div data-tour="builds-section">
       <h2 className="text-heading mb-4 font-display text-xs uppercase tracking-widest heading-glow">
@@ -190,6 +199,7 @@ async function WeaponDetail({ slug }: { slug: string }) {
 
       <WeaponPageTabs
         detailsContent={detailsView}
+        ttkContent={ttkView}
         buildsContent={buildsView}
       />
     </>

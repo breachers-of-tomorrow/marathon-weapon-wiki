@@ -38,6 +38,16 @@ function startHomeTour() {
         },
       },
       {
+        element: '[data-tour="compare-link"]',
+        popover: {
+          title: "Compare Weapons",
+          description:
+            "Pick any two weapons and compare their TTK stats side-by-side. See damage, DPS, and time-to-kill across every shield tier at a glance.",
+          side: "bottom" as const,
+          align: "start" as const,
+        },
+      },
+      {
         element: '[data-tour="filters"]',
         popover: {
           title: "Browse the Arsenal",
@@ -70,7 +80,7 @@ function startHomeTour() {
     },
     onNextClick: (_el, _step, options) => {
       const currentStep = options.state.activeIndex;
-      if (currentStep === 2) {
+      if (currentStep === 3) {
         localStorage.setItem(TOUR_PHASE_KEY, "navigate");
         options.driver.destroy();
         return;

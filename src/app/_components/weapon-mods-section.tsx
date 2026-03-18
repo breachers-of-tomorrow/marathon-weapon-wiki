@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { RarityBadge, RARITY_COLORS } from "./rarity-badge";
+import { StatModifierBadges } from "./stat-modifier-badges";
 
 type Mod = {
   id: string;
@@ -13,6 +14,7 @@ type Mod = {
   price: number | null;
   imageUrl: string | null;
   isUniversal: boolean;
+  statModifiers: unknown;
 };
 
 const TYPE_ORDER = ["BARREL", "GRIP", "MAGAZINE", "OPTIC", "SHIELD", "GENERATOR", "CHIP"];
@@ -143,6 +145,7 @@ export function WeaponModsSection({
                           {mod.description}
                         </p>
                       )}
+                      <StatModifierBadges statModifiers={mod.statModifiers} />
                     </div>
                   ))}
                 </div>

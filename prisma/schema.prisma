@@ -99,6 +99,7 @@ model Weapon {
 
     mods    WeaponMod[]
     builds  Build[]
+    ttk     WeaponTTK?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -106,6 +107,27 @@ model Weapon {
     @@index([type])
     @@index([slot])
     @@index([ammoType])
+}
+
+model WeaponTTK {
+    id                 String @id @default(cuid())
+    weapon             Weapon @relation(fields: [weaponId], references: [id], onDelete: Cascade)
+    weaponId           String @unique
+    damage             Float
+    rpm                Float
+    headshotMultiplier Float
+    headshotDamage     Float
+    range              Float
+    dps                Float
+    shotsToKill        String
+    ttkWhite           Float
+    ttkGreen           Float
+    ttkBlue            Float
+    ttkPurple          Float
+    ttkHeadWhite       Float
+    ttkHeadGreen       Float
+    ttkHeadBlue        Float
+    ttkHeadPurple      Float
 }
 
 model Mod {
@@ -117,8 +139,9 @@ model Mod {
     description String?
     price       Int?
     imageUrl    String?
-    isUniversal Boolean   @default(false)
-    weapons     WeaponMod[]
+    statModifiers Json?     @db.JsonB
+    isUniversal   Boolean   @default(false)
+    weapons       WeaponMod[]
     buildMods   BuildMod[]
     createdAt   DateTime  @default(now())
     updatedAt   DateTime  @updatedAt

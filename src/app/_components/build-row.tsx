@@ -2,6 +2,8 @@
 
 import { BuildVote } from "./build-vote";
 import { RarityBadge, RARITY_COLORS } from "./rarity-badge";
+import { StatModifierBadges } from "./stat-modifier-badges";
+import { parseStatModifiers, aggregateStatModifiers } from "@/lib/stat-modifiers";
 
 type Mod = {
   id: string;
@@ -13,6 +15,7 @@ type Mod = {
   price: number | null;
   imageUrl: string | null;
   isUniversal: boolean;
+  statModifiers: unknown;
 };
 
 type BuildMod = {
@@ -207,11 +210,48 @@ export function BuildRow({
                         {description}
                       </p>
                     )}
+                    <StatModifierBadges statModifiers={fullMod?.statModifiers} />
                   </div>
                 );
               })}
             </div>
           )}
+
+          {/* Aggregated stat summary */}
+          {(() => {
+            const allModifiers = build.mods.map((bm) => {
+              const fullMod = allModsMap.get(bm.mod.id);
+              return parseStatModifiers(fullMod?.statModifiers);
+            }).filter((m) => m.length > 0);
+            if (allModifiers.length === 0) return null;
+            const aggregated = aggregateStatModifiers(allModifiers);
+            return (
+              <div className="border-border mt-3 border-t pt-3">
+                <span className="text-dim font-mono text-[10px] uppercase tracking-wide">
+                  Combined Stats
+                </span>
+                <div className="mt-1.5 flex flex-wrap gap-1">
+                  {Array.from(aggregated.entries()).map(([stat, { label, ups, downs }]) => {
+                    const net = ups - downs;
+                    if (net === 0) return null;
+                    const isPositive = net > 0;
+                    return (
+                      <span
+                        key={stat}
+                        className="rounded px-1.5 py-0.5 font-mono text-[10px]"
+                        style={{
+                          backgroundColor: isPositive ? "#00ff9d20" : "#ff224420",
+                          color: isPositive ? "#00ff9d" : "#ff2244",
+                        }}
+                      >
+                        {isPositive ? "↑" : "↓"} {label}{Math.abs(net) > 1 ? ` ×${Math.abs(net)}` : ""}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })()}
 
           {/* Total build cost */}
           {totalCost > 0 && (

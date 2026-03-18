@@ -2,6 +2,7 @@
 
 import { useDraggable } from "@dnd-kit/core";
 import { RarityBadge, RARITY_COLORS } from "./rarity-badge";
+import { StatModifierBadges } from "./stat-modifier-badges";
 
 type Mod = {
   id: string;
@@ -10,6 +11,7 @@ type Mod = {
   rarity: string;
   description: string | null;
   price: number | null;
+  statModifiers: unknown;
 };
 
 export function ModCard({
@@ -64,6 +66,7 @@ export function ModCard({
           {mod.description}
         </p>
       )}
+      <StatModifierBadges statModifiers={mod.statModifiers} />
     </button>
   );
 }
