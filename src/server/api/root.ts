@@ -1,3 +1,4 @@
+import { buildRouter } from "@/server/api/routers/build";
 import { modRouter } from "@/server/api/routers/mod";
 import { submissionRouter } from "@/server/api/routers/submission";
 import { weaponRouter } from "@/server/api/routers/weapon";
@@ -7,6 +8,7 @@ export const appRouter = createTRPCRouter({
   weapon: weaponRouter,
   mod: modRouter,
   submission: submissionRouter,
+  build: buildRouter,
 });
 
 export type AppRouter = typeof appRouter;

@@ -9,6 +9,10 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
     UPLOADTHING_TOKEN: z.string().min(1),
+    AUTH_BUNGIE_ID: z.string().min(1),
+    AUTH_BUNGIE_SECRET: z.string().min(1),
+    AUTH_BUNGIE_API_KEY: z.string().min(1),
+    AUTH_SECRET: z.string().min(1),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -30,6 +34,10 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
+    AUTH_BUNGIE_ID: process.env.AUTH_BUNGIE_ID,
+    AUTH_BUNGIE_SECRET: process.env.AUTH_BUNGIE_SECRET,
+    AUTH_BUNGIE_API_KEY: process.env.AUTH_BUNGIE_API_KEY,
+    AUTH_SECRET: process.env.AUTH_SECRET,
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   },

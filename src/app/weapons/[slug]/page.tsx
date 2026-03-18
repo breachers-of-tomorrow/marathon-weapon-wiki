@@ -8,7 +8,7 @@ import { api } from "@/trpc/server";
 import { db } from "@/server/db";
 import { WeaponBadges } from "@/app/_components/weapon-badges";
 import { WeaponStats } from "@/app/_components/stat-section";
-import { WeaponModsSection } from "@/app/_components/weapon-mods-section";
+import { WeaponRightPanel } from "@/app/_components/weapon-right-panel";
 import {
   weaponProductJsonLd,
   breadcrumbJsonLd,
@@ -159,18 +159,18 @@ async function WeaponDetail({ slug }: { slug: string }) {
           </div>
         </div>
 
-        {/* Right column: Mods */}
+        {/* Right column: Mods & Builds */}
         <div className="order-3">
-          <WeaponModsLoader weaponId={weapon.id} />
+          <WeaponModsLoader weaponId={weapon.id} weaponSlug={weapon.slug} />
         </div>
       </div>
     </>
   );
 }
 
-async function WeaponModsLoader({ weaponId }: { weaponId: string }) {
+async function WeaponModsLoader({ weaponId, weaponSlug }: { weaponId: string; weaponSlug: string }) {
   const { linkedMods, universalMods } = await api.mod.getByWeaponId({ weaponId });
-  return <WeaponModsSection linkedMods={linkedMods} universalMods={universalMods} />;
+  return <WeaponRightPanel weaponSlug={weaponSlug} linkedMods={linkedMods} universalMods={universalMods} />;
 }
 
 export default async function WeaponDetailPage({ params }: Props) {
