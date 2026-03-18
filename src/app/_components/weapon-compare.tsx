@@ -139,7 +139,7 @@ function WeaponSelector({
 
   return (
     <div className="relative flex-1" ref={containerRef}>
-      <label className="text-dim mb-2 block font-mono text-[10px] tracking-widest uppercase">
+      <label className="text-dim mb-2 block font-mono text-xs tracking-widest uppercase">
         {label}
       </label>
       <div
@@ -168,7 +168,7 @@ function WeaponSelector({
           type="text"
           value={open ? search : selected?.name ?? ""}
           placeholder="Search weapons..."
-          className="text-foreground w-full bg-transparent font-mono text-sm outline-none placeholder:text-[var(--color-dim)]"
+          className="text-foreground w-full bg-transparent font-mono text-base outline-none placeholder:text-[var(--color-dim)]"
           onChange={(e) => {
             setSearch(e.target.value);
             setHighlightIndex(-1);
@@ -205,13 +205,13 @@ function WeaponSelector({
           className="cryo-panel border-border absolute z-50 mt-1 max-h-72 w-full overflow-y-auto rounded-lg border shadow-lg"
         >
           {grouped.length === 0 ? (
-            <div className="text-dim p-3 text-center font-mono text-sm">
+            <div className="text-dim p-3 text-center font-mono text-base">
               No weapons found
             </div>
           ) : (
             grouped.map(([type, items]) => (
               <div key={type}>
-                <div className="text-dim sticky top-0 bg-[var(--color-panel)] px-3 py-1.5 font-mono text-[10px] tracking-widest uppercase">
+                <div className="text-dim sticky top-0 bg-[var(--color-panel)] px-3 py-1.5 font-mono text-xs tracking-widest uppercase">
                   {type}
                 </div>
                 {items.map((w) => {
@@ -221,7 +221,7 @@ function WeaponSelector({
                       key={w.slug}
                       type="button"
                       data-index={flatIdx}
-                      className={`text-foreground w-full px-3 py-2 text-left font-mono text-sm transition-colors ${
+                      className={`text-foreground w-full px-3 py-2 text-left font-mono text-base transition-colors ${
                         flatIdx === highlightIndex
                           ? "bg-[var(--color-accent)]/10 text-accent"
                           : "hover:bg-[var(--color-border)]/30"
@@ -260,18 +260,18 @@ function StatCompareCard({
 
   return (
     <div className="cryo-panel rounded-lg p-3">
-      <div className="text-dim mb-2 text-center font-mono text-[10px] tracking-widest uppercase">
+      <div className="text-dim mb-2 text-center font-mono text-xs tracking-widest uppercase">
         {label}
       </div>
       <div className="flex items-center justify-between gap-2">
         <span
-          className={`font-display text-lg font-bold ${aWins ? "text-accent" : "text-foreground"}`}
+          className={`font-display text-xl font-bold ${aWins ? "text-accent" : "text-foreground"}`}
         >
           {valueA}
         </span>
-        <span className="text-dim font-mono text-xs">vs</span>
+        <span className="text-dim font-mono text-sm">vs</span>
         <span
-          className={`font-display text-lg font-bold ${bWins ? "text-accent" : "text-foreground"}`}
+          className={`font-display text-xl font-bold ${bWins ? "text-accent" : "text-foreground"}`}
         >
           {valueB}
         </span>
@@ -284,13 +284,13 @@ function DeltaCell({ a, b }: { a: number; b: number }) {
   const diff = a - b;
   if (diff === 0) {
     return (
-      <td className="text-dim p-3 text-center font-mono text-xs">—</td>
+      <td className="text-dim p-3 text-center font-mono text-sm">—</td>
     );
   }
   const faster = diff < 0;
   return (
     <td
-      className={`p-3 text-center font-mono text-xs font-bold ${faster ? "text-green-400" : "text-red-400"}`}
+      className={`p-3 text-center font-mono text-sm font-bold ${faster ? "text-green-400" : "text-red-400"}`}
     >
       {diff > 0 ? "+" : ""}
       {diff.toFixed(3)}s {faster ? "▼" : "▲"}
@@ -381,19 +381,19 @@ export function WeaponCompare({ weapons }: { weapons: WeaponWithTTK[] }) {
 
           {/* TTK comparison table */}
           <div className="cryo-panel overflow-x-auto rounded-lg">
-            <table className="w-full text-sm">
+            <table className="w-full text-base">
               <thead>
                 <tr className="border-border border-b">
-                  <th className="text-dim p-3 text-left font-mono text-xs tracking-widest uppercase">
+                  <th className="text-dim p-3 text-left font-mono text-sm tracking-widest uppercase">
                     Shield Tier
                   </th>
                   {shieldTiers.map((tier) => (
                     <th
                       key={tier.key}
-                      className={`p-3 text-center font-mono text-xs tracking-widest uppercase ${tier.color}`}
+                      className={`p-3 text-center font-mono text-sm tracking-widest uppercase ${tier.color}`}
                     >
                       {tier.key}
-                      <div className="text-dim mt-0.5 text-[10px] font-normal">
+                      <div className="text-dim mt-0.5 text-xs font-normal">
                         {tier.hp} HP
                       </div>
                     </th>
@@ -405,14 +405,14 @@ export function WeaponCompare({ weapons }: { weapons: WeaponWithTTK[] }) {
                 <tr className="border-border/50 border-b">
                   <td
                     colSpan={5}
-                    className="text-heading p-3 font-mono text-xs font-bold tracking-widest uppercase"
+                    className="text-heading p-3 font-mono text-sm font-bold tracking-widest uppercase"
                   >
                     Body TTK
                   </td>
                 </tr>
                 {/* Weapon A body */}
                 <tr className="border-border/50 border-b">
-                  <td className="text-dim p-3 font-mono text-xs">
+                  <td className="text-dim p-3 font-mono text-sm">
                     {weaponA.name}
                   </td>
                   {ttkBodyKeys.map((key) => (
@@ -426,7 +426,7 @@ export function WeaponCompare({ weapons }: { weapons: WeaponWithTTK[] }) {
                 </tr>
                 {/* Weapon B body */}
                 <tr className="border-border/50 border-b">
-                  <td className="text-dim p-3 font-mono text-xs">
+                  <td className="text-dim p-3 font-mono text-sm">
                     {weaponB.name}
                   </td>
                   {ttkBodyKeys.map((key) => (
@@ -440,7 +440,7 @@ export function WeaponCompare({ weapons }: { weapons: WeaponWithTTK[] }) {
                 </tr>
                 {/* Body diff */}
                 <tr className="border-border border-b">
-                  <td className="text-dim p-3 font-mono text-[10px] tracking-widest uppercase">
+                  <td className="text-dim p-3 font-mono text-xs tracking-widest uppercase">
                     Diff (A − B)
                   </td>
                   {ttkBodyKeys.map((key) => (
@@ -452,14 +452,14 @@ export function WeaponCompare({ weapons }: { weapons: WeaponWithTTK[] }) {
                 <tr className="border-border/50 border-b">
                   <td
                     colSpan={5}
-                    className="text-heading p-3 font-mono text-xs font-bold tracking-widest uppercase"
+                    className="text-heading p-3 font-mono text-sm font-bold tracking-widest uppercase"
                   >
                     Headshot TTK
                   </td>
                 </tr>
                 {/* Weapon A head */}
                 <tr className="border-border/50 border-b">
-                  <td className="text-dim p-3 font-mono text-xs">
+                  <td className="text-dim p-3 font-mono text-sm">
                     {weaponA.name}
                   </td>
                   {ttkHeadKeys.map((key) => (
@@ -473,7 +473,7 @@ export function WeaponCompare({ weapons }: { weapons: WeaponWithTTK[] }) {
                 </tr>
                 {/* Weapon B head */}
                 <tr className="border-border/50 border-b">
-                  <td className="text-dim p-3 font-mono text-xs">
+                  <td className="text-dim p-3 font-mono text-sm">
                     {weaponB.name}
                   </td>
                   {ttkHeadKeys.map((key) => (
@@ -487,7 +487,7 @@ export function WeaponCompare({ weapons }: { weapons: WeaponWithTTK[] }) {
                 </tr>
                 {/* Head diff */}
                 <tr>
-                  <td className="text-dim p-3 font-mono text-[10px] tracking-widest uppercase">
+                  <td className="text-dim p-3 font-mono text-xs tracking-widest uppercase">
                     Diff (A − B)
                   </td>
                   {ttkHeadKeys.map((key) => (
@@ -510,7 +510,7 @@ export function WeaponCompare({ weapons }: { weapons: WeaponWithTTK[] }) {
         </div>
       ) : (
         <div className="cryo-panel rounded-lg p-8 text-center">
-          <p className="text-dim font-mono text-sm">
+          <p className="text-dim font-mono text-base">
             Select two weapons above to compare their TTK stats side-by-side.
           </p>
         </div>
