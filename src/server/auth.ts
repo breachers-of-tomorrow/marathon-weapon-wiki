@@ -21,6 +21,10 @@ export const authOptions: NextAuthOptions = {
     BungieProvider({
       clientId: process.env.AUTH_BUNGIE_ID!,
       clientSecret: process.env.AUTH_BUNGIE_SECRET!,
+      authorization: {
+        url: "https://www.bungie.net/en/OAuth/Authorize",
+        params: { reauth: true },
+      },
       ...({
         headers: { "X-API-Key": process.env.AUTH_BUNGIE_API_KEY! },
       } as Record<string, unknown>),
