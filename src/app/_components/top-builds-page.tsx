@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { api } from "@/trpc/react";
 import { BuildVote } from "./build-vote";
+import { BuildForm } from "./build-form";
 import { RARITY_COLORS } from "./rarity-badge";
 
 const FILTER_OPTIONS = [
@@ -32,35 +33,65 @@ export function TopBuildsPage() {
     "PVP" | "PVE" | "PVEVP" | undefined
   >();
   const [expandedBuildId, setExpandedBuildId] = useState<string | null>(null);
+  const [weaponPickerOpen, setWeaponPickerOpen] = useState(false);
+  const [selectedWeaponSlug, setSelectedWeaponSlug] = useState<string | null>(
+    null,
+  );
 
   const { data: builds, isLoading } = api.build.getTopBuilds.useQuery({
     type: typeFilter,
   });
+
+  const { data: weapons } = api.weapon.getAll.useQuery(undefined, {
+    enabled: weaponPickerOpen,
+  });
+
+  const selectedWeapon = weapons?.find((w) => w.slug === selectedWeaponSlug);
+  const { data: modsData } = api.mod.getByWeaponId.useQuery(
+    { weaponId: selectedWeapon?.id ?? "" },
+    { enabled: !!selectedWeapon },
+  );
 
   const utils = api.useUtils();
   const deleteBuild = api.build.delete.useMutation({
     onSuccess: () => void utils.build.getTopBuilds.invalidate(),
   });
 
+  function handleNewBuild() {
+    if (!session?.user) {
+      void signIn("bungie");
+      return;
+    }
+    setWeaponPickerOpen(true);
+  }
+
   const displayBuilds = builds ?? [];
 
   return (
     <div>
-      {/* Type filter */}
-      <div className="mb-6 flex flex-wrap gap-1.5">
-        {FILTER_OPTIONS.map((opt) => (
-          <button
-            key={opt.label}
-            onClick={() => setTypeFilter(opt.value)}
-            className={`rounded px-2 py-1 font-mono text-xs uppercase tracking-wide transition-colors ${
-              typeFilter === opt.value
-                ? "bg-accent text-background"
-                : "border border-border bg-panel text-dim hover:text-foreground"
-            }`}
-          >
-            {opt.label}
-          </button>
-        ))}
+      {/* Type filter + new build button */}
+      <div className="mb-6 flex items-center justify-between gap-2">
+        <div className="flex flex-wrap gap-1.5">
+          {FILTER_OPTIONS.map((opt) => (
+            <button
+              key={opt.label}
+              onClick={() => setTypeFilter(opt.value)}
+              className={`rounded px-2 py-1 font-mono text-xs uppercase tracking-wide transition-colors ${
+                typeFilter === opt.value
+                  ? "bg-accent text-background"
+                  : "border border-border bg-panel text-dim hover:text-foreground"
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={handleNewBuild}
+          className="cursor-pointer rounded border border-border-accent px-2 py-1 font-mono text-xs uppercase tracking-wide text-accent transition-colors hover:bg-panel-hover"
+        >
+          + Build
+        </button>
       </div>
 
       {/* Builds list */}
@@ -238,6 +269,79 @@ export function TopBuildsPage() {
             );
           })}
         </div>
+      )}
+
+      {/* Weapon picker modal */}
+      {weaponPickerOpen && !selectedWeaponSlug && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setWeaponPickerOpen(false);
+          }}
+        >
+          <div className="cryo-panel mx-4 w-full max-w-md rounded-lg border-border-accent p-6">
+            <h2 className="mb-4 text-lg font-semibold text-foreground">
+              Choose a Weapon
+            </h2>
+            {!weapons ? (
+              <div className="space-y-2">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-10 animate-pulse rounded bg-panel"
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="max-h-[60vh] space-y-1 overflow-y-auto">
+                {weapons.map((weapon) => (
+                  <button
+                    key={weapon.id}
+                    onClick={() => setSelectedWeaponSlug(weapon.slug)}
+                    className="flex w-full cursor-pointer items-center gap-3 rounded p-2 text-left transition-colors hover:bg-panel-hover"
+                  >
+                    {weapon.imageUrl && (
+                      <img
+                        src={weapon.imageUrl}
+                        alt=""
+                        className="h-8 w-12 rounded object-contain"
+                      />
+                    )}
+                    <div>
+                      <span className="text-sm font-medium text-foreground">
+                        {weapon.name}
+                      </span>
+                      <span className="text-dim ml-2 font-mono text-xs uppercase">
+                        {weapon.type}
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+            <button
+              onClick={() => setWeaponPickerOpen(false)}
+              className="text-dim mt-4 cursor-pointer font-mono text-xs uppercase tracking-wide transition-colors hover:text-foreground"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Build form (after weapon is selected) */}
+      {selectedWeaponSlug && modsData && (
+        <BuildForm
+          open
+          onClose={() => {
+            setSelectedWeaponSlug(null);
+            setWeaponPickerOpen(false);
+            void utils.build.getTopBuilds.invalidate();
+          }}
+          weaponSlug={selectedWeaponSlug}
+          linkedMods={modsData.linkedMods}
+          universalMods={modsData.universalMods}
+        />
       )}
     </div>
   );
