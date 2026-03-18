@@ -75,7 +75,7 @@ export function WeaponBuildsSection({
             <button
               key={opt.label}
               onClick={() => setTypeFilter(opt.value)}
-              className={`rounded px-2 py-1 font-mono text-[10px] uppercase tracking-wide transition-colors ${
+              className={`rounded px-2 py-1 font-mono text-xs uppercase tracking-wide transition-colors ${
                 typeFilter === opt.value
                   ? "bg-accent text-background"
                   : "border border-border bg-panel text-dim hover:text-foreground"
@@ -87,7 +87,7 @@ export function WeaponBuildsSection({
         </div>
         <button
           onClick={handleSubmitClick}
-          className="cursor-pointer rounded border border-border-accent px-2 py-1 font-mono text-[10px] uppercase tracking-wide text-accent transition-colors hover:bg-panel-hover"
+          className="cursor-pointer rounded border border-border-accent px-2 py-1 font-mono text-xs uppercase tracking-wide text-accent transition-colors hover:bg-panel-hover"
         >
           + Build
         </button>
@@ -102,7 +102,7 @@ export function WeaponBuildsSection({
         </div>
       ) : !builds?.length ? (
         <div className="cryo-panel rounded-lg p-6 text-center">
-          <p className="text-dim font-mono text-xs">
+          <p className="text-dim font-mono text-sm">
             No builds yet — be the first!
           </p>
         </div>

@@ -94,11 +94,11 @@ export function BuildRow({
 
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <span className="truncate text-sm font-medium text-foreground">
+            <span className="truncate text-base font-medium text-foreground">
               {build.title}
             </span>
             <span
-              className="shrink-0 rounded px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide"
+              className="shrink-0 rounded px-1.5 py-0.5 font-mono text-xs uppercase tracking-wide"
               style={{
                 backgroundColor: `${BUILD_TYPE_COLORS[build.type]}20`,
                 color: BUILD_TYPE_COLORS[build.type],
@@ -117,18 +117,18 @@ export function BuildRow({
                   className="h-4 w-4 rounded-full"
                 />
               )}
-              <span className="text-dim font-mono text-[10px]">
+              <span className="text-dim font-mono text-xs">
                 {build.author.name ?? "Anonymous"}
               </span>
             </div>
 
             {build.mods.length > 0 && (
-              <span className="text-dim font-mono text-[10px]">
+              <span className="text-dim font-mono text-xs">
                 {build.mods.length} mod{build.mods.length !== 1 && "s"}
               </span>
             )}
             {totalCost > 0 && (
-              <span className="text-foreground/70 font-mono text-xs">
+              <span className="text-foreground/70 font-mono text-sm">
                 {totalCost.toLocaleString()}cr
               </span>
             )}
@@ -142,7 +142,7 @@ export function BuildRow({
                 return (
                   <span
                     key={bm.id}
-                    className="rounded px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wide"
+                    className="rounded px-1.5 py-0.5 font-mono text-xs uppercase tracking-wide"
                     style={{ backgroundColor: `${color}20`, color }}
                   >
                     {bm.mod.name}
@@ -171,7 +171,7 @@ export function BuildRow({
       {isExpanded && (
         <div className="border-border border-t px-3 pb-3 pt-3">
           {sortedMods.length === 0 ? (
-            <p className="text-dim font-mono text-xs">No mods in this build.</p>
+            <p className="text-dim font-mono text-sm">No mods in this build.</p>
           ) : (
             <div className="space-y-3">
               {sortedMods.map((bm) => {
@@ -188,17 +188,17 @@ export function BuildRow({
                     className="border-border border-b pb-3 last:border-b-0 last:pb-0"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="text-dim font-mono text-[10px] uppercase tracking-wide">
+                      <span className="text-dim font-mono text-xs uppercase tracking-wide">
                         {type}
                       </span>
                     </div>
                     <div className="mt-1 flex items-center justify-between gap-2">
-                      <span className="font-mono text-sm text-foreground">
+                      <span className="font-mono text-base text-foreground">
                         {name}
                       </span>
                       <div className="flex shrink-0 items-center gap-2">
                         {price != null && (
-                          <span className="text-foreground/70 font-mono text-xs">
+                          <span className="text-foreground/70 font-mono text-sm">
                             {price === 0 ? "Free" : `${price.toLocaleString()}cr`}
                           </span>
                         )}
@@ -206,7 +206,7 @@ export function BuildRow({
                       </div>
                     </div>
                     {description && (
-                      <p className="text-foreground/60 mt-1 text-xs leading-relaxed">
+                      <p className="text-foreground/60 mt-1 text-sm leading-relaxed">
                         {description}
                       </p>
                     )}
@@ -227,7 +227,7 @@ export function BuildRow({
             const aggregated = aggregateStatModifiers(allModifiers);
             return (
               <div className="border-border mt-3 border-t pt-3">
-                <span className="text-dim font-mono text-[10px] uppercase tracking-wide">
+                <span className="text-dim font-mono text-xs uppercase tracking-wide">
                   Combined Stats
                 </span>
                 <div className="mt-1.5 flex flex-wrap gap-1">
@@ -238,7 +238,7 @@ export function BuildRow({
                     return (
                       <span
                         key={stat}
-                        className="rounded px-1.5 py-0.5 font-mono text-[10px]"
+                        className="rounded px-1.5 py-0.5 font-mono text-xs"
                         style={{
                           backgroundColor: isPositive ? "#00ff9d20" : "#ff224420",
                           color: isPositive ? "#00ff9d" : "#ff2244",
@@ -256,7 +256,7 @@ export function BuildRow({
           {/* Total build cost */}
           {totalCost > 0 && (
             <div className="border-border mt-3 flex items-center justify-end border-t pt-3">
-              <span className="text-foreground font-mono text-xs">
+              <span className="text-foreground font-mono text-sm">
                 Total: {totalCost.toLocaleString()}cr
               </span>
             </div>
@@ -268,7 +268,7 @@ export function BuildRow({
               <button
                 onClick={() => onDelete(build.id)}
                 disabled={isDeleting}
-                className="text-dim cursor-pointer font-mono text-[10px] uppercase tracking-wide transition-colors hover:text-danger disabled:opacity-50"
+                className="text-dim cursor-pointer font-mono text-xs uppercase tracking-wide transition-colors hover:text-danger disabled:opacity-50"
               >
                 {isDeleting ? "Deleting..." : "Delete build"}
               </button>
