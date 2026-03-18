@@ -9,6 +9,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Bungie({
       clientId: process.env.AUTH_BUNGIE_ID,
       clientSecret: process.env.AUTH_BUNGIE_SECRET,
+      authorization: { params: { scope: "" } },
+      checks: ["state"],
       // headers is required by Bungie API but not in the OAuthUserConfig type
       ...({ headers: { "X-API-Key": process.env.AUTH_BUNGIE_API_KEY! } } as Record<string, unknown>),
     }),
