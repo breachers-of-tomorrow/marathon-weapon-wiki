@@ -23,7 +23,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.AUTH_BUNGIE_SECRET!,
       authorization: {
         url: "https://www.bungie.net/en/OAuth/Authorize",
-        params: { reauth: true },
+        params: { reauth: true, scope: "" },
       },
       ...({
         headers: { "X-API-Key": process.env.AUTH_BUNGIE_API_KEY! },
