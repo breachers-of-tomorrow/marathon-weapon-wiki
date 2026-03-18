@@ -15,7 +15,7 @@ export function StatSection({
 }) {
   return (
     <div className="cryo-panel rounded-lg p-4">
-      <h3 className="text-heading mb-3 font-mono text-xs uppercase tracking-widest">
+      <h3 className="text-heading mb-3 font-display text-xs uppercase tracking-widest heading-glow">
         {title}
       </h3>
       <div className="space-y-2">

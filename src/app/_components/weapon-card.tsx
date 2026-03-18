@@ -28,7 +28,7 @@ export function WeaponCard({ weapon }: { weapon: Weapon }) {
 
       <div className="flex flex-1 flex-col gap-2 p-4">
         {/* Name */}
-        <h2 className="font-mono text-sm font-semibold uppercase tracking-wide text-foreground">
+        <h2 className="font-display text-sm font-semibold uppercase tracking-wide text-foreground">
           {weapon.name}
         </h2>
 

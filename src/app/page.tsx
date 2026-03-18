@@ -66,7 +66,7 @@ export default function Home() {
 
       {/* Static shell — served instantly */}
       <div className="mb-10">
-        <h1 className="font-mono text-3xl font-bold uppercase tracking-widest text-foreground">
+        <h1 className="font-display text-3xl font-bold uppercase tracking-widest text-foreground heading-glow">
           Marathon Weapon Wiki
         </h1>
         <p className="text-dim mt-2 font-mono text-sm uppercase tracking-wide">

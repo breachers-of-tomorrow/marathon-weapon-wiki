@@ -17,8 +17,8 @@ type Mod = {
 const RARITY_COLORS: Record<string, string> = {
   PRESTIGE: "#f59e0b",
   SUPERIOR: "#8b5cf6",
-  DELUXE: "#038adf",
-  ENHANCED: "#10b981",
+  DELUXE: "#00d4ff",
+  ENHANCED: "#00ff9d",
   STANDARD: "#6b7280",
 };
 
@@ -70,7 +70,7 @@ export function WeaponModsSection({
 
   return (
     <div>
-      <h2 className="text-heading mb-4 font-mono text-xs uppercase tracking-widest">
+      <h2 className="text-heading mb-4 font-display text-xs uppercase tracking-widest heading-glow">
         Mods & Attachments
       </h2>
 
@@ -154,7 +154,7 @@ export function WeaponModsSection({
                         </div>
                       </div>
                       {mod.description && (
-                        <p className="text-dim mt-1 text-xs leading-relaxed">
+                        <p className="text-foreground/60 mt-1 text-xs leading-relaxed">
                           {mod.description}
                         </p>
                       )}

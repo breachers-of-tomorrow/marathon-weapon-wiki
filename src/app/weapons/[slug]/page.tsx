@@ -97,7 +97,7 @@ async function WeaponDetail({ slug }: { slug: string }) {
       <div className="mt-4 grid gap-6 lg:grid-cols-[280px_1fr_320px]">
         {/* Left column: Stats */}
         <div className="order-2 lg:order-1">
-          <h2 className="text-heading mb-4 font-mono text-xs uppercase tracking-widest">
+          <h2 className="text-heading mb-4 font-display text-xs uppercase tracking-widest heading-glow">
             Weapon Statistics
           </h2>
           <WeaponStats weapon={weapon} />
@@ -107,7 +107,7 @@ async function WeaponDetail({ slug }: { slug: string }) {
         <div className="order-1 lg:order-2">
           {/* Floating weapon details */}
           <div className="mb-4 flex items-start justify-between gap-4">
-            <h1 className="font-mono text-2xl font-bold uppercase tracking-widest text-foreground">
+            <h1 className="font-display text-2xl font-bold uppercase tracking-widest text-foreground heading-glow">
               {weapon.name}
             </h1>
             <div className="shrink-0 text-right">

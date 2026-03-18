@@ -1,20 +1,23 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-sans: var(--font-share-tech-mono), ui-monospace, monospace;
+  --font-mono: var(--font-share-tech-mono), ui-monospace, monospace;
+  --font-display: var(--font-orbitron), ui-sans-serif, sans-serif;
 
-  --color-background: #0a0b0f;
-  --color-panel: #12141a;
-  --color-panel-hover: #1a1d26;
-  --color-border: #2a2d3a;
-  --color-border-accent: #038adf;
-  --color-accent: #038adf;
-  --color-accent-dim: rgba(3, 138, 223, 0.15);
+  --color-background: #030a0f;
+  --color-panel: #060f17;
+  --color-panel-hover: #0c1f2e;
+  --color-border: #0a3a4a;
+  --color-border-accent: #00d4ff;
+  --color-accent: #00d4ff;
+  --color-accent2: #00ff9d;
+  --color-accent-dim: rgba(0, 212, 255, 0.15);
   --color-foreground: #e8eaed;
   --color-dim: #6b7280;
-  --color-heading: #9ca3af;
+  --color-heading: #00d4ff;
+  --color-warning: #ff6b35;
+  --color-danger: #ff2244;
 }
 
 @layer base {
@@ -29,6 +32,18 @@
   }
 
   .glow-accent {
-    filter: drop-shadow(0 0 12px rgba(3, 138, 223, 0.5));
+    filter: drop-shadow(0 0 12px rgba(0, 212, 255, 0.5));
+  }
+
+  .glow-accent2 {
+    filter: drop-shadow(0 0 12px rgba(0, 255, 157, 0.5));
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .heading-glow {
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
   }
 }

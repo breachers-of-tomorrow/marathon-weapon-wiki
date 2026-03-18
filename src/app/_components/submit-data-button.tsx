@@ -82,7 +82,7 @@ export function SubmitDataButton() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 left-6 z-50 cryo-panel rounded-lg border-border-accent px-4 py-2 text-sm font-medium text-accent transition-all hover:bg-panel-hover hover:shadow-[0_0_12px_rgba(3,138,223,0.3)] cursor-pointer"
+        className="fixed bottom-6 left-6 z-50 cryo-panel rounded-lg border-border-accent px-4 py-2 text-sm font-medium text-accent transition-all hover:bg-panel-hover hover:shadow-[0_0_12px_rgba(0,212,255,0.3)] cursor-pointer"
       >
         Provide More Data
       </button>
@@ -100,7 +100,7 @@ export function SubmitDataButton() {
             </h2>
 
             {status === "success" ? (
-              <p className="text-green-400 text-sm">
+              <p className="text-sm" style={{ color: '#00ff9d' }}>
                 Submission received. Thank you!
               </p>
             ) : (
@@ -155,7 +155,7 @@ export function SubmitDataButton() {
                 </div>
 
                 {status === "error" && (
-                  <p className="text-red-400 text-sm">{errorMsg}</p>
+                  <p className="text-sm" style={{ color: '#ff2244' }}>{errorMsg}</p>
                 )}
 
                 <div className="flex gap-3 justify-end">

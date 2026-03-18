@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 
 import { type Metadata } from "next";
-import { Geist, JetBrains_Mono } from "next/font/google";
+import { Orbitron, Share_Tech_Mono } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { SubmitDataButton } from "@/app/_components/submit-data-button";
@@ -45,21 +45,22 @@ export const metadata: Metadata = {
   },
 };
 
-const geist = Geist({
+const orbitron = Orbitron({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
+  variable: "--font-orbitron",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const shareTechMono = Share_Tech_Mono({
   subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
+  weight: "400",
+  variable: "--font-share-tech-mono",
 });
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`dark ${geist.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`dark ${orbitron.variable} ${shareTechMono.variable}`}>
       <body>
         <TRPCReactProvider>
           {children}
@@ -69,7 +70,7 @@ export default function RootLayout({
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Contribute on GitHub"
-            className="fixed bottom-6 right-6 z-50 cryo-panel rounded-lg border-border p-2.5 text-dim transition-all hover:border-border-accent hover:text-foreground hover:shadow-[0_0_12px_rgba(3,138,223,0.3)]"
+            className="fixed bottom-6 right-6 z-50 cryo-panel rounded-lg border-border p-2.5 text-dim transition-all hover:border-border-accent hover:text-foreground hover:shadow-[0_0_12px_rgba(0,212,255,0.3)]"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
