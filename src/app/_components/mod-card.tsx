@@ -53,7 +53,7 @@ export function ModCard({
         <div className="flex shrink-0 items-center gap-2">
           {mod.price != null && (
             <span className="font-mono text-[10px] text-dim">
-              {mod.price.toLocaleString()}cr
+              {mod.price === 0 ? "Free" : `${mod.price.toLocaleString()}cr`}
             </span>
           )}
           <RarityBadge rarity={mod.rarity} />

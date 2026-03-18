@@ -185,7 +185,7 @@ export function BuildRow({
                       <div className="flex shrink-0 items-center gap-2">
                         {price != null && (
                           <span className="text-dim font-mono text-[10px]">
-                            {price.toLocaleString()}cr
+                            {price === 0 ? "Free" : `${price.toLocaleString()}cr`}
                           </span>
                         )}
                         <RarityBadge rarity={rarity} />

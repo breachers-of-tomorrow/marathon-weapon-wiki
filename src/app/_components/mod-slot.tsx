@@ -74,7 +74,7 @@ export function ModSlot({
             <div className="ml-auto flex shrink-0 items-center gap-2">
               {selectedMod.price != null && (
                 <span className="font-mono text-[10px] text-dim">
-                  {selectedMod.price.toLocaleString()}cr
+                  {selectedMod.price === 0 ? "Free" : `${selectedMod.price.toLocaleString()}cr`}
                 </span>
               )}
               <RarityBadge rarity={selectedMod.rarity} />
