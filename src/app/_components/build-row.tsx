@@ -128,7 +128,7 @@ export function BuildRow({
                 return (
                   <span
                     key={bm.id}
-                    className="rounded px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wide"
+                    className="rounded px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wide"
                     style={{ backgroundColor: `${color}20`, color }}
                   >
                     {bm.mod.name}

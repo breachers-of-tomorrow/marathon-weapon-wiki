@@ -7,6 +7,7 @@ import { TRPCReactProvider } from "@/trpc/react";
 import { AuthSessionProvider } from "@/app/_components/session-provider";
 import { Navbar } from "@/app/_components/navbar";
 import { SubmitDataButton } from "@/app/_components/submit-data-button";
+import { SiteTour } from "@/app/_components/site-tour";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -69,6 +70,7 @@ export default function RootLayout({
             <Navbar />
             {children}
             <SubmitDataButton />
+            <SiteTour />
           <a
             href="https://github.com/LeonardM01/marathon-weapon-wiki/"
             target="_blank"

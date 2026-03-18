@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 
 export function WeaponPageTabs({
   detailsContent,
@@ -11,10 +11,17 @@ export function WeaponPageTabs({
 }) {
   const [activeTab, setActiveTab] = useState<"details" | "builds">("details");
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("tour") === "builds") {
+      setActiveTab("builds");
+    }
+  }, []);
+
   return (
     <>
       {/* Tab bar */}
-      <div className="mt-4 mb-6 flex gap-1.5">
+      <div className="mt-4 mb-6 flex gap-1.5" data-tour="tab-bar">
         <button
           onClick={() => setActiveTab("details")}
           className={`cursor-pointer rounded px-3 py-1.5 font-mono text-xs uppercase tracking-widest transition-colors ${
@@ -27,6 +34,7 @@ export function WeaponPageTabs({
         </button>
         <button
           onClick={() => setActiveTab("builds")}
+          data-tour="builds-tab"
           className={`cursor-pointer rounded px-3 py-1.5 font-mono text-xs uppercase tracking-widest transition-colors ${
             activeTab === "builds"
               ? "bg-accent text-background"

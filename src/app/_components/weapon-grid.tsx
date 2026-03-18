@@ -28,7 +28,7 @@ export function WeaponGrid({
   return (
     <div>
       {/* Filter bar */}
-      <div className="mb-8 flex flex-wrap gap-2">
+      <div className="mb-8 flex flex-wrap gap-2" data-tour="filters">
         <button
           onClick={() => setActiveType(undefined)}
           className={`rounded px-3 py-1.5 font-mono text-xs uppercase tracking-wide transition-colors ${
@@ -57,7 +57,7 @@ export function WeaponGrid({
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" data-tour="weapon-grid">
         {filtered.map((weapon) => (
           <WeaponCard key={weapon.id} weapon={weapon} />
         ))}

@@ -156,7 +156,7 @@ async function WeaponDetail({ slug }: { slug: string }) {
   );
 
   const buildsView = (
-    <div>
+    <div data-tour="builds-section">
       <h2 className="text-heading mb-4 font-display text-xs uppercase tracking-widest heading-glow">
         Community Builds
       </h2>

@@ -47,3 +47,95 @@
     text-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
   }
 }
+
+/* Driver.js tour theme */
+.driver-popover.cryo-tour {
+  background-color: #060f17;
+  color: #e8eaed;
+  border: 1px solid #0a3a4a;
+  border-radius: 8px;
+  box-shadow:
+    0 0 20px rgba(0, 212, 255, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+.driver-popover.cryo-tour .driver-popover-title {
+  font-family: var(--font-orbitron), ui-sans-serif, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #00d4ff;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+}
+
+.driver-popover.cryo-tour .driver-popover-description {
+  color: #b0b8c1;
+  font-family: var(--font-share-tech-mono), ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.driver-popover.cryo-tour .driver-popover-progress-text {
+  color: #6b7280;
+  font-family: var(--font-share-tech-mono), ui-monospace, monospace;
+  font-size: 12px;
+}
+
+.driver-popover.cryo-tour .driver-popover-prev-btn {
+  background-color: transparent;
+  border: 1px solid #0a3a4a;
+  color: #e8eaed;
+  text-shadow: none;
+  font-family: var(--font-share-tech-mono), ui-monospace, monospace;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 6px;
+}
+
+.driver-popover.cryo-tour .driver-popover-prev-btn:hover {
+  border-color: #00d4ff;
+  color: #00d4ff;
+  background-color: transparent;
+}
+
+.driver-popover.cryo-tour .driver-popover-next-btn,
+.driver-popover.cryo-tour .driver-popover-done-btn {
+  background-color: rgba(0, 212, 255, 0.1);
+  border: 1px solid #00d4ff;
+  color: #00d4ff;
+  text-shadow: none;
+  font-family: var(--font-share-tech-mono), ui-monospace, monospace;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 6px;
+}
+
+.driver-popover.cryo-tour .driver-popover-next-btn:hover,
+.driver-popover.cryo-tour .driver-popover-done-btn:hover {
+  background-color: rgba(0, 212, 255, 0.2);
+}
+
+.driver-popover.cryo-tour .driver-popover-close-btn {
+  color: #6b7280;
+}
+
+.driver-popover.cryo-tour .driver-popover-close-btn:hover {
+  color: #e8eaed;
+}
+
+.driver-popover.cryo-tour .driver-popover-arrow-side-left.driver-popover-arrow {
+  border-left-color: #060f17;
+}
+
+.driver-popover.cryo-tour .driver-popover-arrow-side-right.driver-popover-arrow {
+  border-right-color: #060f17;
+}
+
+.driver-popover.cryo-tour .driver-popover-arrow-side-top.driver-popover-arrow {
+  border-top-color: #060f17;
+}
+
+.driver-popover.cryo-tour .driver-popover-arrow-side-bottom.driver-popover-arrow {
+  border-bottom-color: #060f17;
+}

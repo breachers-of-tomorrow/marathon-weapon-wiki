@@ -7,7 +7,7 @@ export function Navbar() {
   const { data: session, status } = useSession();
 
   return (
-    <nav className="cryo-panel border-b border-border">
+    <nav className="cryo-panel border-b border-border" data-tour="navbar">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
         <Link
           href="/"

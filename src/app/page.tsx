@@ -65,7 +65,7 @@ export default function Home() {
       />
 
       {/* Static shell — served instantly */}
-      <div className="mb-10">
+      <div className="mb-10" data-tour="header">
         <h1 className="font-display text-3xl font-bold uppercase tracking-widest text-foreground heading-glow">
           Marathon Weapon Wiki
         </h1>
