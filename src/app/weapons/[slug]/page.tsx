@@ -1,16 +1,13 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 
 import { api } from "@/trpc/server";
 import { db } from "@/server/db";
-import { WeaponBadges } from "@/app/_components/weapon-badges";
-import { WeaponStats } from "@/app/_components/stat-section";
-import { WeaponModsSection } from "@/app/_components/weapon-mods-section";
 import { WeaponBuildsSection } from "@/app/_components/weapon-builds-section";
 import { WeaponPageTabs } from "@/app/_components/weapon-page-tabs";
+import { WeaponDetailInteractive } from "@/app/_components/weapon-detail-interactive";
 import {
   weaponProductJsonLd,
   breadcrumbJsonLd,
@@ -85,75 +82,11 @@ async function WeaponDetail({ slug }: { slug: string }) {
   const { linkedMods, universalMods } = await api.mod.getByWeaponId({ weaponId: weapon.id });
 
   const detailsView = (
-    <div className="grid gap-6 lg:grid-cols-[280px_1fr_320px]">
-      {/* Left column: Stats */}
-      <div className="order-2 lg:order-1">
-        <h2 className="text-heading mb-4 font-display text-xs uppercase tracking-widest heading-glow">
-          Weapon Statistics
-        </h2>
-        <WeaponStats weapon={weapon} />
-      </div>
-
-      {/* Center column: Info + Image */}
-      <div className="order-1 lg:order-2">
-        <div className="mb-4 flex items-start justify-between gap-4">
-          <h1 className="font-display text-2xl font-bold uppercase tracking-widest text-foreground heading-glow">
-            {weapon.name}
-          </h1>
-          <div className="shrink-0 text-right">
-            <div className="text-dim flex flex-wrap justify-end gap-x-4 gap-y-1 font-mono text-xs">
-              {weapon.rarity && (
-                <div>
-                  <span className="text-heading uppercase">Rarity:</span>{" "}
-                  <span className="text-foreground">{weapon.rarity}</span>
-                </div>
-              )}
-              {weapon.price != null && (
-                <div>
-                  <span className="text-heading uppercase">Price:</span>{" "}
-                  <span className="text-foreground">{weapon.price}</span>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="mb-4 flex flex-wrap items-center gap-2">
-          <WeaponBadges
-            type={weapon.type}
-            slot={weapon.slot}
-            ammoType={weapon.ammoType}
-          />
-        </div>
-
-        {weapon.description && (
-          <p className="text-dim mb-4 text-sm leading-relaxed">
-            {weapon.description}
-          </p>
-        )}
-
-        {/* Big weapon image */}
-        <div className="cryo-panel relative flex min-h-72 items-center justify-center rounded-lg lg:min-h-[28rem]">
-          {weapon.imageUrl ? (
-            <Image
-              src={weapon.imageUrl}
-              alt={weapon.name}
-              fill
-              className="rounded-lg object-contain p-6"
-            />
-          ) : (
-            <div className="text-dim flex h-72 w-full items-center justify-center font-mono text-sm uppercase tracking-wide">
-              No Image Available
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Right column: Mods */}
-      <div className="order-3">
-        <WeaponModsSection linkedMods={linkedMods} universalMods={universalMods} />
-      </div>
-    </div>
+    <WeaponDetailInteractive
+      weapon={weapon}
+      linkedMods={linkedMods}
+      universalMods={universalMods}
+    />
   );
 
   const ttkView = weapon.ttk ? (
