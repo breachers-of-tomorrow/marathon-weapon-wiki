@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { CommandPaletteTrigger } from "./command-palette";
 
 const NAV_LINKS: { href: string; label: string; dataTour?: string }[] = [
   { href: "/compare", label: "Compare", dataTour: "compare-link" },
@@ -135,8 +136,11 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Desktop auth */}
-        <div className="hidden md:block">{authSection}</div>
+        {/* Desktop: search + auth */}
+        <div className="hidden md:flex items-center gap-4">
+          <CommandPaletteTrigger />
+          {authSection}
+        </div>
       </div>
 
       {/* Mobile dropdown */}

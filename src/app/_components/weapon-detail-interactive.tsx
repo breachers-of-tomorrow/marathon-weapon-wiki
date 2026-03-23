@@ -1,10 +1,14 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { WeaponBadges } from "./weapon-badges";
 import { WeaponConfigurator } from "./weapon-configurator";
+import { BuildSaveModal } from "./build-save-modal";
 import { parseStatModifiers } from "@/lib/stat-modifiers";
+import { api } from "@/trpc/react";
 
 type Mod = {
   id: string;
@@ -71,6 +75,70 @@ export function WeaponDetailInteractive({
   universalMods: Mod[];
 }) {
   const [equippedMods, setEquippedMods] = useState<Mod[]>([]);
+  const [saveModalOpen, setSaveModalOpen] = useState(false);
+  const [pendingBuildMods, setPendingBuildMods] = useState<Record<string, Mod> | null>(null);
+  const { data: session } = useSession();
+  const router = useRouter();
+  const utils = api.useUtils();
+
+  const createBuild = api.build.create.useMutation({
+    onSuccess: () => {
+      void utils.build.getByWeaponSlug.invalidate();
+      setSaveModalOpen(false);
+      setPendingBuildMods(null);
+      // Clear localStorage draft if present
+      try { localStorage.removeItem("pending-build"); } catch { /* noop */ }
+    },
+  });
+
+  // On mount, check for a pending build in localStorage (user just returned from sign-in)
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("pending-build");
+      if (!raw) return;
+      const pending = JSON.parse(raw) as { weaponSlug: string; modIds: string[] };
+      if (pending.weaponSlug !== weapon.slug) return;
+      if (!session?.user) return;
+      // Restore the pending build: open save modal
+      localStorage.removeItem("pending-build");
+      // Reconstruct mod objects from IDs
+      const allMods = [...linkedMods, ...universalMods];
+      const modMap = new Map(allMods.map((m) => [m.id, m]));
+      const restored: Record<string, Mod> = {};
+      for (const id of pending.modIds) {
+        const mod = modMap.get(id);
+        if (mod) restored[mod.type] = mod;
+      }
+      if (Object.keys(restored).length > 0) {
+        setEquippedMods(Object.values(restored));
+        setPendingBuildMods(restored);
+        setSaveModalOpen(true);
+      }
+    } catch { /* noop */ }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session?.user]);
+
+  const handleSaveBuild = useCallback(
+    (equipped: Record<string, Mod>) => {
+      if (!session?.user) {
+        // Stash build to localStorage, redirect to sign-in
+        try {
+          localStorage.setItem(
+            "pending-build",
+            JSON.stringify({
+              weaponSlug: weapon.slug,
+              modIds: Object.values(equipped).map((m) => m.id),
+            }),
+          );
+        } catch { /* noop */ }
+        router.push(`/auth/signin?callbackUrl=/weapons/${weapon.slug}`);
+        return;
+      }
+      setPendingBuildMods(equipped);
+      setSaveModalOpen(true);
+    },
+    [session?.user, weapon.slug, router],
+  );
 
   // Compute which stats are affected by equipped mods
   const affectedStats = useMemo(() => {
@@ -266,8 +334,33 @@ export function WeaponDetailInteractive({
           linkedMods={linkedMods}
           universalMods={universalMods}
           onModsChange={handleModsChange}
+          onSaveBuild={handleSaveBuild}
+          isSaving={createBuild.isPending}
         />
       </div>
+
+      {/* Save Build Modal */}
+      {saveModalOpen && pendingBuildMods && (
+        <BuildSaveModal
+          weaponSlug={weapon.slug}
+          weaponName={weapon.name}
+          equippedMods={pendingBuildMods}
+          onClose={() => {
+            setSaveModalOpen(false);
+            setPendingBuildMods(null);
+          }}
+          onSubmit={(title, type) => {
+            createBuild.mutate({
+              title,
+              type,
+              weaponSlug: weapon.slug,
+              modIds: Object.values(pendingBuildMods).map((m) => m.id),
+            });
+          }}
+          isPending={createBuild.isPending}
+          error={createBuild.error?.message ?? null}
+        />
+      )}
     </div>
   );
 }

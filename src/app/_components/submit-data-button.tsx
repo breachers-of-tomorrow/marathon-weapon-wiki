@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useUploadThing } from "@/utils/uploadthing";
 import { api } from "@/trpc/react";
 
@@ -8,6 +8,15 @@ const MAX_MESSAGE_LENGTH = 180;
 
 export function SubmitDataButton() {
   const [open, setOpen] = useState(false);
+
+  // Listen for custom event from MobileFab
+  useEffect(() => {
+    function handleOpen() {
+      setOpen(true);
+    }
+    window.addEventListener("open-submit-data", handleOpen);
+    return () => window.removeEventListener("open-submit-data", handleOpen);
+  }, []);
   const [message, setMessage] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -83,7 +92,7 @@ export function SubmitDataButton() {
       <button
         onClick={() => setOpen(true)}
         data-tour="submit-data"
-        className="fixed bottom-6 left-6 z-50 cryo-panel rounded-lg border-border-accent px-4 py-2 text-sm font-medium text-accent transition-all hover:bg-panel-hover hover:shadow-[0_0_12px_rgba(0,212,255,0.3)] cursor-pointer"
+        className="fixed bottom-6 left-6 z-50 hidden md:flex cryo-panel rounded-lg border-border-accent px-4 py-2 text-sm font-medium text-accent transition-all hover:bg-panel-hover hover:shadow-[0_0_12px_rgba(0,212,255,0.3)] cursor-pointer"
       >
         Provide More Data
       </button>

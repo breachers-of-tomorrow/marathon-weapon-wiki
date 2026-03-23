@@ -119,10 +119,14 @@ export function WeaponConfigurator({
   linkedMods,
   universalMods,
   onModsChange,
+  onSaveBuild,
+  isSaving,
 }: {
   linkedMods: Mod[];
   universalMods: Mod[];
   onModsChange?: (equippedMods: Mod[]) => void;
+  onSaveBuild?: (equippedMods: Record<string, Mod>) => void;
+  isSaving?: boolean;
 }) {
   const [activeSlot, setActiveSlot] = useState<string | null>(null);
   const [equippedMods, setEquippedMods] = useState<Record<string, Mod>>({});
@@ -203,6 +207,18 @@ export function WeaponConfigurator({
           </span>
         )}
       </div>
+
+      {/* Save Build CTA — prominent, always visible when mods are equipped */}
+      {onSaveBuild && equippedCount > 0 && (
+        <button
+          type="button"
+          onClick={() => onSaveBuild(equippedMods)}
+          disabled={isSaving}
+          className="w-full cursor-pointer rounded-lg border border-accent/50 bg-accent/10 px-4 py-2.5 font-display text-sm uppercase tracking-wider text-accent transition-all hover:border-accent hover:bg-accent/20 hover:shadow-[0_0_12px_rgba(0,212,255,0.2)] active:bg-accent/30 disabled:opacity-40"
+        >
+          {isSaving ? "Saving..." : "Save Build"}
+        </button>
+      )}
 
       {/* Slot Bar */}
       <div className="grid grid-cols-7 gap-1">

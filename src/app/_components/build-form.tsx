@@ -1,20 +1,8 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import {
-  DndContext,
-  DragOverlay,
-  PointerSensor,
-  KeyboardSensor,
-  useSensor,
-  useSensors,
-  type DragStartEvent,
-  type DragEndEvent,
-} from "@dnd-kit/core";
+import { useState, useCallback, useRef } from "react";
 import { api } from "@/trpc/react";
-import { ModSlot } from "./mod-slot";
-import { ModCard } from "./mod-card";
-import { RarityBadge, RARITY_COLORS } from "./rarity-badge";
+import { WeaponConfigurator } from "./weapon-configurator";
 
 type Mod = {
   id: string;
@@ -29,15 +17,6 @@ type Mod = {
   statModifiers: unknown;
 };
 
-const TYPE_ORDER = [
-  "BARREL",
-  "GRIP",
-  "MAGAZINE",
-  "OPTIC",
-  "SHIELD",
-  "GENERATOR",
-  "CHIP",
-];
 const BUILD_TYPES = ["PVP", "PVE", "PVEVP"] as const;
 
 const BUILD_TYPE_LABELS: Record<string, string> = {
@@ -50,12 +29,16 @@ export function BuildForm({
   open,
   onClose,
   weaponSlug,
+  weaponName,
+  weaponImageUrl,
   linkedMods,
   universalMods,
 }: {
   open: boolean;
   onClose: () => void;
   weaponSlug: string;
+  weaponName?: string;
+  weaponImageUrl?: string | null;
   linkedMods: Mod[];
   universalMods: Mod[];
 }) {
@@ -63,15 +46,8 @@ export function BuildForm({
   const [buildType, setBuildType] = useState<(typeof BUILD_TYPES)[number]>(
     "PVP",
   );
-  const [selectedMods, setSelectedMods] = useState<Record<string, string>>({});
   const [error, setError] = useState("");
-  const [expandedType, setExpandedType] = useState<string | null>(null);
-  const [activeDragId, setActiveDragId] = useState<string | null>(null);
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(KeyboardSensor),
-  );
+  const equippedRef = useRef<Mod[]>([]);
 
   const utils = api.useUtils();
   const createBuild = api.build.create.useMutation({
@@ -85,18 +61,20 @@ export function BuildForm({
   function resetAndClose() {
     setTitle("");
     setBuildType("PVP");
-    setSelectedMods({});
     setError("");
-    setExpandedType(null);
-    setActiveDragId(null);
+    equippedRef.current = [];
     onClose();
   }
+
+  const handleModsChange = useCallback((mods: Mod[]) => {
+    equippedRef.current = mods;
+  }, []);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!title.trim()) return;
 
-    const modIds = Object.values(selectedMods).filter(Boolean);
+    const modIds = equippedRef.current.map((m) => m.id);
     createBuild.mutate({
       title: title.trim(),
       type: buildType,
@@ -104,52 +82,6 @@ export function BuildForm({
       modIds,
     });
   }
-
-  // Group available mods by type
-  const allMods = [...linkedMods, ...universalMods];
-  const modsByType = new Map<string, Mod[]>();
-  for (const type of TYPE_ORDER) {
-    const modsOfType = allMods.filter((m) => m.type === type);
-    if (modsOfType.length > 0) modsByType.set(type, modsOfType);
-  }
-
-  const allModsById = new Map(allMods.map((m) => [m.id, m]));
-
-  const selectMod = useCallback(
-    (type: string, modId: string) => {
-      setSelectedMods((prev) => ({ ...prev, [type]: modId }));
-      setExpandedType(null);
-    },
-    [],
-  );
-
-  const clearMod = useCallback((type: string) => {
-    setSelectedMods((prev) => {
-      const next = { ...prev };
-      delete next[type];
-      return next;
-    });
-  }, []);
-
-  function handleDragStart(event: DragStartEvent) {
-    setActiveDragId(event.active.id as string);
-  }
-
-  function handleDragEnd(event: DragEndEvent) {
-    setActiveDragId(null);
-    const { active, over } = event;
-    if (!over) return;
-
-    const mod = active.data.current?.mod as Mod | undefined;
-    const slotType = over.data.current?.type as string | undefined;
-    if (mod && slotType && mod.type === slotType) {
-      selectMod(slotType, mod.id);
-    }
-  }
-
-  const activeDragMod = activeDragId
-    ? allModsById.get(activeDragId)
-    : undefined;
 
   if (!open) return null;
 
@@ -161,117 +93,80 @@ export function BuildForm({
           resetAndClose();
       }}
     >
-      <div className="cryo-panel mx-4 w-full max-w-lg rounded-lg border-border-accent p-6">
-        <h2 className="mb-4 text-lg font-semibold text-foreground">
+      <div className="cryo-panel mx-4 w-full max-w-3xl rounded-lg border-border-accent p-6">
+        <h2 className="mb-4 font-display text-sm font-bold uppercase tracking-wider text-foreground">
           Submit Build
         </h2>
 
         <form
           onSubmit={handleSubmit}
-          className="flex max-h-[70vh] flex-col gap-4 overflow-y-auto pr-1"
+          className="flex max-h-[80vh] flex-col gap-4 overflow-y-auto pr-1"
         >
-          {/* Title */}
-          <div>
-            <label className="mb-1 block text-sm text-dim">Build Title</label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value.slice(0, 100))}
-              placeholder="e.g. PvP Rush Loadout"
-              className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-dim focus:border-accent focus:outline-none"
-              required
-              disabled={createBuild.isPending}
-            />
-          </div>
-
-          {/* Build Type */}
-          <div>
-            <label className="mb-1 block text-sm text-dim">Build Type</label>
-            <div className="flex gap-1.5">
-              {BUILD_TYPES.map((bt) => (
-                <button
-                  key={bt}
-                  type="button"
-                  onClick={() => setBuildType(bt)}
-                  className={`rounded px-3 py-1 font-mono text-[10px] uppercase tracking-wide transition-colors ${
-                    buildType === bt
-                      ? "bg-accent text-background"
-                      : "border border-border bg-panel text-dim hover:text-foreground"
-                  }`}
-                >
-                  {BUILD_TYPE_LABELS[bt]}
-                </button>
-              ))}
+          {/* Top section: title + type */}
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-sm text-dim">Build Title</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value.slice(0, 100))}
+                placeholder="e.g. PvP Rush Loadout"
+                className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-dim focus:border-accent focus:outline-none"
+                required
+                autoFocus
+                disabled={createBuild.isPending}
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm text-dim">Build Type</label>
+              <div className="flex gap-1.5">
+                {BUILD_TYPES.map((bt) => (
+                  <button
+                    key={bt}
+                    type="button"
+                    onClick={() => setBuildType(bt)}
+                    className={`cursor-pointer rounded px-3 py-1.5 font-mono text-[10px] uppercase tracking-wide transition-colors ${
+                      buildType === bt
+                        ? "bg-accent text-background"
+                        : "border border-border bg-panel text-dim hover:text-foreground"
+                    }`}
+                  >
+                    {BUILD_TYPE_LABELS[bt]}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Mod Slots */}
-          <div>
-            <label className="mb-1 block text-sm text-dim">Mods</label>
-            <DndContext
-              sensors={sensors}
-              onDragStart={handleDragStart}
-              onDragEnd={handleDragEnd}
-            >
-              <div className="space-y-1.5">
-                {Array.from(modsByType.entries()).map(([type, mods]) => {
-                  const selectedModId = selectedMods[type];
-                  const selectedMod = selectedModId
-                    ? allModsById.get(selectedModId)
-                    : undefined;
-                  const isExpanded = expandedType === type;
+          {/* Main section: weapon info left, configurator right */}
+          <div className="grid gap-4 sm:grid-cols-[200px_1fr]">
+            {/* Left: weapon preview */}
+            <div className="flex flex-col items-center gap-2">
+              {weaponImageUrl && (
+                <div className="cryo-panel relative flex h-32 w-full items-center justify-center rounded-lg sm:h-44">
+                  <img
+                    src={weaponImageUrl}
+                    alt={weaponName ?? "Weapon"}
+                    className="h-full w-full rounded-lg object-contain p-3"
+                  />
+                </div>
+              )}
+              {weaponName && (
+                <span className="font-display text-xs uppercase tracking-wider text-foreground">
+                  {weaponName}
+                </span>
+              )}
+            </div>
 
-                  return (
-                    <div key={type}>
-                      <ModSlot
-                        type={type}
-                        selectedMod={selectedMod}
-                        expanded={isExpanded}
-                        onToggle={() =>
-                          setExpandedType(isExpanded ? null : type)
-                        }
-                        onClear={() => clearMod(type)}
-                        disabled={createBuild.isPending}
-                      />
-
-                      {/* Inline picker */}
-                      {isExpanded && (
-                        <div className="mt-1 mb-1 space-y-1 pl-2">
-                          {mods.map((mod) => (
-                            <ModCard
-                              key={mod.id}
-                              mod={mod}
-                              selected={selectedModId === mod.id}
-                              onClick={() => selectMod(type, mod.id)}
-                            />
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
-              <DragOverlay dropAnimation={null}>
-                {activeDragMod && (
-                  <div
-                    className="w-72 scale-105 rounded-md border border-accent bg-panel p-2.5 opacity-90 shadow-lg"
-                    style={{
-                      borderLeftWidth: "3px",
-                      borderLeftColor:
-                        RARITY_COLORS[activeDragMod.rarity] ?? "#6b7280",
-                    }}
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="truncate font-mono text-sm text-foreground">
-                        {activeDragMod.name}
-                      </span>
-                      <RarityBadge rarity={activeDragMod.rarity} />
-                    </div>
-                  </div>
-                )}
-              </DragOverlay>
-            </DndContext>
+            {/* Right: configurator */}
+            <div className="min-h-0">
+              <label className="mb-1 block text-sm text-dim">Select Mods</label>
+              <WeaponConfigurator
+                linkedMods={linkedMods}
+                universalMods={universalMods}
+                onModsChange={handleModsChange}
+              />
+            </div>
           </div>
 
           {error && (

@@ -104,6 +104,8 @@ async function WeaponDetail({ slug }: { slug: string }) {
       </h2>
       <WeaponBuildsSection
         weaponSlug={weapon.slug}
+        weaponName={weapon.name}
+        weaponImageUrl={weapon.imageUrl}
         linkedMods={linkedMods}
         universalMods={universalMods}
       />

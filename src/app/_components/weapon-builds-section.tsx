@@ -29,10 +29,14 @@ const FILTER_OPTIONS = [
 
 export function WeaponBuildsSection({
   weaponSlug,
+  weaponName,
+  weaponImageUrl,
   linkedMods,
   universalMods,
 }: {
   weaponSlug: string;
+  weaponName?: string;
+  weaponImageUrl?: string | null;
   linkedMods: Mod[];
   universalMods: Mod[];
 }) {
@@ -131,6 +135,8 @@ export function WeaponBuildsSection({
         open={formOpen}
         onClose={() => setFormOpen(false)}
         weaponSlug={weaponSlug}
+        weaponName={weaponName}
+        weaponImageUrl={weaponImageUrl}
         linkedMods={linkedMods}
         universalMods={universalMods}
       />
