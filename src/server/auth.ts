@@ -4,6 +4,7 @@ import {
   getServerSession,
 } from "next-auth";
 import BungieProvider from "next-auth/providers/bungie";
+import DiscordProvider from "next-auth/providers/discord";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { db } from "@/server/db";
 
@@ -17,6 +18,9 @@ declare module "next-auth" {
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
+  pages: {
+    signIn: "/auth/signin",
+  },
   providers: [
     BungieProvider({
       clientId: process.env.AUTH_BUNGIE_ID!,
@@ -42,6 +46,10 @@ export const authOptions: NextAuthOptions = {
       ...({
         headers: { "X-API-Key": process.env.AUTH_BUNGIE_API_KEY! },
       } as Record<string, unknown>),
+    }),
+    DiscordProvider({
+      clientId: process.env.AUTH_DISCORD_ID!,
+      clientSecret: process.env.AUTH_DISCORD_SECRET!,
     }),
   ],
   callbacks: {

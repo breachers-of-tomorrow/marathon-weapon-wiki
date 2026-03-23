@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useSession, signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
 import { BuildRow } from "./build-row";
 import { BuildForm } from "./build-form";
@@ -36,6 +37,7 @@ export function WeaponBuildsSection({
   universalMods: Mod[];
 }) {
   const { data: session } = useSession();
+  const router = useRouter();
   const [typeFilter, setTypeFilter] = useState<"PVP" | "PVE" | "PVEVP" | undefined>();
   const [formOpen, setFormOpen] = useState(false);
   const [expandedBuildId, setExpandedBuildId] = useState<string | null>(null);
@@ -60,7 +62,7 @@ export function WeaponBuildsSection({
 
   function handleSubmitClick() {
     if (!session?.user) {
-      void signIn("bungie");
+      router.push("/auth/signin");
       return;
     }
     setFormOpen(true);

@@ -12,6 +12,8 @@ export const env = createEnv({
     AUTH_BUNGIE_ID: z.string().min(1),
     AUTH_BUNGIE_SECRET: z.string().min(1),
     AUTH_BUNGIE_API_KEY: z.string().min(1),
+    AUTH_DISCORD_ID: z.string().min(1),
+    AUTH_DISCORD_SECRET: z.string().min(1),
     NEXTAUTH_SECRET: z.string().min(1),
     NEXTAUTH_URL: z.string().url().optional(),
     NODE_ENV: z
@@ -38,6 +40,8 @@ export const env = createEnv({
     AUTH_BUNGIE_ID: process.env.AUTH_BUNGIE_ID,
     AUTH_BUNGIE_SECRET: process.env.AUTH_BUNGIE_SECRET,
     AUTH_BUNGIE_API_KEY: process.env.AUTH_BUNGIE_API_KEY,
+    AUTH_DISCORD_ID: process.env.AUTH_DISCORD_ID,
+    AUTH_DISCORD_SECRET: process.env.AUTH_DISCORD_SECRET,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     NODE_ENV: process.env.NODE_ENV,

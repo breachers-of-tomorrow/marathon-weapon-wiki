@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useSession, signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
 
 export function BuildVote({
@@ -14,6 +15,7 @@ export function BuildVote({
   initialUserVote: 1 | -1 | null;
 }) {
   const { data: session } = useSession();
+  const router = useRouter();
   const [score, setScore] = useState(initialScore);
   const [userVote, setUserVote] = useState(initialUserVote);
 
@@ -44,7 +46,7 @@ export function BuildVote({
 
   function handleVote(direction: 1 | -1) {
     if (!session?.user) {
-      void signIn("bungie");
+      router.push("/auth/signin");
       return;
     }
     const newValue = userVote === direction ? 0 : direction;

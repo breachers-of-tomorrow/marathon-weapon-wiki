@@ -1,0 +1,109 @@
+Name,Type,Rarity,Price,Description / Buff,Stat Modifiers (Direction),Compatible Weapons,Is Universal,Has Image in DB,Image URL (for reference),Updated,Notes
+Flechette Split Action,BARREL,PRESTIGE,1620,"Increases stability, handling, and accuracy when firing from the hip","Stability (up), Handling (up), Hipfire Accuracy (up)",BRRT SMG,No,Yes,,FALSE,
+Lockout Muzzle Brake,BARREL,PRESTIGE,1620,"Increases movement speed. While hip-firing: greatly increased accuracy, stability, and range","Movement Speed (up), Hipfire Accuracy (up), Stability (up), Range (up)",B33 Volley Rifle,No,Yes,,FALSE,
+MIPS Slug Converter,BARREL,PRESTIGE,1620,"Increases ROF, stability, aim assist, range, reduces pellet spread. Press to convert to slug.","Rate of Fire (up), Stability (up), Aim Assist (up), Range (up), Pellet Spread (up)",WSTR Combat Shotgun,No,Yes,,FALSE,
+Pinpoint Barrel,BARREL,SUPERIOR,540,"Greatly increases stability and range.","Stability (up), Range (up)","WSTR Combat Shotgun, Misriah 2442",No,No,,FALSE,
+Steady Barrel,BARREL,SUPERIOR,540,"Greatly increases stability, ready speed, and accuracy while moving.","Stability (up), Ready Speed (up), Moving Accuracy (up)","Stryder M1T, Hardline PR, Repeater HPR, Twin Tap HBR, Longshot, Outland",No,No,,FALSE,
+Suppression Dampener,BARREL,DELUXE,207,"Silences shots. Increases stability.",Stability (up),Universal,Yes,Yes,,FALSE,
+Precision Barrel,BARREL,DELUXE,180,"Increased ADS accuracy and range.","ADS Accuracy (up), Range (up)","BRRT SMG, Copperhead RF, Bully SMG, CE Tactical Sidearm, Magnum MC",No,Yes,,FALSE,
+Precision Choke,BARREL,DELUXE,180,"Increases range and aim assist.","Range (up), Aim Assist (up)","WSTR Combat Shotgun, Misriah 2442",No,Yes,,FALSE,
+Farshot Barrel,BARREL,ENHANCED,0,"Slightly increases range.",Range (up),Universal,Yes,Yes,,FALSE,
+Impulse Brake,BARREL,DELUXE,180,"Increases stability and reduces flinch.","Stability (up), Flinch Resistance (up)","Hardline PR, Repeater HPR, Twin Tap HBR, Stryder M1T, B33 Volley Rifle, Longshot, Outland",No,Yes,,FALSE,
+Ironhold Barrel,BARREL,ENHANCED,60,"Slightly increases stability and reduces flinch.","Stability (up), Flinch Resistance (up)","BRRT SMG, Copperhead RF, Bully SMG, CE Tactical Sidearm, Magnum MC",No,No,,FALSE,
+Stabilizing Barrel,BARREL,ENHANCED,60,"Slightly increases stability.",Stability (up),"V66 Lookout, V99 Channel Rifle",No,Yes,,FALSE,
+Weighted Barrel,BARREL,ENHANCED,540,"Slightly increases aim assist.",Aim Assist (up),"BRRT SMG, Copperhead RF, Bully SMG, CE Tactical Sidearm, Magnum MC",No,No,,FALSE,
+Nano-Suppressor,BARREL,ENHANCED,0,"Shots fired from this weapon are silenced.",None,"BRRT SMG, Copperhead RF, Bully SMG, CE Tactical Sidearm, Magnum MC",No,Yes,,FALSE,
+Suppression Muzzle,BARREL,PRESTIGE,1600,"Silences shots. Greatly increases stability and accuracy.","Stability (up), Accuracy (up)","BRRT SMG, Bully SMG, Copperhead RF, V22 Volt Thrower",No,No,,FALSE,
+Tru-shot Barrel,BARREL,ENHANCED,60,"Slightly increases ADS accuracy.",ADS Accuracy (up),"Hardline PR, Repeater HPR, Twin Tap HBR, Stryder M1T, B33 Volley Rifle, V66 Lookout",No,No,,FALSE,
+Quickfire Barrel,BARREL,ENHANCED,0,"Slightly increases rate of fire.",Rate of Fire (up),"V99 Channel Rifle, V66 Lookout",No,No,,FALSE,
+Accu-point Dampener,BARREL,ENHANCED,0,"Slightly increases ADS accuracy.",ADS Accuracy (up),"V75 Scar, V22 Volt Thrower, V11 Punch",No,No,,FALSE,
+Hi-Focus Dampener,BARREL,ENHANCED,60,"Increases ADS accuracy and range.","ADS Accuracy (up), Range (up)","V75 Scar, V22 Volt Thrower, V11 Punch",No,No,,FALSE,
+Hipshot Dampener,BARREL,ENHANCED,60,"Slightly increases hipfire accuracy and movement speed.","Hipfire Accuracy (up), Weight (up)","V75 Scar, V22 Volt Thrower, V11 Punch",No,No,,FALSE,
+Combat Grip,GRIP,DELUXE,180,"Increases ADS speed and ready speed.","ADS Speed (up), Ready Speed (up)","M77 Assault Rifle, Overrun AR, Impact HAR, V75 Scar",No,Yes,,FALSE,
+Snapshot Grip,GRIP,DELUXE,180,"Increases accuracy while moving and ADS speed.","Moving Accuracy (up), ADS Speed (up)","WSTR Combat Shotgun, Misriah 2442, V85 Circuit Breaker",No,Yes,,FALSE,
+Speed Scout Grip,GRIP,ENHANCED,0,"Slightly increases movement speed with this weapon.",Movement Speed (up),"Overrun AR, M77 Assault Rifle, Impact HAR",No,No,,FALSE,
+Vigilant Grip,GRIP,ENHANCED,0,"Slightly increases ready speed.",Ready Speed (up),"Overrun AR, M77 Assault Rifle, Impact HAR",No,No,,FALSE,
+Kingmaker Mag,MAGAZINE,PRESTIGE,1620,"Increases reload speed and mag size. Headshots increase ROF (stacks 3x).","Reload Speed (up), Magazine Size (up), Rate of Fire (up)",Longshot,No,Yes,,FALSE,
+Overclocked Delimiter,MAGAZINE,PRESTIGE,1620,"Increases mag size and reload. Adds 3rd charge level. Full charge: reduced spread, increased damage, ricochet/pierce.","Magazine Size (up), Reload Speed (up), Damage (up), Spread (up)",V85 Circuit Breaker,No,Yes,,FALSE,
+Ram-Page Mag,MAGAZINE,PRESTIGE,1620,"Increases ROF, mag size, reload. ROF stays high as heat builds. Projectiles ricochet and track.","Rate of Fire (up), Magazine Size (up), Reload Speed (up)",V75 Scar,No,Yes,,FALSE,
+Adrenal Feedback Rounds,MAGAZINE,PRESTIGE,1620,"Increases mag size. Precision hits reduce heat and grant Micro-Adrenaline (heat capacity + agility).","Magazine Size (up), Heat Capacity (up), Agility (up)",Hardline PR,No,Yes,,FALSE,
+Rodeo Mag,MAGAZINE,PRESTIGE,1620,"Increases ROF, stability, mag size. Fire rate greatly increases over time.","Rate of Fire (up), Stability (up), Magazine Size (up)",Bully SMG,No,Yes,,FALSE,
+Air-Cooled Chamber,MAGAZINE,SUPERIOR,60,"Greatly increases reload speed and magazine size.","Reload Speed (up), Magazine Size (up)","V99 Channel Rifle, V00 Zeus RG, V85 Circuit Breaker",No,Yes,,FALSE,
+Hi-Cap Mag,MAGAZINE,DELUXE,234,"Increases magazine size.",Magazine Size (up),"Stryder M1T, Hardline PR, B33 Volley Rifle, Twin Tap HBR, Longshot",No,No,,FALSE,
+Steady Mag,MAGAZINE,ENHANCED,42,"Slightly increases magazine size and stability.","Magazine Size (up), Stability (up)",CE Tactical Sidearm,No,Yes,,FALSE,
+Turbo Chamber,MAGAZINE,ENHANCED,0,"Slightly increases rate of fire.",Rate of Fire (up),"V22 Volt Thrower, V11 Punch, V66 Lookout",No,No,,FALSE,
+Slick Mag I,MAGAZINE,ENHANCED,60,"Slightly increases rate of fire and magazine size.","Rate of Fire (up), Magazine Size (up)",Misriah 2442,No,No,,FALSE,
+Reloader Mag,MAGAZINE,ENHANCED,0,"Slightly increases reload speed.",Reload Speed (up),"Overrun AR, M77 Assault Rifle, Bully SMG, Copperhead RF",No,No,,FALSE,
+Extended Feather Mag,MAGAZINE,ENHANCED,60,"Slightly increases mag size and reduces weight.","Magazine Size (up), Weight (up)","Overrun AR, M77 Assault Rifle, Impact HAR, V75 Scar",No,No,,FALSE,
+Hollow-Case Rounds,MAGAZINE,ENHANCED,60,"Slightly increases damage at the cost of range.","Damage (up), Range (down)","Overrun AR, M77 Assault Rifle, Impact HAR, Bully SMG, Copperhead RF",No,No,,FALSE,
+Drum Mag,MAGAZINE,DELUXE,234,"Greatly increases magazine size.",Magazine Size (up),"Overrun AR, M77 Assault Rifle, Impact HAR, Bully SMG, Copperhead RF",No,No,,FALSE,
+Steady Rounds,MAGAZINE,DELUXE,207,"Increases stability and reduces recoil.","Stability (up), Recoil (up)","Overrun AR, M77 Assault Rifle, Impact HAR, Bully SMG, Copperhead RF",No,No,,FALSE,
+Combat Mag,MAGAZINE,ENHANCED,60,"Slightly increases reload speed and ready speed.","Reload Speed (up), Ready Speed (up)","Hardline PR, Twin Tap HBR, Stryder M1T, B33 Volley Rifle",No,No,,FALSE,
+Scope Linked Magazine,MAGAZINE,PRESTIGE,0,"Increases mag size and reload. While scoped: increased accuracy and ROF.","Magazine Size (up), Reload Speed (up), Accuracy (up), Rate of Fire (up)",M77 Assault Rifle,No,No,,FALSE,
+Tapered Heatsink,MAGAZINE,DELUXE,180,"Increases charge speed and reduces heat buildup.","Charge Speed (up), Heat Management (up)","V00 Zeus RG, Ares RG",No,No,,FALSE,
+Cloudfeather Chamber,MAGAZINE,ENHANCED,0,"Slightly reduces weight and increases movement speed.","Weight (up), Movement Speed (up)","V75 Scar, V22 Volt Thrower, V11 Punch, V66 Lookout",No,No,,FALSE,
+Null-Grav Chamber,MAGAZINE,DELUXE,207,"Increases movement speed and reduces weapon weight.","Movement Speed (up), Weight (up)","V75 Scar, V22 Volt Thrower, V11 Punch, V66 Lookout",No,No,,FALSE,
+Lever Overhaul Interface,OPTIC,PRESTIGE,1620,"Increases reload speed and rounds reloaded. Shots on target increase fire rate (degrades on miss).","Reload Speed (up), Rate of Fire (up)",Repeater HPR,No,Yes,,FALSE,
+Pistol Scope,OPTIC,PRESTIGE,1620,"Greatly increases ADS speed. Specialized high zoom optic. Precision hits restore shields.","ADS Speed (up), Zoom (up)",Magnum MC,No,Yes,,FALSE,
+Vital Intel,OPTIC,PRESTIGE,1620,"Greatly increases handling and ADS speed. Proximity Sensor on radar. Nearby hostiles grant increased handling and accuracy.","Handling (up), ADS Speed (up), Accuracy (up)",Stryder M1T,No,Yes,,FALSE,
+Far Reach Optic,OPTIC,ENHANCED,69,"Slightly increases zoom and range. Rangefinder with laser pulses.","Range (up), Zoom (up)","Overrun AR, Impact HAR, V75 Scar, BRRT SMG, Copperhead RF, Bully SMG",No,Yes,,FALSE,
+Termal Optic,OPTIC,DELUXE,207,"Increases zoom and ADS accuracy. Highlights hostile heat signatures.","Zoom (up), ADS Accuracy (up)","Stryder M1T, Hardline PR, Repeater HPR, V66 Lookout, B33 Volley Rifle, Twin Tap HBR",No,No,,FALSE,
+Midsight Optic,OPTIC,ENHANCED,60,"Slightly increases zoom.",Zoom (up),"Overrun AR, M77 Assault Rifle, Impact HAR, V75 Scar, BRRT SMG, Bully SMG, Copperhead RF",No,No,,FALSE,
+Shortwave Scout Optic,OPTIC,DELUXE,69,"Increases zoom. Enables motion tracker on radar.",Zoom (up),"Overrun AR, M77 Assault Rifle, Impact HAR, V75 Scar, BRRT SMG, Bully SMG, Copperhead RF",No,No,,FALSE,
+Twinscope Optic,OPTIC,ENHANCED,69,"Slightly increases zoom. Toggle between two zoom levels.",Zoom (up),"Overrun AR, M77 Assault Rifle, Impact HAR, V75 Scar, BRRT SMG, Bully SMG, Copperhead RF",No,No,,FALSE,
+Oracle Lens,OPTIC,SUPERIOR,459,"Greatly increases ADS speed, moving accuracy, and ADS accuracy.","ADS Speed (up), Moving Accuracy (up), ADS Accuracy (up), Zoom (up)","CE Tactical Sidearm, Magnum MC, V11 Punch",No,No,,FALSE,
+Charge-Coupled Optic,OPTIC,PRESTIGE,0,"Increases charge speed. While scoped: charge damage ramps faster, increased aim assist.","Charge Speed (up), Aim Assist (up)",V99 Channel Rifle,No,No,,FALSE,
+Overcharge Lens,OPTIC,PRESTIGE,60,"Increases lock-on range and tracking. Lock-on chains to nearby targets.","Lock-on Range (up), Tracking (up)",V22 Volt Thrower,No,No,,FALSE,
+Circuit Shield,SHIELD,PRESTIGE,1620,"Decreases recoil 10%. Damage absorbed refunds ammo to magazine.",Recoil (up),Retaliator LMG,No,Yes,,FALSE,
+Control Shield,SHIELD,SUPERIOR,621,"Greatly increases stability.",Stability (up),"Conquest LMG, Retaliator LMG, Demolition HMG",No,Yes,,FALSE,
+Balanced Shield,SHIELD,DELUXE,207,"Increases ready speed and movement speed.","Ready Speed (up), Movement Speed (up)","Conquest LMG, Retaliator LMG, Demolition HMG",No,Yes,,FALSE,
+Duelist Shield,SHIELD,ENHANCED,69,"Slightly increases moving accuracy and ADS speed.","Moving Accuracy (up), ADS Speed (up)","Conquest LMG, Retaliator LMG, Demolition HMG",No,Yes,,FALSE,
+Overclocked Generator,GENERATOR,PRESTIGE,0,"Greatly increases charge speed and damage. Overcharging fires devastating blast.","Charge Speed (up), Damage (up)",V00 Zeus RG,No,No,,FALSE,
+Stabilizing Generator,GENERATOR,SUPERIOR,,"Greatly increases stability while charging.",Stability (up),"Ares RG, V00 Zeus RG",No,No,,FALSE,
+See ya,CHIP,SUPERIOR,621,"Reloading when magazine empty causes brief invisibility.",Buff only (no stat modifiers),Universal,Yes,No,,FALSE,
+Bounty,CHIP,DELUXE,207,"Eliminating UESC pays considerable credits.",Buff only (no stat modifiers),Universal,Yes,No,,FALSE,
+Torch Bug,CHIP,DELUXE,0,"Eliminating a hostile causes them to explode.",Buff only (no stat modifiers),Universal,Yes,Yes,,FALSE,
+Bounty Hunter,CHIP,ENHANCED,207,"Eliminating UESC pays small credits.",Buff only (no stat modifiers),Universal,Yes,No,,FALSE,
+Swarm Directive,CHIP,DELUXE,0,"Precision kills spawn flechette seekers that heal on hit.",Buff only (no stat modifiers),Universal,Yes,No,,FALSE,
+Last Resort,CHIP,ENHANCED,69,"While overheated: moderate non-precision damage increase.",Buff only (no stat modifiers),Universal,Yes,Yes,,FALSE,
+Eyes On Fire,CHIP,ENHANCED,0,"Damaging hostiles briefly highlights them through walls.",Buff only (no stat modifiers),Universal,Yes,Yes,,FALSE,
+Endless Runner,CHIP,ENHANCED,0,"Kills grant brief sprint speed boost.",Buff only (no stat modifiers),Universal,Yes,Yes,,FALSE,
+Veilshot Chip,CHIP,ENHANCED,60,"Kills briefly cloak you.",Buff only (no stat modifiers),Conquest LMG,No,No,,FALSE,
+Background Process,CHIP,ENHANCED,69,"Weapon auto-reloads when stowed.",Buff only (no stat modifiers),Universal,Yes,No,,FALSE,
+Cloudborn,CHIP,ENHANCED,0,"While airborne: increased accuracy and stability.","Accuracy (up), Stability (up)",Universal,Yes,No,,FALSE,
+Heatsink,CHIP,ENHANCED,60,"Increases heat capacity for sustained fire.",Heat Capacity (up),Universal,Yes,No,,FALSE,
+Insomniac,CHIP,ENHANCED,0,"Sprint speed slightly increased.",Sprint Speed (up),Universal,Yes,No,,FALSE,
+Insurrection,CHIP,DELUXE,0,"Damaging hostiles increases damage resistance briefly.",Buff only (no stat modifiers),Universal,Yes,No,,FALSE,
+Keen Scout Chip,CHIP,ENHANCED,60,"Increases radar range.",Buff only (no stat modifiers),Universal,Yes,No,,FALSE,
+Motionsense Chip,CHIP,ENHANCED,60,"Briefly highlights hostiles on radar after taking damage.",Buff only (no stat modifiers),Universal,Yes,No,,FALSE,
+Stack Overflow,CHIP,DELUXE,23,"Rapid kills grant stacking damage bonus.",Buff only (no stat modifiers),Universal,Yes,No,,FALSE,
+Flash Draw Chip,CHIP,SUPERIOR,540,"Greatly increases ready speed and weapon swap speed.","Ready Speed (up), Swap Speed (up)",Universal,Yes,No,,FALSE,
+Ornithologist,CHIP,SUPERIOR,621,"While airborne: greatly increased accuracy, stability, handling.","Accuracy (up), Stability (up), Handling (up)",Universal,Yes,No,,FALSE,
+Alternating Current,CHIP,ENHANCED,69,"Moderate health/shield restore when damaging EMP-affected target.",Buff only (no stat modifiers),Universal,Yes,No,,FALSE,
+Accu-Point Barrel,BARREL,"DELUXE, ENHANCED","180, 60","Increases ADS accuracy and aim assist.","ADS Accuracy (up), Aim Assist (up)",Unknown,No,No,,FALSE,NEW from wzstats
+Accu-Sight Lens,OPTIC,SUPERIOR,702,"Increases zoom, range, and ADS accuracy. Decreases ADS speed.","Zoom (up), Range (up), ADS Accuracy (up), ADS Speed (down)",Unknown,No,No,,FALSE,NEW from wzstats
+Adaptive Mag,MAGAZINE,PRESTIGE,1620,"A custom-made mod for the Overrun AR. Increases reload speed and magazine size.","Reload Speed (up), Magazine Size (up)",Overrun AR,No,No,,FALSE,NEW from wzstats
+Afterburner,CHIP,SUPERIOR,540,"Sliding with this weapon reloads a portion of your magazine and increases stability and accuracy by a massive amount. Ballistic weapons reload from reserves. Volt weapons reload a smaller portion.",Buff only (no stat modifiers),Unknown,No,No,,FALSE,NEW from wzstats
+Balanced Belt,BELT,SUPERIOR,621,"Greatly increases magazine, range, and reload speed.","Magazine (up), Range (up), Reload Speed (up)",Unknown (LMG belt slot),No,No,,FALSE,NEW from wzstats
+Balanced Payload,MAGAZINE,"ENHANCED, DELUXE, SUPERIOR","69, 207, 621","Slightly increases magazine size, reload speed, and movement speed with this weapon.","Magazine Size (up), Reload Speed (up), Movement Speed (up)",Unknown,No,No,,FALSE,NEW from wzstats
+Battle Runner,CHIP,ENHANCED,23,"Eliminations with this weapon grant increased sprint speed for a short duration.",Buff only (no stat modifiers),Universal,Yes,No,,FALSE,NEW from wzstats
+BFM,MAGAZINE,"ENHANCED, DELUXE","51, 153","Greatly increases magazine size.",Magazine Size (up),Unknown,No,No,,FALSE,NEW from wzstats
+Cold Vigilance Scope,OPTIC,"ENHANCED, DELUXE","69, 207","Slightly increases zoom, ADS speed, and ADS accuracy.","Zoom (up), ADS Speed (up), ADS Accuracy (up)",Unknown,No,No,,FALSE,NEW from wzstats
+Extra Mag III,MAGAZINE,SUPERIOR,702,"Greatly increases magazine size and reload speed.","Magazine Size (up), Reload Speed (up)",Unknown,No,No,,FALSE,NEW from wzstats
+Feather Mag,MAGAZINE,"ENHANCED, SUPERIOR","69, 621","Slightly increases magazine size and reload speed.","Magazine Size (up), Reload Speed (up)",Unknown,No,No,,FALSE,NEW from wzstats
+Five Finger Discount,CHIP,SUPERIOR,621,"Eliminating UESC or downing Runners with melee/knife partially reloads this weapon by a massive amount.",Buff only (no stat modifiers),Unknown,No,No,,FALSE,NEW from wzstats
+Mega Drive,MAGAZINE,"ENHANCED, SUPERIOR","0, 702","Massively increases magazine size.",Magazine Size (up),Unknown,No,No,,FALSE,NEW from wzstats
+Neuro Optic Lens,OPTIC,ENHANCED,69,"Slightly increases zoom and ADS speed.","Zoom (up), ADS Speed (up)",Unknown,No,No,,FALSE,NEW from wzstats
+Null-Grav Generator,GENERATOR,ENHANCED,69,"Slightly increases aim assist and charge time.","Aim Assist (up), Charge Time (up)",Unknown,No,No,,FALSE,NEW from wzstats
+Optic 1.4x I,OPTIC,ENHANCED,69,"Slightly increases zoom, ADS accuracy, and accuracy while moving.","Zoom (up), ADS Accuracy (up), Moving Accuracy (up)",Unknown,No,No,,FALSE,NEW from wzstats
+Outland Suppressor,BARREL,PRESTIGE,1620,"A unique mod for the Outland. Increases stability and range. Shots fired from the weapon are suppressed.","Stability (up), Range (up)",Outland,No,No,,FALSE,NEW from wzstats
+Q-Tap Regen Optic,OPTIC,PRESTIGE,1620,"A custom-made mod for the Twin Tap HBR. Increases rounds per burst to four. While health is very low, hit all rounds in a burst to start health regeneration.",Buff / special perk,Twin Tap HBR,No,No,,FALSE,NEW from wzstats
+Rangefinder Lens,OPTIC,"ENHANCED, DELUXE, SUPERIOR","51, 153, 383","Slightly increases zoom and ADS accuracy.","Zoom (up), ADS Accuracy (up)",Unknown,No,No,,FALSE,NEW from wzstats
+Rangefinder Optic,OPTIC,"ENHANCED, DELUXE","69, 207","Slightly increases zoom, ADS accuracy, and accuracy while moving.","Zoom (up), ADS Accuracy (up), Moving Accuracy (up)",Unknown,No,No,,FALSE,NEW from wzstats
+Rocket Start,CHIP,SUPERIOR,621,"Eliminating a hostile shortly after sprinting grants you the effects of Cardio Kick for a long duration.",Buff only (no stat modifiers),Unknown,No,No,,FALSE,NEW from wzstats
+Stabilizing Mag,MAGAZINE,"ENHANCED, DELUXE, SUPERIOR","69, 207, 621","Slightly increases magazine size and stability.","Magazine Size (up), Stability (up)",Unknown,No,No,,FALSE,NEW from wzstats
+Sturdy Brace Grip,GRIP,ENHANCED,0,"Increases stability.",Stability (up),Unknown,No,No,,FALSE,NEW from wzstats
+Thermal Optic,OPTIC,"DELUXE, SUPERIOR","0, 621","Increases zoom and ADS accuracy. Decreases ADS speed.","Zoom (up), ADS Accuracy (up), ADS Speed (down)",Unknown,No,No,,FALSE,NEW from wzstats - note: may overlap with Termal Optic (typo in seed)
+Tuned Generator,GENERATOR,SUPERIOR,621,"Greatly increases ready speed and movement speed with this weapon.","Ready Speed (up), Movement Speed (up)",Unknown,No,No,,FALSE,NEW from wzstats
+Turbo Belt,BELT,ENHANCED,0,"Slightly increases magazine size, reload speed, and movement speed with this weapon.","Magazine Size (up), Reload Speed (up), Movement Speed (up)",Unknown (LMG belt slot),No,No,,FALSE,NEW from wzstats
+Turbo Generator,GENERATOR,ENHANCED,0,"Slightly increases ADS speed and charge time.","ADS Speed (up), Charge Time (up)",Unknown,No,No,,FALSE,NEW from wzstats

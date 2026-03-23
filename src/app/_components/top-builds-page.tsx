@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useSession, signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
 import { BuildVote } from "./build-vote";
 import { BuildForm } from "./build-form";
@@ -28,6 +29,7 @@ const BUILD_TYPE_COLORS: Record<string, string> = {
 };
 
 export function TopBuildsPage() {
+  const router = useRouter();
   const { data: session } = useSession();
   const [typeFilter, setTypeFilter] = useState<
     "PVP" | "PVE" | "PVEVP" | undefined
@@ -59,7 +61,7 @@ export function TopBuildsPage() {
 
   function handleNewBuild() {
     if (!session?.user) {
-      void signIn("bungie");
+      router.push("/auth/signin");
       return;
     }
     setWeaponPickerOpen(true);

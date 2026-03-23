@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -39,15 +39,19 @@ export function Navbar() {
           {session.user.name}
         </span>
         <button
-          onClick={() => signOut()}
+          onClick={() => {
+            closeMenu();
+            void signOut();
+          }}
           className="rounded border border-border px-3 py-1 text-xs uppercase tracking-wider text-dim transition-colors hover:border-border-accent hover:text-foreground"
         >
           Sign Out
         </button>
       </div>
     ) : (
-      <button
-        onClick={() => signIn("bungie")}
+      <Link
+        href="/auth/signin"
+        onClick={closeMenu}
         className="flex items-center gap-2 rounded border border-border px-3 py-1.5 text-sm uppercase tracking-wider text-foreground transition-all hover:border-border-accent hover:shadow-[0_0_12px_rgba(0,212,255,0.3)]"
       >
         <svg
@@ -66,8 +70,8 @@ export function Navbar() {
           <polyline points="10 17 15 12 10 7" />
           <line x1="15" y1="12" x2="3" y2="12" />
         </svg>
-        Sign in with Bungie
-      </button>
+        Sign In
+      </Link>
     );
 
   return (
