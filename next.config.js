@@ -14,7 +14,7 @@ const config = {
 
 export default withSentryConfig(config, {
   org: "meridian-digital",
-  project: "javascript-nextjs",
+  project: "marathon-wiki",
 
   silent: !process.env.CI,
 
