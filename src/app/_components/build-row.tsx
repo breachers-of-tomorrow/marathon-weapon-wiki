@@ -20,7 +20,7 @@ type Mod = {
 
 type BuildMod = {
   id: string;
-  mod: { id: string; name: string; type: string; rarity: string };
+  mod: { id: string; name: string; type: string; rarity: string; imageUrl: string | null };
 };
 
 type Build = {
@@ -139,12 +139,22 @@ export function BuildRow({
             <div className="mt-1.5 flex flex-wrap gap-1">
               {build.mods.map((bm) => {
                 const color = RARITY_COLORS[bm.mod.rarity] ?? "#6b7280";
+                const fullMod = allModsMap.get(bm.mod.id);
                 return (
                   <span
                     key={bm.id}
-                    className="rounded px-1.5 py-0.5 font-mono text-xs uppercase tracking-wide"
+                    className="flex items-center gap-1 rounded px-1.5 py-0.5 font-mono text-xs uppercase tracking-wide"
                     style={{ backgroundColor: `${color}20`, color }}
                   >
+                    {(bm.mod.imageUrl ?? fullMod?.imageUrl) && (
+                      <img
+                        src={(bm.mod.imageUrl ?? fullMod?.imageUrl)!}
+                        alt=""
+                        width={16}
+                        height={16}
+                        className="rounded object-contain"
+                      />
+                    )}
                     {bm.mod.name}
                   </span>
                 );
@@ -182,6 +192,8 @@ export function BuildRow({
                 const price = fullMod?.price ?? null;
                 const description = fullMod?.description ?? null;
 
+                const imageUrl = bm.mod.imageUrl ?? fullMod?.imageUrl ?? null;
+
                 return (
                   <div
                     key={bm.id}
@@ -192,25 +204,41 @@ export function BuildRow({
                         {type}
                       </span>
                     </div>
-                    <div className="mt-1 flex items-center justify-between gap-2">
-                      <span className="font-mono text-base text-foreground">
-                        {name}
-                      </span>
-                      <div className="flex shrink-0 items-center gap-2">
-                        {price != null && (
-                          <span className="text-foreground/70 font-mono text-sm">
-                            {price === 0 ? "Free" : `${price.toLocaleString()}cr`}
+                    <div className="mt-1 flex items-center gap-3">
+                      {imageUrl && (
+                        <img
+                          src={imageUrl}
+                          alt={name}
+                          width={44}
+                          height={44}
+                          className="shrink-0 rounded object-contain"
+                          style={{
+                            filter: `drop-shadow(0 0 4px ${RARITY_COLORS[rarity] ?? "#6b7280"}40)`,
+                          }}
+                        />
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-mono text-base text-foreground">
+                            {name}
                           </span>
+                          <div className="flex shrink-0 items-center gap-2">
+                            {price != null && (
+                              <span className="text-foreground/70 font-mono text-sm">
+                                {price === 0 ? "Free" : `${price.toLocaleString()}cr`}
+                              </span>
+                            )}
+                            <RarityBadge rarity={rarity} />
+                          </div>
+                        </div>
+                        {description && (
+                          <p className="text-foreground/60 mt-1 text-sm leading-relaxed">
+                            {description}
+                          </p>
                         )}
-                        <RarityBadge rarity={rarity} />
+                        <StatModifierBadges statModifiers={fullMod?.statModifiers} />
                       </div>
                     </div>
-                    {description && (
-                      <p className="text-foreground/60 mt-1 text-sm leading-relaxed">
-                        {description}
-                      </p>
-                    )}
-                    <StatModifierBadges statModifiers={fullMod?.statModifiers} />
                   </div>
                 );
               })}

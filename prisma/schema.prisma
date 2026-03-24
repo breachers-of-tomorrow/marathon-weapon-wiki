@@ -157,6 +157,10 @@ model WeaponMod {
     mod      Mod    @relation(fields: [modId], references: [id])
     modId    String
 
+    // Weapon-specific stat modifier values (overrides the generic Mod.statModifiers)
+    // Array of { stat, direction, label, value } — same shape as Mod.statModifiers but with numeric values
+    statModifiers Json? @db.JsonB
+
     @@unique([weaponId, modId])
     @@index([weaponId])
     @@index([modId])

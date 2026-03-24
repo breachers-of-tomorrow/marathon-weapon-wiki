@@ -683,6 +683,7 @@ async function main() {
 
   // === MODS ===
   type StatModifier = { stat: string; direction: "up" | "down"; label: string };
+  type WeaponStatModifier = StatModifier & { value: number };
 
   const mods: {
     name: string;
@@ -694,6 +695,8 @@ async function main() {
     isUniversal?: boolean;
     compatibleWeapons: string[];
     statModifiers?: StatModifier[];
+    // Weapon-specific stat values — keyed by weapon name
+    weaponStats?: Record<string, WeaponStatModifier[]>;
   }[] = [
     // --- BARREL (14) ---
     { name: "Flechette Split Action", type: "BARREL", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the BRRT SMG. Increases stability, handling, and accuracy when firing from the hip", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/f/f3/Flechette_Split_Action.png", compatibleWeapons: ["BRRT SMG"], statModifiers: [{ stat: "stability", direction: "up", label: "Stability" }, { stat: "handling", direction: "up", label: "Handling" }, { stat: "hipfireSpread", direction: "up", label: "Hipfire Accuracy" }] },
@@ -730,7 +733,7 @@ async function main() {
     { name: "Adrenal Feedback Rounds", type: "MAGAZINE", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Hardline PR. Increases Magazine Size. Precision hits reduce your shell's heat and grant a stack of Micro-Adrenaline, increasing Heat Capacity and Agility for a short duration.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/4/4a/Adrenal_Feedback_Rounds.png", compatibleWeapons: ["Hardline PR"], statModifiers: [{ stat: "magazineSize", direction: "up", label: "Magazine Size" }, { stat: "heatCapacity", direction: "up", label: "Heat Capacity" }, { stat: "movementSpeed", direction: "up", label: "Agility" }] },
     { name: "Rodeo Mag", type: "MAGAZINE", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Bully SMG. Increases rate of fire, stability, and magazine size. This weapon's fire rate greatly increases over time.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/3/37/Rodeo_Mag.png", compatibleWeapons: ["Bully SMG"], statModifiers: [{ stat: "rateOfFire", direction: "up", label: "Rate of Fire" }, { stat: "stability", direction: "up", label: "Stability" }, { stat: "magazineSize", direction: "up", label: "Magazine Size" }] },
     { name: "Air-Cooled Chamber", type: "MAGAZINE", rarity: "SUPERIOR", price: 60, description: "Greatly increases reload speed and magazine size.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/3/3b/Air-Cooled_Chamber.png", compatibleWeapons: ["V99 Channel Rifle", "V00 Zeus RG", "V85 Circuit Breaker"], statModifiers: [{ stat: "reloadSpeed", direction: "up", label: "Reload Speed" }, { stat: "magazineSize", direction: "up", label: "Magazine Size" }] },
-    { name: "Hi-Cap Mag", type: "MAGAZINE", rarity: "DELUXE", price: 234, description: "Increases magazine size.", compatibleWeapons: ["Stryder M1T", "Hardline PR", "B33 Volley Rifle", "Twin Tap HBR", "Longshot"], statModifiers: [{ stat: "magazineSize", direction: "up", label: "Magazine Size" }] },
+    { name: "Hi-Cap Mag", type: "MAGAZINE", rarity: "ENHANCED", price: 78, description: "Increases magazine size.", compatibleWeapons: ["Stryder M1T", "Hardline PR", "B33 Volley Rifle", "Twin Tap HBR", "Longshot"], statModifiers: [{ stat: "magazineSize", direction: "up", label: "Magazine Size" }], weaponStats: { "B33 Volley Rifle": [{ stat: "magazineSize", direction: "up", label: "Magazine", value: 18 }], "Hardline PR": [{ stat: "magazineSize", direction: "up", label: "Magazine", value: 4 }], "Stryder M1T": [{ stat: "magazineSize", direction: "up", label: "Magazine", value: 6 }] } },
     { name: "Steady Mag", type: "MAGAZINE", rarity: "ENHANCED", price: 42, description: "Slightly increases magazine size and stability.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/8/81/Steady_Mag.png", compatibleWeapons: ["CE Tactical Sidearm"], statModifiers: [{ stat: "magazineSize", direction: "up", label: "Magazine Size" }, { stat: "stability", direction: "up", label: "Stability" }] },
     { name: "Turbo Chamber", type: "MAGAZINE", rarity: "ENHANCED", price: 0, description: "Slightly increases rate of fire.", compatibleWeapons: ["V22 Volt Thrower", "V11 Punch", "V66 Lookout"], statModifiers: [{ stat: "rateOfFire", direction: "up", label: "Rate of Fire" }] },
     { name: "Slick Mag I", type: "MAGAZINE", rarity: "ENHANCED", price: 60, description: "Slightly increases rate of fire and magazine size.", compatibleWeapons: ["Misriah 2442"], statModifiers: [{ stat: "rateOfFire", direction: "up", label: "Rate of Fire" }, { stat: "magazineSize", direction: "up", label: "Magazine Size" }] },
@@ -857,17 +860,22 @@ async function main() {
       create: { name: mod.name, ...data },
     });
 
-    // Create junction rows for non-universal mods
+    // Create junction rows for non-universal mods (with optional weapon-specific stats)
     for (const weaponName of mod.compatibleWeapons) {
       const weaponId = weaponMap.get(weaponName);
       if (!weaponId) {
         console.warn(`  ⚠ Weapon not found: "${weaponName}" (mod: ${mod.name})`);
         continue;
       }
+      const weaponSpecificStats = mod.weaponStats?.[weaponName] ?? null;
       await db.weaponMod.upsert({
         where: { weaponId_modId: { weaponId, modId: upserted.id } },
-        update: {},
-        create: { weaponId, modId: upserted.id },
+        update: { statModifiers: weaponSpecificStats ?? Prisma.DbNull },
+        create: {
+          weaponId,
+          modId: upserted.id,
+          statModifiers: weaponSpecificStats ?? Prisma.DbNull,
+        },
       });
     }
 

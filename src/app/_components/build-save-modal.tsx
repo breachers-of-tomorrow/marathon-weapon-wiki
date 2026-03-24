@@ -8,6 +8,7 @@ type Mod = {
   name: string;
   type: string;
   rarity: string;
+  imageUrl?: string | null;
 };
 
 const BUILD_TYPES = ["PVP", "PVE", "PVEVP"] as const;
@@ -76,6 +77,15 @@ export function BuildSaveModal({
                 color: RARITY_COLORS[mod.rarity] ?? "#6b7280",
               }}
             >
+              {mod.imageUrl && (
+                <img
+                  src={mod.imageUrl}
+                  alt=""
+                  width={16}
+                  height={16}
+                  className="rounded object-contain"
+                />
+              )}
               <span className="text-dim">{SLOT_SHORT[type] ?? type}</span>
               <span className="text-foreground">{mod.name}</span>
             </span>

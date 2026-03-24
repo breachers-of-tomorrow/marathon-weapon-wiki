@@ -183,12 +183,21 @@ export function TopBuildsPage() {
                           return (
                             <span
                               key={bm.id}
-                              className="rounded px-1.5 py-0.5 font-mono text-xs uppercase tracking-wide"
+                              className="flex items-center gap-1 rounded px-1.5 py-0.5 font-mono text-xs uppercase tracking-wide"
                               style={{
                                 backgroundColor: `${color}20`,
                                 color,
                               }}
                             >
+                              {bm.mod.imageUrl && (
+                                <img
+                                  src={bm.mod.imageUrl}
+                                  alt=""
+                                  width={16}
+                                  height={16}
+                                  className="rounded object-contain"
+                                />
+                              )}
                               {bm.mod.name}
                             </span>
                           );
@@ -231,19 +240,33 @@ export function TopBuildsPage() {
                               <span className="text-dim font-mono text-xs uppercase tracking-wide">
                                 {bm.mod.type}
                               </span>
-                              <div className="mt-0.5 flex items-center gap-2">
-                                <span className="font-mono text-sm text-foreground">
-                                  {bm.mod.name}
-                                </span>
-                                <span
-                                  className="rounded px-1 py-0.5 font-mono text-xs uppercase"
-                                  style={{
-                                    backgroundColor: `${color}20`,
-                                    color,
-                                  }}
-                                >
-                                  {bm.mod.rarity}
-                                </span>
+                              <div className="mt-1 flex items-center gap-3">
+                                {bm.mod.imageUrl && (
+                                  <img
+                                    src={bm.mod.imageUrl}
+                                    alt={bm.mod.name}
+                                    width={44}
+                                    height={44}
+                                    className="shrink-0 rounded object-contain"
+                                    style={{
+                                      filter: `drop-shadow(0 0 4px ${color}40)`,
+                                    }}
+                                  />
+                                )}
+                                <div>
+                                  <span className="font-mono text-sm text-foreground">
+                                    {bm.mod.name}
+                                  </span>
+                                  <span
+                                    className="ml-2 rounded px-1 py-0.5 font-mono text-xs uppercase"
+                                    style={{
+                                      backgroundColor: `${color}20`,
+                                      color,
+                                    }}
+                                  >
+                                    {bm.mod.rarity}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           );
