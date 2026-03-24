@@ -33,6 +33,34 @@ type WeaponData = {
   price: number | null;
   description: string | null;
   imageUrl: string | null;
+  isUnique: boolean;
+  baseWeapon?: {
+    name: string;
+    slug: string;
+    firepower: number | null;
+    damage: number | null;
+    precisionMultiplier: number | null;
+    rateOfFire: number | null;
+    range: number | null;
+    accuracy: number | null;
+    hipfireSpread: number | null;
+    adsSpread: number | null;
+    crouchSpreadBonus: number | null;
+    movingInaccuracy: number | null;
+    handling: number | null;
+    equipSpeed: number | null;
+    adsSpeed: number | null;
+    reloadSpeed: number | null;
+    weight: number | null;
+    recoil: number | null;
+    aimAssist: number | null;
+    magazineSize: number | null;
+    zoom: number | null;
+    pelletCount: number | null;
+    spreadAngle: number | null;
+    voltDrain: number | null;
+    chargeTime: number | null;
+  } | null;
   firepower: number | null;
   damage: number | null;
   precisionMultiplier: number | null;
@@ -141,9 +169,56 @@ export function WeaponDetailInteractive({
     [session?.user, weapon.slug, router],
   );
 
-  // Compute which stats are affected by equipped mods (keyed by stat field name)
+  // Stats where a lower number is an improvement (faster speed, less recoil, etc.)
+  const lowerIsBetter = useMemo(
+    () =>
+      new Set([
+        "hipfireSpread",
+        "adsSpread",
+        "movingInaccuracy",
+        "recoil",
+        "weight",
+        "voltDrain",
+        "chargeTime",
+        "equipSpeed",
+        "adsSpeed",
+        "reloadSpeed",
+      ]),
+    [],
+  );
+
+  // Compute which stats are affected by equipped mods OR by unique variant diffs
   const affectedStats = useMemo(() => {
     const map = new Map<string, { direction: "up" | "down"; value?: number }>();
+
+    // For unique weapons: compare against base weapon stats
+    if (weapon.isUnique && weapon.baseWeapon) {
+      const base = weapon.baseWeapon;
+      const statKeys = [
+        "firepower", "damage", "precisionMultiplier", "rateOfFire", "range",
+        "accuracy", "hipfireSpread", "adsSpread", "crouchSpreadBonus", "movingInaccuracy",
+        "handling", "equipSpeed", "adsSpeed", "reloadSpeed", "weight", "recoil", "aimAssist",
+        "magazineSize", "zoom", "pelletCount", "spreadAngle", "voltDrain", "chargeTime",
+      ] as const;
+
+      for (const key of statKeys) {
+        const baseVal = base[key];
+        const varVal = weapon[key];
+        if (baseVal != null && varVal != null && baseVal !== varVal) {
+          const diff = Math.round((varVal - baseVal) * 100) / 100;
+          // Determine if the change is an improvement
+          const isImprovement = lowerIsBetter.has(key) ? diff < 0 : diff > 0;
+          // Don't pass numeric value — the weapon's stats already include the change.
+          // The CompactStatsPanel would add modValue on top of the displayed value,
+          // which would double-count. We only need the direction arrow.
+          map.set(key, {
+            direction: isImprovement ? "up" : "down",
+          });
+        }
+      }
+    }
+
+    // Layer on mod effects (for non-unique weapons)
     for (const mod of equippedMods) {
       const modifiers = parseStatModifiers(mod.statModifiers);
       for (const m of modifiers) {
@@ -151,7 +226,6 @@ export function WeaponDetailInteractive({
         if (!existing) {
           map.set(m.stat, { direction: m.direction, value: m.value });
         } else {
-          // Accumulate values from multiple mods affecting the same stat
           const newValue =
             existing.value != null && m.value != null
               ? existing.value + m.value
@@ -164,7 +238,7 @@ export function WeaponDetailInteractive({
       }
     }
     return map;
-  }, [equippedMods]);
+  }, [equippedMods, weapon, lowerIsBetter]);
 
   const handleModsChange = useCallback((mods: Mod[]) => {
     setEquippedMods(mods);
@@ -339,15 +413,39 @@ export function WeaponDetailInteractive({
         </div>
       </div>
 
-      {/* Right column: Configurator */}
+      {/* Right column: Configurator (hidden for unique weapons) */}
       <div className="order-3">
-        <WeaponConfigurator
-          linkedMods={linkedMods}
-          universalMods={universalMods}
-          onModsChange={handleModsChange}
-          onSaveBuild={handleSaveBuild}
-          isSaving={createBuild.isPending}
-        />
+        {weapon.isUnique ? (
+          <div className="cryo-panel rounded-lg p-6">
+            <div className="mb-3 flex items-center gap-2">
+              <span className="inline-block rounded bg-amber-500/20 px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-wider text-amber-400 ring-1 ring-amber-500/30">
+                Unique
+              </span>
+              <span className="font-mono text-xs uppercase tracking-wider text-heading">
+                Fixed Loadout
+              </span>
+            </div>
+            <p className="text-dim text-sm leading-relaxed">
+              This is a unique weapon variant with fixed stats. Mods cannot be swapped.
+            </p>
+            {weapon.baseWeapon && (
+              <a
+                href={`/weapons/${weapon.baseWeapon.slug}`}
+                className="text-accent mt-3 inline-block font-mono text-xs uppercase tracking-wide hover:underline"
+              >
+                View base weapon: {weapon.baseWeapon.name} &rarr;
+              </a>
+            )}
+          </div>
+        ) : (
+          <WeaponConfigurator
+            linkedMods={linkedMods}
+            universalMods={universalMods}
+            onModsChange={handleModsChange}
+            onSaveBuild={handleSaveBuild}
+            isSaving={createBuild.isPending}
+          />
+        )}
       </div>
 
       {/* Save Build Modal */}

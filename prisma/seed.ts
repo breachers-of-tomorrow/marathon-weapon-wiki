@@ -665,6 +665,60 @@ const weapons = [
   },
 ];
 
+// === UNIQUE WEAPON VARIANTS ===
+// These are fixed-stat variants found in Cryo Archive with no mod swapping.
+const uniqueWeapons = [
+  {
+    name: "V99 Watchtower",
+    baseName: "V99 Channel Rifle",
+    type: "SNIPER_RIFLE" as const,
+    slot: "SECONDARY" as const,
+    ammoType: "VOLT_CELL" as const,
+    rarity: "Unique",
+    description:
+      "A unique variant of the V99 Channel Rifle found in Cryo Archive. Has faster equip speed and scope-in rate.",
+    firepower: 120.0,
+    accuracy: 71.2,
+    handling: 29,
+    range: 175,
+    zoom: 4.0,
+    voltDrain: 29,
+    // Unique bonuses: faster equip and scope (ADS) speed
+    equipSpeed: 0.7,
+    adsSpeed: 0.4,
+  },
+  {
+    name: "DRRVISH",
+    baseName: "BRRT SMG",
+    type: "SMG" as const,
+    slot: "PRIMARY" as const,
+    ammoType: "LIGHT_ROUNDS" as const,
+    rarity: "Unique",
+    description:
+      "A unique variant of the BRRT SMG found in Cryo Archive. Has an increased base magazine size of 45 rounds.",
+    firepower: 16.1,
+    damage: 11,
+    precisionMultiplier: 1.4,
+    rateOfFire: 1000,
+    range: 16,
+    accuracy: 60.5,
+    hipfireSpread: 1.93,
+    adsSpread: 1.16,
+    crouchSpreadBonus: 85,
+    movingInaccuracy: 17.7,
+    handling: 35,
+    equipSpeed: 0.9,
+    adsSpeed: 0.35,
+    reloadSpeed: 3.0,
+    weight: 27.5,
+    recoil: 143.6,
+    aimAssist: 2.44,
+    // Unique bonus: +10 magazine size (35 → 45)
+    magazineSize: 45,
+    zoom: 1.1,
+  },
+];
+
 async function main() {
   console.log(`Seeding ${weapons.length} weapons...`);
 
@@ -680,6 +734,28 @@ async function main() {
   }
 
   console.log(`\nSeeded ${weapons.length} weapons.`);
+
+  // === UNIQUE WEAPON VARIANTS ===
+  console.log(`\nSeeding ${uniqueWeapons.length} unique weapon variants...`);
+
+  for (const { baseName, ...uniqueWeapon } of uniqueWeapons) {
+    const slug = slugify(uniqueWeapon.name);
+    // Look up the base weapon to link and reuse its image
+    const baseWeapon = await db.weapon.findUnique({ where: { name: baseName } });
+    if (!baseWeapon) {
+      console.warn(`  ⚠ Base weapon not found: "${baseName}" — skipping unique variant`);
+      continue;
+    }
+    const imageUrl = baseWeapon.imageUrl ?? `/weapons/${slugify(baseName)}.png`;
+    await db.weapon.upsert({
+      where: { name: uniqueWeapon.name },
+      update: { ...uniqueWeapon, slug, imageUrl, isUnique: true, baseWeaponId: baseWeapon.id },
+      create: { ...uniqueWeapon, slug, imageUrl, isUnique: true, baseWeaponId: baseWeapon.id },
+    });
+    console.log(`  ✓ ${uniqueWeapon.name} (base: ${baseName})`);
+  }
+
+  console.log(`\nSeeded ${uniqueWeapons.length} unique weapon variants.`);
 
   // === MODS ===
   type StatModifier = { stat: string; direction: "up" | "down"; label: string };
@@ -701,7 +777,7 @@ async function main() {
     // --- BARREL (14) ---
     { name: "Flechette Split Action", type: "BARREL", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the BRRT SMG. Increases stability, handling, and accuracy when firing from the hip", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/f/f3/Flechette_Split_Action.png", compatibleWeapons: ["BRRT SMG"], statModifiers: [{ stat: "stability", direction: "up", label: "Stability" }, { stat: "handling", direction: "up", label: "Handling" }, { stat: "hipfireSpread", direction: "up", label: "Hipfire Accuracy" }] },
     { name: "Lockout Muzzle Brake", type: "BARREL", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the BR33 Volley Rifle. Increases movement speed with this weapon. While firing from the hip, this weapon has greatly increased accuracy, stability, and range.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/4/47/Lockout_Muzzle_Brake.png", compatibleWeapons: ["B33 Volley Rifle"], statModifiers: [{ stat: "movementSpeed", direction: "up", label: "Movement Speed" }, { stat: "hipfireSpread", direction: "up", label: "Hipfire Accuracy" }, { stat: "stability", direction: "up", label: "Stability" }, { stat: "range", direction: "up", label: "Range" }] },
-    { name: "MIPS Slug Converter", type: "BARREL", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the WSTR Combat Shotgun. Increases rate of fire, stability, aim assist, range, and reduces pellet spread. Press to convert shells to a high-powered slug projectile.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/1/14/MIPS_Slug_Converter.png", compatibleWeapons: ["WSTR Combat Shotgun"], statModifiers: [{ stat: "rateOfFire", direction: "up", label: "Rate of Fire" }, { stat: "stability", direction: "up", label: "Stability" }, { stat: "aimAssist", direction: "up", label: "Aim Assist" }, { stat: "range", direction: "up", label: "Range" }, { stat: "spreadAngle", direction: "up", label: "Pellet Spread" }] },
+    { name: "MIPS Slug Converter", type: "BARREL", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the WSTR Combat Shotgun. Increases rate of fire, stability, aim assist, range, and reduces pellet spread. MIPS Slug Converter — Press to convert shells to a high-powered slug projectile.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/1/14/MIPS_Slug_Converter.png", compatibleWeapons: ["WSTR Combat Shotgun"], statModifiers: [{ stat: "rateOfFire", direction: "up", label: "Rate of Fire" }, { stat: "recoil", direction: "up", label: "Stability" }, { stat: "range", direction: "up", label: "Range" }, { stat: "hipfireSpread", direction: "up", label: "Accuracy" }, { stat: "aimAssist", direction: "up", label: "Aim Assist" }] },
     { name: "Pinpoint Barrel", type: "BARREL", rarity: "SUPERIOR", price: 540, description: "Greatly increases stability and range.", compatibleWeapons: ["WSTR Combat Shotgun", "Misriah 2442"], statModifiers: [{ stat: "stability", direction: "up", label: "Stability" }, { stat: "range", direction: "up", label: "Range" }] },
     { name: "Steady Barrel", type: "BARREL", rarity: "SUPERIOR", price: 540, description: "Greatly increases stability, ready speed, and accuracy while moving.", compatibleWeapons: ["Stryder M1T", "Hardline PR", "Repeater HPR", "Twin Tap HBR", "Longshot", "Outland"], statModifiers: [{ stat: "stability", direction: "up", label: "Stability" }, { stat: "equipSpeed", direction: "up", label: "Ready Speed" }, { stat: "movingInaccuracy", direction: "up", label: "Moving Accuracy" }] },
     { name: "Suppression Dampener", type: "BARREL", rarity: "DELUXE", price: 207, description: "Shots fired from this weapon are silenced. Increases stability.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/4/4b/Suppression_Dampener.png", compatibleWeapons: [], statModifiers: [{ stat: "stability", direction: "up", label: "Stability" }] },
@@ -720,16 +796,17 @@ async function main() {
     { name: "Hi-Focus Dampener", type: "BARREL", rarity: "ENHANCED", price: 60, description: "Increases ADS accuracy and range.", compatibleWeapons: ["V75 Scar", "V22 Volt Thrower", "V11 Punch"], statModifiers: [{ stat: "adsSpread", direction: "up", label: "ADS Accuracy" }, { stat: "range", direction: "up", label: "Range" }] },
     { name: "Hipshot Dampener", type: "BARREL", rarity: "ENHANCED", price: 60, description: "Slightly increases accuracy when firing from the hip and movement speed with this weapon.", compatibleWeapons: ["V75 Scar", "V22 Volt Thrower", "V11 Punch"], statModifiers: [{ stat: "hipfireSpread", direction: "up", label: "Hipfire Accuracy" }, { stat: "weight", direction: "up", label: "Weight" }] },
 
-    // --- GRIP (4) ---
+    // --- GRIP (5) ---
+    { name: "Full-Auto Selector", type: "GRIP", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Misriah 2442. Increases rate of fire. Full-Auto Selector — This weapon fires full auto.", compatibleWeapons: ["Misriah 2442"], statModifiers: [{ stat: "rateOfFire", direction: "up", label: "Rate of Fire" }, { stat: "hipfireSpread", direction: "up", label: "Accuracy" }] },
     { name: "Combat Grip", type: "GRIP", rarity: "ENHANCED", price: 60, description: "Slightly increases ADS speed and ready speed.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/e/e2/Combat_Grip.png", compatibleWeapons: ["M77 Assault Rifle", "Overrun AR", "Impact HAR"], statModifiers: [{ stat: "equipSpeed", direction: "up", label: "Equip Speed" }, { stat: "adsSpeed", direction: "up", label: "ADS Speed" }], weaponStats: { "M77 Assault Rifle": [{ stat: "equipSpeed", direction: "up", label: "Equip Speed", value: -0.09 }, { stat: "adsSpeed", direction: "up", label: "ADS Speed", value: -0.02 }] } },
     { name: "Snapshot Grip", type: "GRIP", rarity: "DELUXE", price: 180, description: "Increases accuracy while moving and ADS speed.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/9/93/Snapshot_Grip.png", compatibleWeapons: ["WSTR Combat Shotgun", "Misriah 2442", "V85 Circuit Breaker"], statModifiers: [{ stat: "movingInaccuracy", direction: "up", label: "Moving Accuracy" }, { stat: "adsSpeed", direction: "up", label: "ADS Speed" }] },
     { name: "Speed Scout Grip", type: "GRIP", rarity: "ENHANCED", price: 0, description: "Slightly increases movement speed with this weapon.", compatibleWeapons: ["Overrun AR", "M77 Assault Rifle", "Impact HAR"], statModifiers: [{ stat: "movementSpeed", direction: "up", label: "Movement Speed" }] },
     { name: "Vigilant Grip", type: "GRIP", rarity: "ENHANCED", price: 0, description: "Slightly increases ready speed.", compatibleWeapons: ["Overrun AR", "M77 Assault Rifle", "Impact HAR"], statModifiers: [{ stat: "equipSpeed", direction: "up", label: "Ready Speed" }] },
 
     // --- MAGAZINE (19) ---
-    { name: "Kingmaker Mag", type: "MAGAZINE", rarity: "PRESTIGE", price: 1620, description: "A unique mod for the Longshot. Increases reload speed and magazine size. Headshots increase rate of fire. Stacks up to three times.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/8/81/Kingmaker_Mag.png", compatibleWeapons: ["Longshot"], statModifiers: [{ stat: "reloadSpeed", direction: "up", label: "Reload Speed" }, { stat: "magazineSize", direction: "up", label: "Magazine Size" }, { stat: "rateOfFire", direction: "up", label: "Rate of Fire" }] },
+    { name: "Kingmaker Mag", type: "MAGAZINE", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Longshot. Increases reload speed and magazine size. Pure Skill — Headshots increase rate of fire. Stacks up to three times.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/8/81/Kingmaker_Mag.png", compatibleWeapons: ["Longshot"], statModifiers: [{ stat: "magazineSize", direction: "up", label: "Magazine" }, { stat: "reloadSpeed", direction: "up", label: "Reload" }] },
     { name: "Overclocked Delimiter", type: "MAGAZINE", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the V85 Circuit Breaker. Increases magazine size and reload speed. Adds a third level of charge. When fully charged, this weapon has greatly reduced spread, increased damage, and its projectiles ricochet and pierce hostiles.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/5/53/Overclocked_Delimiter.png", compatibleWeapons: ["V85 Circuit Breaker"], statModifiers: [{ stat: "magazineSize", direction: "up", label: "Magazine Size" }, { stat: "reloadSpeed", direction: "up", label: "Reload Speed" }, { stat: "damage", direction: "up", label: "Damage" }, { stat: "spreadAngle", direction: "up", label: "Spread" }] },
-    { name: "Ram-Page Mag", type: "MAGAZINE", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the V75 SCAR. Increases rate of fire, magazine size, and reload speed. Rate of fire no longer decreases as heat builds and projectiles ricochet off surfaces, tracking nearby targets.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/b/ba/Ram-Page_Mag.png", compatibleWeapons: ["V75 Scar"], statModifiers: [{ stat: "rateOfFire", direction: "up", label: "Rate of Fire" }, { stat: "magazineSize", direction: "up", label: "Magazine Size" }, { stat: "reloadSpeed", direction: "up", label: "Reload Speed" }] },
+    { name: "Ram-Page Mag", type: "MAGAZINE", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the V75 SCAR. Increases rate of fire, magazine size, and reload speed. SM-5 Ragnarok — Rate of fire no longer decreases as heat builds and projectiles ricochet off surfaces, tracking nearby targets.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/b/ba/Ram-Page_Mag.png", compatibleWeapons: ["V75 Scar"], statModifiers: [{ stat: "rateOfFire", direction: "up", label: "Rate of Fire" }, { stat: "magazineSize", direction: "up", label: "Magazine" }, { stat: "reloadSpeed", direction: "up", label: "Reload" }] },
     { name: "Impact Shockwave", type: "MAGAZINE", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Ares RG. Increases range and magazine size. Impact Shockwave — Rounds from this weapon explode on impact, dealing splash damage and knocking targets back.", compatibleWeapons: ["Ares RG"], statModifiers: [{ stat: "range", direction: "up", label: "Range" }, { stat: "magazineSize", direction: "up", label: "Magazine" }] },
     { name: "Adrenal Feedback Rounds", type: "MAGAZINE", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Hardline PR. Increases magazine size. Adrenal Feedback Rounds — Precision hits reduce your shell's heat and grant a stack of Micro-Adrenaline. Micro-Adrenaline stacks increase your shell's Heat Capacity and Agility for a short duration.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/4/4a/Adrenal_Feedback_Rounds.png", compatibleWeapons: ["Hardline PR"], statModifiers: [{ stat: "magazineSize", direction: "up", label: "Magazine" }] },
     { name: "Rodeo Mag", type: "MAGAZINE", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Bully SMG. Increases rate of fire, stability, and magazine size. This weapon's fire rate greatly increases over time.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/3/37/Rodeo_Mag.png", compatibleWeapons: ["Bully SMG"], statModifiers: [{ stat: "rateOfFire", direction: "up", label: "Rate of Fire" }, { stat: "stability", direction: "up", label: "Stability" }, { stat: "magazineSize", direction: "up", label: "Magazine Size" }] },
@@ -751,7 +828,7 @@ async function main() {
 
     // --- OPTIC (11) ---
     { name: "Lever Overhaul Interface", type: "OPTIC", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Repeater HPR. Increases reload speed and rounds reloaded at a time. Shots on target increase fire rate. This degrades when a shot misses.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/5/56/Lever_Overhaul_Interface.png", compatibleWeapons: ["Repeater HPR"], statModifiers: [{ stat: "reloadSpeed", direction: "up", label: "Reload Speed" }, { stat: "rateOfFire", direction: "up", label: "Rate of Fire" }] },
-    { name: "Pistol Scope", type: "OPTIC", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for Magnum MC. Greatly increases ADS speed. Activates a specialized high zoom optic. Precision hits restore a small amount of shields.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/9/96/Pistol_Scope.png", compatibleWeapons: ["Magnum MC"], statModifiers: [{ stat: "adsSpeed", direction: "up", label: "ADS Speed" }, { stat: "zoom", direction: "up", label: "Zoom" }] },
+    { name: "Pistol Scope", type: "OPTIC", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Magnum MC. Greatly increases zoom and ADS speed. Shield Surge Optic — Activates a specialized high zoom optic. Precision hits with this weapon restore a small amount of shields.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/9/96/Pistol_Scope.png", compatibleWeapons: ["Magnum MC"], statModifiers: [{ stat: "zoom", direction: "up", label: "Zoom" }, { stat: "recoilDirection", direction: "up", label: "Recoil Direction" }, { stat: "adsSpeed", direction: "up", label: "ADS Speed" }] },
     { name: "Vital Intel", type: "OPTIC", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Stryder M1T. Greatly increases handling and ADS speed. Threat Detector — Enables Proximity Sensor on radar. When hostiles are nearby, this weapon has increased handling, aim assist, and equip speed.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/a/a4/Vital_Intel.png", compatibleWeapons: ["Stryder M1T"], statModifiers: [{ stat: "handling", direction: "up", label: "Handling" }, { stat: "adsSpeed", direction: "up", label: "ADS Speed" }] },
     { name: "Far Reach Optic", type: "OPTIC", rarity: "ENHANCED", price: 69, description: "Slightly increases zoom and range. Rangefinder uses laser pulses to measure distance to the target.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/7/75/Far_Reach_Optic.png", compatibleWeapons: ["Overrun AR", "Impact HAR", "V75 Scar", "BRRT SMG", "Copperhead RF", "Bully SMG"], statModifiers: [{ stat: "range", direction: "up", label: "Range" }, { stat: "zoom", direction: "up", label: "Zoom" }] },
     { name: "Thermal Optic", type: "OPTIC", rarity: "DELUXE", price: 207, description: "Increase zoom and ADS accuracy. This sight highlights hostile heat signatures.", compatibleWeapons: ["Stryder M1T", "Hardline PR", "Repeater HPR", "V66 Lookout", "B33 Volley Rifle", "Twin Tap HBR"], statModifiers: [{ stat: "zoom", direction: "up", label: "Zoom" }, { stat: "adsSpread", direction: "up", label: "ADS Accuracy" }] },
@@ -759,10 +836,11 @@ async function main() {
     { name: "Shortwave Scout Optic", type: "OPTIC", rarity: "DELUXE", price: 69, description: "Increases zoom. Enables motion tracker on radar.", compatibleWeapons: ["Overrun AR", "M77 Assault Rifle", "Impact HAR", "V75 Scar", "BRRT SMG", "Bully SMG", "Copperhead RF"], statModifiers: [{ stat: "zoom", direction: "up", label: "Zoom" }] },
     { name: "Twinscope Optic", type: "OPTIC", rarity: "ENHANCED", price: 69, description: "Slightly increases zoom. Toggle between two zoom levels.", compatibleWeapons: ["Overrun AR", "M77 Assault Rifle", "Impact HAR", "V75 Scar", "BRRT SMG", "Bully SMG", "Copperhead RF"], statModifiers: [{ stat: "zoom", direction: "up", label: "Zoom" }] },
     { name: "Oracle Lens", type: "OPTIC", rarity: "SUPERIOR", price: 459, description: "Greatly increases ADS speed, accuracy while moving, and ADS accuracy. +Zoom, +ADS Speed, +Moving Accuracy, +ADS Spread.", compatibleWeapons: ["CE Tactical Sidearm", "Magnum MC", "V11 Punch"], statModifiers: [{ stat: "adsSpeed", direction: "up", label: "ADS Speed" }, { stat: "movingInaccuracy", direction: "up", label: "Moving Accuracy" }, { stat: "adsSpread", direction: "up", label: "ADS Accuracy" }, { stat: "zoom", direction: "up", label: "Zoom" }] },
-    { name: "Charge-Coupled Optic", type: "OPTIC", rarity: "PRESTIGE", price: 0, description: "A custom-made mod for the V99 Channel Rifle. Increases charge speed. While scoped, charge damage ramps up faster and this weapon has increased aim assist.", compatibleWeapons: ["V99 Channel Rifle"], statModifiers: [{ stat: "chargeTime", direction: "up", label: "Charge Speed" }, { stat: "aimAssist", direction: "up", label: "Aim Assist" }] },
-    { name: "Overcharge Lens", type: "OPTIC", rarity: "PRESTIGE", price: 60, description: "A custom-made mod for the V22 Volt Thrower. Increases lock-on range and tracking strength. Lock-on now chains to nearby targets.", compatibleWeapons: ["V22 Volt Thrower"], statModifiers: [{ stat: "range", direction: "up", label: "Lock-on Range" }, { stat: "aimAssist", direction: "up", label: "Tracking" }] },
+    { name: "Charge-Coupled Optic", type: "OPTIC", rarity: "PRESTIGE", price: 1620, description: "A unique mod for the V99 Channel Rifle. Increases ADS accuracy. Photometric Amplifier — Charge rate is increased while aiming down sights.", compatibleWeapons: ["V99 Channel Rifle"], statModifiers: [{ stat: "zoom", direction: "up", label: "Zoom" }, { stat: "adsSpread", direction: "up", label: "ADS Spread" }] },
+    { name: "Overcharge Lens", type: "BARREL", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the V22 Volt Thrower. Increases range, accuracy when firing from the hip, and aim assist. Reactive Burst — Consecutive hits on target create an explosive burst on the target.", compatibleWeapons: ["V22 Volt Thrower"], statModifiers: [{ stat: "range", direction: "up", label: "Range" }, { stat: "hipfireSpread", direction: "up", label: "Accuracy" }, { stat: "aimAssist", direction: "up", label: "Aim Assist" }] },
 
-    // --- SHIELD (4) ---
+    // --- SHIELD (5) ---
+    { name: "Overclocked Shield", type: "SHIELD", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Demolition HMG. Increases stability and movement speed with this weapon. Overclocked Shield — Press: Activate an energy shield that absorbs incoming damage. When this shield is active, aiming down sights grants an increased rate of fire.", compatibleWeapons: ["Demolition HMG"], statModifiers: [{ stat: "recoil", direction: "up", label: "Stability" }, { stat: "weight", direction: "up", label: "Weight Reduction" }] },
     { name: "Circuit Shield", type: "SHIELD", rarity: "PRESTIGE", price: 1620, description: "Decreases Recoil by 10%. Damage absorbed by this shield refunds ammo back to the magazine.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/4/49/Circuit_Shield.png", compatibleWeapons: ["Retaliator LMG"], statModifiers: [{ stat: "recoil", direction: "up", label: "Recoil" }] },
     { name: "Control Shield", type: "SHIELD", rarity: "SUPERIOR", price: 621, description: "Greatly increases stability.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/1/14/Control_Shield.png", compatibleWeapons: ["Conquest LMG", "Retaliator LMG", "Demolition HMG"], statModifiers: [{ stat: "stability", direction: "up", label: "Stability" }] },
     { name: "Balanced Shield", type: "SHIELD", rarity: "DELUXE", price: 207, description: "Increases ready speed and movement speed with this weapon.", imageUrl: "https://static.wikia.nocookie.net/marathonthegame/images/e/ec/Balanced_Shield.png", compatibleWeapons: ["Conquest LMG", "Retaliator LMG", "Demolition HMG"], statModifiers: [{ stat: "equipSpeed", direction: "up", label: "Ready Speed" }, { stat: "movementSpeed", direction: "up", label: "Movement Speed" }] },
@@ -798,6 +876,8 @@ async function main() {
 
     // --- BARREL (new) ---
     { name: "Accu-Point Barrel", type: "BARREL", rarity: "DELUXE", price: 180, description: "Increases ADS accuracy and aim assist.", compatibleWeapons: [], statModifiers: [{ stat: "adsSpread", direction: "up", label: "ADS Accuracy" }, { stat: "aimAssist", direction: "up", label: "Aim Assist" }] },
+    { name: "Triple Barrel", type: "BARREL", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Copperhead RF. Increases movement speed with this weapon and accuracy when firing from the hip. Decreases damage per bullet. Triple Barrel — Fires three shots simultaneously in a fan pattern.", compatibleWeapons: ["Copperhead RF"], statModifiers: [{ stat: "damage", direction: "down", label: "Damage" }, { stat: "hipfireSpread", direction: "up", label: "Accuracy" }, { stat: "weight", direction: "up", label: "Weight Reduction" }] },
+    { name: "Sonar Shot", type: "BARREL", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the V66 Lookout. Greatly increases range and stability. Sonar Shot — Precision eliminations or downs trigger a sonar pulse, revealing nearby hostiles if present.", compatibleWeapons: ["V66 Lookout"], statModifiers: [{ stat: "recoil", direction: "up", label: "Stability" }, { stat: "range", direction: "up", label: "Range" }] },
     { name: "Outland Suppressor", type: "BARREL", rarity: "PRESTIGE", price: 1620, description: "A unique mod for the Outland. Increases stability and range. Shots fired from the weapon are suppressed.", compatibleWeapons: ["Outland"], statModifiers: [{ stat: "stability", direction: "up", label: "Stability" }, { stat: "range", direction: "up", label: "Range" }] },
 
     // --- GRIP (new) ---
@@ -821,7 +901,7 @@ async function main() {
     { name: "Cold Vigilance Scope", type: "OPTIC", rarity: "DELUXE", price: 207, description: "Increases zoom, ADS speed, and ADS accuracy.", compatibleWeapons: [], statModifiers: [{ stat: "zoom", direction: "up", label: "Zoom" }, { stat: "adsSpeed", direction: "up", label: "ADS Speed" }, { stat: "adsSpread", direction: "up", label: "ADS Accuracy" }] },
     { name: "Neuro Optic Lens", type: "OPTIC", rarity: "ENHANCED", price: 69, description: "Slightly increases zoom and ADS speed.", compatibleWeapons: [], statModifiers: [{ stat: "zoom", direction: "up", label: "Zoom" }, { stat: "adsSpeed", direction: "up", label: "ADS Speed" }] },
     { name: "Optic 1.4x I", type: "OPTIC", rarity: "ENHANCED", price: 69, description: "Slightly increases zoom, ADS accuracy, and accuracy while moving.", compatibleWeapons: [], statModifiers: [{ stat: "zoom", direction: "up", label: "Zoom" }, { stat: "adsSpread", direction: "up", label: "ADS Accuracy" }, { stat: "movingInaccuracy", direction: "up", label: "Moving Accuracy" }] },
-    { name: "Q-Tap Regen Optic", type: "OPTIC", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Twin Tap HBR. Increases rounds per burst to four. While health is very low, hit all rounds in a burst to start health regeneration.", compatibleWeapons: ["Twin Tap HBR"], statModifiers: [{ stat: "rateOfFire", direction: "up", label: "Burst Count" }] },
+    { name: "Q-Tap Regen Optic", type: "OPTIC", rarity: "PRESTIGE", price: 1620, description: "A custom-made mod for the Twin Tap HBR. Increases rounds per burst to four. Q-Tap Regen Optic — While health is very low, hit all rounds in a burst to start health regeneration.", compatibleWeapons: ["Twin Tap HBR"], statModifiers: [{ stat: "damage", direction: "up", label: "Damage" }, { stat: "zoom", direction: "up", label: "Zoom" }, { stat: "precision", direction: "up", label: "Precision" }, { stat: "recoil", direction: "up", label: "Stability" }, { stat: "range", direction: "up", label: "Range" }, { stat: "adsSpeed", direction: "up", label: "ADS Speed" }] },
     { name: "Rangefinder Lens", type: "OPTIC", rarity: "DELUXE", price: 153, description: "Increases zoom and ADS accuracy.", compatibleWeapons: [], statModifiers: [{ stat: "zoom", direction: "up", label: "Zoom" }, { stat: "adsSpread", direction: "up", label: "ADS Accuracy" }] },
     { name: "Rangefinder Optic", type: "OPTIC", rarity: "DELUXE", price: 207, description: "Increases zoom, ADS accuracy, and accuracy while moving.", compatibleWeapons: [], statModifiers: [{ stat: "zoom", direction: "up", label: "Zoom" }, { stat: "adsSpread", direction: "up", label: "ADS Accuracy" }, { stat: "movingInaccuracy", direction: "up", label: "Moving Accuracy" }] },
 

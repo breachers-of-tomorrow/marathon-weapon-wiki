@@ -13,12 +13,13 @@ import {
   breadcrumbJsonLd,
 } from "@/lib/structured-data";
 import { WeaponTTKSection } from "@/app/_components/weapon-ttk-section";
+import { VariantStatsComparison } from "@/app/_components/variant-stats-comparison";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export async function generateStaticParams() {
-  const weapons = await db.weapon.findMany({ select: { slug: true } });
+  const weapons = await db.weapon.findMany({ where: { isUnique: false }, select: { slug: true } });
   return weapons.map((w) => ({ slug: w.slug }));
 }
 
@@ -79,7 +80,10 @@ async function WeaponDetail({ slug }: { slug: string }) {
 
   if (!weapon) notFound();
 
-  const { linkedMods, universalMods } = await api.mod.getByWeaponId({ weaponId: weapon.id });
+  // Unique weapons have fixed loadouts — no mods to fetch
+  const { linkedMods, universalMods } = weapon.isUnique
+    ? { linkedMods: [], universalMods: [] }
+    : await api.mod.getByWeaponId({ weaponId: weapon.id });
 
   const detailsView = (
     <WeaponDetailInteractive
@@ -97,7 +101,11 @@ async function WeaponDetail({ slug }: { slug: string }) {
     </div>
   );
 
-  const buildsView = (
+  const buildsView = weapon.isUnique ? (
+    <div className="cryo-panel rounded-lg p-8 text-center">
+      <p className="text-dim font-mono text-sm">Unique weapons have a fixed loadout — no community builds available.</p>
+    </div>
+  ) : (
     <div data-tour="builds-section">
       <h2 className="text-heading mb-4 font-display text-xs uppercase tracking-widest heading-glow">
         Community Builds
@@ -136,6 +144,21 @@ async function WeaponDetail({ slug }: { slug: string }) {
         detailsContent={detailsView}
         ttkContent={ttkView}
         buildsContent={buildsView}
+        variantsContent={
+          !weapon.isUnique && weapon.variants && weapon.variants.length > 0
+            ? (
+              <div className="space-y-6">
+                {weapon.variants.map((variant) => (
+                  <VariantStatsComparison
+                    key={variant.id}
+                    baseWeapon={weapon}
+                    variant={variant}
+                  />
+                ))}
+              </div>
+            )
+            : undefined
+        }
       />
     </>
   );

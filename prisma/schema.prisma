@@ -64,6 +64,12 @@ model Weapon {
     description String?
     imageUrl    String?
 
+    // Unique weapon variant support
+    isUnique      Boolean  @default(false)
+    baseWeaponId  String?
+    baseWeapon    Weapon?  @relation("WeaponVariants", fields: [baseWeaponId], references: [id])
+    variants      Weapon[] @relation("WeaponVariants")
+
     // Combat stats
     firepower           Float?
     damage              Float?

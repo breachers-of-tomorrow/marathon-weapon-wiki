@@ -12,6 +12,7 @@ const getCachedWeapons = (type?: WeaponType, slot?: WeaponSlot, ammoType?: AmmoT
     () =>
       db.weapon.findMany({
         where: {
+          isUnique: false,
           ...(type ? { type } : {}),
           ...(slot ? { slot } : {}),
           ...(ammoType ? { ammoType } : {}),
@@ -24,7 +25,7 @@ const getCachedWeapons = (type?: WeaponType, slot?: WeaponSlot, ammoType?: AmmoT
 
 const getCachedWeaponBySlug = (slug: string) =>
   unstable_cache(
-    () => db.weapon.findUnique({ where: { slug }, include: { ttk: true } }),
+    () => db.weapon.findUnique({ where: { slug }, include: { ttk: true, baseWeapon: true, variants: true } }),
     [`weapon-${slug}`],
     { revalidate: CACHE_TTL, tags: ["weapons"] },
   )();
@@ -47,7 +48,7 @@ const getCachedWeaponsWithTTK = () =>
   unstable_cache(
     () =>
       db.weapon.findMany({
-        where: { ttk: { isNot: null } },
+        where: { isUnique: false, ttk: { isNot: null } },
         include: { ttk: true },
         orderBy: { name: "asc" },
       }),

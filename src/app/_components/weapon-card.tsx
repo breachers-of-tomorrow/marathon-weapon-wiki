@@ -12,6 +12,11 @@ export function WeaponCard({ weapon }: { weapon: Weapon }) {
     >
       {/* Image placeholder */}
       <div className="bg-border/30 relative flex h-40 items-center justify-center rounded-t-lg">
+        {weapon.isUnique && (
+          <span className="absolute top-2 left-2 z-10 rounded bg-amber-500/20 px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-amber-400 ring-1 ring-amber-500/30">
+            Unique
+          </span>
+        )}
         {weapon.imageUrl ? (
           <Image
             src={weapon.imageUrl}

@@ -94,7 +94,7 @@ export function BuildRow({
 
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <span className="truncate text-base font-medium text-foreground">
+            <span className="truncate text-lg font-bold text-foreground">
               {build.title}
             </span>
             <span
