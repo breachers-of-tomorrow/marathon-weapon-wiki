@@ -63,6 +63,7 @@ interface StatRow {
   value: number | null;
   max?: number;
   modEffect?: "up" | "down" | null;
+  modValue?: number | null;
 }
 
 export function WeaponDetailInteractive({
@@ -140,19 +141,25 @@ export function WeaponDetailInteractive({
     [session?.user, weapon.slug, router],
   );
 
-  // Compute which stats are affected by equipped mods
+  // Compute which stats are affected by equipped mods (keyed by stat field name)
   const affectedStats = useMemo(() => {
-    const map = new Map<string, "up" | "down">();
+    const map = new Map<string, { direction: "up" | "down"; value?: number }>();
     for (const mod of equippedMods) {
       const modifiers = parseStatModifiers(mod.statModifiers);
       for (const m of modifiers) {
-        // Use the label to match against stat labels
-        const existing = map.get(m.label);
+        const existing = map.get(m.stat);
         if (!existing) {
-          map.set(m.label, m.direction);
-        } else if (existing !== m.direction) {
-          // Conflicting effects - use the last one
-          map.set(m.label, m.direction);
+          map.set(m.stat, { direction: m.direction, value: m.value });
+        } else {
+          // Accumulate values from multiple mods affecting the same stat
+          const newValue =
+            existing.value != null && m.value != null
+              ? existing.value + m.value
+              : m.value ?? existing.value;
+          map.set(m.stat, {
+            direction: existing.direction !== m.direction ? m.direction : existing.direction,
+            value: newValue,
+          });
         }
       }
     }
@@ -191,12 +198,16 @@ export function WeaponDetailInteractive({
   const buildStats = (
     entries: [StatKey, string, number?][],
   ): StatRow[] =>
-    entries.map(([key, label, max]) => ({
-      label,
-      value: weapon[key] ?? null,
-      max,
-      modEffect: affectedStats.get(label) ?? null,
-    }));
+    entries.map(([key, label, max]) => {
+      const effect = affectedStats.get(key);
+      return {
+        label,
+        value: weapon[key] ?? null,
+        max,
+        modEffect: effect?.direction ?? null,
+        modValue: effect?.value ?? null,
+      };
+    });
 
   // Each section: title, a "headline" stat (shown with bar next to title), and sub-stats
   const sections: {
@@ -434,7 +445,9 @@ function CompactStatsPanel({
                           : "text-foreground"
                     }`}
                   >
-                    {section.headline.value}
+                    {section.headline.modValue != null
+                      ? Math.round((section.headline.value! + section.headline.modValue) * 100) / 100
+                      : section.headline.value}
                     {section.headline.modEffect && (
                       <span
                         className="ml-0.5 text-[10px]"
@@ -481,8 +494,20 @@ function CompactStatsPanel({
                             : "text-foreground"
                       }`}
                     >
-                      {stat.value}
-                      {stat.modEffect && (
+                      {stat.modValue != null
+                        ? Math.round((stat.value! + stat.modValue) * 100) / 100
+                        : stat.value}
+                      {stat.modEffect && stat.modValue != null ? (
+                        <span
+                          className="ml-1 text-[10px]"
+                          style={{
+                            color:
+                              stat.modEffect === "up" ? "#00ff9d" : "#ff2244",
+                          }}
+                        >
+                          ({stat.modValue > 0 ? "+" : ""}{Math.round(stat.modValue * 100) / 100})
+                        </span>
+                      ) : stat.modEffect ? (
                         <span
                           className="ml-0.5 text-[10px]"
                           style={{
@@ -492,7 +517,7 @@ function CompactStatsPanel({
                         >
                           {stat.modEffect === "up" ? "▲" : "▼"}
                         </span>
-                      )}
+                      ) : null}
                     </span>
                   </div>
                 ))}

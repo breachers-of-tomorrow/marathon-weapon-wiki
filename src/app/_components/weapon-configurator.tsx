@@ -133,6 +133,11 @@ export function WeaponConfigurator({
   const [filterRarity, setFilterRarity] = useState<string | null>(null);
   const tooltip = useModTooltip();
 
+  // Notify parent of mod changes via effect to avoid setState-during-render
+  useEffect(() => {
+    onModsChange?.(Object.values(equippedMods));
+  }, [equippedMods, onModsChange]);
+
   const allMods = useMemo(
     () => [...linkedMods, ...universalMods],
     [linkedMods, universalMods],
@@ -162,33 +167,25 @@ export function WeaponConfigurator({
     return RARITY_ORDER.filter((r) => rarities.has(r));
   }, [allMods, activeSlot]);
 
-  const equipMod = useCallback(
-    (mod: Mod) => {
-      setEquippedMods((prev) => {
-        const next = { ...prev };
-        if (prev[mod.type]?.id === mod.id) {
-          delete next[mod.type];
-        } else {
-          next[mod.type] = mod;
-        }
-        onModsChange?.(Object.values(next));
-        return next;
-      });
-    },
-    [onModsChange],
-  );
+  const equipMod = useCallback((mod: Mod) => {
+    setEquippedMods((prev) => {
+      const next = { ...prev };
+      if (prev[mod.type]?.id === mod.id) {
+        delete next[mod.type];
+      } else {
+        next[mod.type] = mod;
+      }
+      return next;
+    });
+  }, []);
 
-  const unequipSlot = useCallback(
-    (type: string) => {
-      setEquippedMods((prev) => {
-        const next = { ...prev };
-        delete next[type];
-        onModsChange?.(Object.values(next));
-        return next;
-      });
-    },
-    [onModsChange],
-  );
+  const unequipSlot = useCallback((type: string) => {
+    setEquippedMods((prev) => {
+      const next = { ...prev };
+      delete next[type];
+      return next;
+    });
+  }, []);
 
   const equippedCount = Object.keys(equippedMods).length;
 

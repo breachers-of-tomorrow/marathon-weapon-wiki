@@ -22,7 +22,12 @@ const getCachedModsByWeaponId = (weaponId: string) =>
       ]);
 
       return {
-        linkedMods: linkedMods.map((wm) => wm.mod),
+        // When a WeaponMod has weapon-specific statModifiers, use those
+        // instead of the generic Mod.statModifiers
+        linkedMods: linkedMods.map((wm) => ({
+          ...wm.mod,
+          statModifiers: wm.statModifiers ?? wm.mod.statModifiers,
+        })),
         universalMods,
       };
     },

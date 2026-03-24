@@ -2,6 +2,7 @@ export type StatModifier = {
   stat: string;
   direction: "up" | "down";
   label: string;
+  value?: number;
 };
 
 export function parseStatModifiers(json: unknown): StatModifier[] {
