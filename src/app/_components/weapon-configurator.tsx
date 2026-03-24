@@ -221,7 +221,7 @@ export function WeaponConfigurator({
       )}
 
       {/* Slot Bar */}
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-4 gap-1.5">
         {availableSlots.map((type) => {
           const isActive = activeSlot === type;
           const hasEquipped = !!equippedMods[type];
@@ -238,7 +238,7 @@ export function WeaponConfigurator({
                 setActiveSlot(isActive ? null : type);
                 setFilterRarity(null);
               }}
-              className={`group relative flex cursor-pointer flex-col items-center gap-1 rounded-md border px-1 py-2.5 transition-all ${
+              className={`group relative flex cursor-pointer flex-col items-center gap-1 rounded-lg border px-1 py-1.5 transition-all ${
                 isActive && !hasEquipped
                   ? "border-border-accent bg-panel-hover"
                   : !hasEquipped
@@ -256,22 +256,33 @@ export function WeaponConfigurator({
                   : undefined
               }
             >
-              {IconComponent && (
-                <IconComponent
-                  size={18}
-                  strokeWidth={hasEquipped ? 2.5 : 1.5}
-                  className={`transition-colors ${
-                    hasEquipped
-                      ? ""
-                      : isActive
-                        ? "text-accent"
-                        : "text-dim group-hover:text-foreground"
-                  }`}
-                  style={hasEquipped ? { color } : undefined}
+              {hasEquipped && equippedMods[type]!.imageUrl ? (
+                <img
+                  src={equippedMods[type]!.imageUrl!}
+                  alt={equippedMods[type]!.name}
+                  width={36}
+                  height={36}
+                  className="rounded object-contain"
+                  style={{ filter: `drop-shadow(0 0 4px ${color}50)` }}
                 />
+              ) : (
+                IconComponent && (
+                  <IconComponent
+                    size={28}
+                    strokeWidth={hasEquipped ? 2.5 : 1.5}
+                    className={`transition-colors ${
+                      hasEquipped
+                        ? ""
+                        : isActive
+                          ? "text-accent"
+                          : "text-dim group-hover:text-foreground"
+                    }`}
+                    style={hasEquipped ? { color } : undefined}
+                  />
+                )
               )}
               <span
-                className={`font-mono text-[8px] uppercase leading-none tracking-wider transition-colors ${
+                className={`font-mono text-[9px] uppercase leading-none tracking-wider transition-colors ${
                   hasEquipped
                     ? ""
                     : isActive
@@ -457,14 +468,34 @@ function VaultModTile({
         }}
       />
 
-      <div className="mb-1 flex items-center justify-between gap-1">
-        <ModTypeIcon type={mod.type} color={rarityColor} size={14} />
-        {isEquipped && (
-          <span className="font-mono text-[8px] uppercase tracking-wide text-accent">
-            EQ
-          </span>
-        )}
-      </div>
+      {mod.imageUrl ? (
+        <>
+          <div className="mb-1 flex items-center justify-between gap-1">
+            <img
+              src={mod.imageUrl}
+              alt={mod.name}
+              width={36}
+              height={36}
+              className="rounded object-contain"
+              style={{ filter: `drop-shadow(0 0 4px ${rarityColor}40)` }}
+            />
+            {isEquipped && (
+              <span className="font-mono text-[8px] uppercase tracking-wide text-accent">
+                EQ
+              </span>
+            )}
+          </div>
+        </>
+      ) : (
+        <div className="mb-1 flex items-center justify-between gap-1">
+          <ModTypeIcon type={mod.type} color={rarityColor} size={14} />
+          {isEquipped && (
+            <span className="font-mono text-[8px] uppercase tracking-wide text-accent">
+              EQ
+            </span>
+          )}
+        </div>
+      )}
 
       <span className="line-clamp-1 font-mono text-[11px] leading-tight text-foreground">
         {mod.name}
@@ -506,9 +537,19 @@ function LoadoutRow({
       onMouseLeave={onHoverEnd}
       className="flex items-center gap-2 rounded border border-border bg-background/30 px-2 py-1.5"
     >
-      <span className="w-12 shrink-0 font-mono text-[9px] uppercase tracking-wider text-dim">
-        {type === "MAGAZINE" ? "MAG" : type === "GENERATOR" ? "GEN" : type}
-      </span>
+      {mod.imageUrl ? (
+        <img
+          src={mod.imageUrl}
+          alt={mod.name}
+          width={36}
+          height={36}
+          className="shrink-0 rounded object-contain"
+        />
+      ) : (
+        <span className="w-12 shrink-0 font-mono text-[9px] uppercase tracking-wider text-dim">
+          {type === "MAGAZINE" ? "MAG" : type === "GENERATOR" ? "GEN" : type}
+        </span>
+      )}
       <span
         className="h-3 w-0.5 shrink-0 rounded-full"
         style={{
@@ -604,6 +645,22 @@ function FloatingTooltip({
         transition: "opacity 0.12s ease-out",
       }}
     >
+      {/* Mod image */}
+      {mod.imageUrl && (
+        <div className="mb-2 flex justify-center">
+          <img
+            src={mod.imageUrl}
+            alt={mod.name}
+            width={80}
+            height={80}
+            className="rounded object-contain"
+            style={{
+              filter: `drop-shadow(0 0 6px ${color}40)`,
+            }}
+          />
+        </div>
+      )}
+
       {/* Header row */}
       <div className="mb-1 flex items-center justify-between">
         <span className="font-mono text-[10px] uppercase tracking-wide text-dim">
@@ -691,7 +748,20 @@ function EquippedModRow({ mod }: { mod: Mod }) {
   const color = RARITY_COLORS[mod.rarity] ?? "#6b7280";
   return (
     <div className="flex items-center gap-2">
-      <ModTypeIcon type={mod.type} color={color} size={18} />
+      {mod.imageUrl ? (
+        <img
+          src={mod.imageUrl}
+          alt={mod.name}
+          width={48}
+          height={48}
+          className="shrink-0 rounded object-contain"
+          style={{
+            filter: `drop-shadow(0 0 4px ${color}40)`,
+          }}
+        />
+      ) : (
+        <ModTypeIcon type={mod.type} color={color} size={18} />
+      )}
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <span className="truncate font-mono text-sm text-foreground">

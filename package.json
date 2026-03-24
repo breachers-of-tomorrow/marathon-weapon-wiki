@@ -63,7 +63,7 @@
     "typescript-eslint": "^8.27.0"
   },
   "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "seed": "bun prisma/seed.ts"
   },
   "ct3aMetadata": {
     "initVersion": "7.40.0"
